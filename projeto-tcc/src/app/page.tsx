@@ -41,7 +41,7 @@ export default function Login() {
           <CardHeader className="flex flex-col items-center pb-3">
             <CardTitle className="text-xl">Login</CardTitle>
             <CardDescription className="flex items-center m-0">
-              <p>Não tenho tenho conta?</p>
+              Não tenho tenho conta?
               <Link href={"/cadastro"} className="text-sm font-medium underline">
                 <Button variant={"link"} className="p-1">Criar Conta</Button>
               </Link>

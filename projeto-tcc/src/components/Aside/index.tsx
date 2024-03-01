@@ -28,11 +28,11 @@ const Aside = ({ page }: AsideProps) => {
     }, {
       icon: RiChatNewLine,
       active: page === "createChat",
-      redirect: "/m2/createChat"
+      redirect: "/m2/create-chat"
     }, {
       icon: FaSquarePlus,
       active: page === "createMeet",
-      redirect: "/m2/createMeet"
+      redirect: "/m2/create-meet"
     }
   ]
   return (
