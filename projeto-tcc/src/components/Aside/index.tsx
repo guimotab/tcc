@@ -5,35 +5,39 @@ import Link from "next/link"
 import { FaGear } from "react-icons/fa6"
 import { Button } from "../ui/button"
 import { IoChatbubbleEllipses } from "react-icons/io5";
-import { RiChatNewLine } from "react-icons/ri";
 import { AiFillHome } from "react-icons/ai";
 import { LuLogOut } from "react-icons/lu";
+import { MdGroups } from "react-icons/md";
+import { MdGroupAdd } from "react-icons/md";
 import { FaSquarePlus } from "react-icons/fa6";
 import { Separator } from "../ui/separator"
-
 interface AsideProps {
-  page: "home" | "chat" | "createChat" | "createMeet"
+  page: "home" | "chat" | "createGroup" | "createMeet" | 'myGroup'
 }
 
 const Aside = ({ page }: AsideProps) => {
-  const buttons = [
+  const pages = [
     {
       icon: AiFillHome,
       active: page === "home",
       redirect: "/m2/home"
     }, {
+      icon: MdGroups,
+      active: page === "myGroup",
+      redirect: "/m2/my-groups",
+    }, {
+      icon: MdGroupAdd,
+      active: page === "createGroup",
+      redirect: "/m2/create-chat"
+    }, {
       icon: IoChatbubbleEllipses,
       active: page === "chat",
       redirect: "/m2/chat"
     }, {
-      icon: RiChatNewLine,
-      active: page === "createChat",
-      redirect: "/m2/create-chat"
-    }, {
       icon: FaSquarePlus,
       active: page === "createMeet",
       redirect: "/m2/create-meet"
-    }
+    },
   ]
   return (
     <div className="flex flex-col border-r border-slate-200 bg-slate-50 px-5 py-8 h-full">
@@ -46,10 +50,10 @@ const Aside = ({ page }: AsideProps) => {
         </div>
         <Separator className="h-[1px]" />
         <div className="flex flex-col gap-2">
-          {buttons.map(ButtonIcon =>
-            <Link href={ButtonIcon.redirect}>
-              <Button variant={"ghost"} className={`py-4 h-fit  ${ButtonIcon.active ? "bg-slate-200 hover:bg-slate-300" : ""}`}>
-                {<ButtonIcon.icon className="text-2xl text-gray-800" />}
+          {pages.map((PageIcon, index) =>
+            <Link key={index} href={PageIcon.redirect}>
+              <Button variant={"ghost"} className={`py-4 h-fit  ${PageIcon.active ? "bg-slate-200 hover:bg-slate-300" : ""}`}>
+                {<PageIcon.icon className={`text-2xl text-gray-800`} />}
               </Button>
             </Link>
           )}
