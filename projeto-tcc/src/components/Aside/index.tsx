@@ -28,7 +28,7 @@ const Aside = ({ page }: AsideProps) => {
     }, {
       icon: MdGroupAdd,
       active: page === "createGroup",
-      redirect: "/m2/create-chat"
+      redirect: "/m2/create-group/?step=1"
     }, {
       icon: IoChatbubbleEllipses,
       active: page === "chat",
@@ -45,7 +45,9 @@ const Aside = ({ page }: AsideProps) => {
         <div className="flex justify-center items-center py-3">
           <Avatar className="">
             <AvatarImage src="" />
-            <AvatarFallback className="bg-slate-300 py-3 px-3.5 rounded-full">G</AvatarFallback>
+            <div className="flex items-center justify-center w-11 h-11 bg-slate-300 rounded-full">
+              <AvatarFallback className="">G</AvatarFallback>
+            </div>
           </Avatar>
         </div>
         <Separator className="h-[1px]" />
