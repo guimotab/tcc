@@ -1,4 +1,5 @@
 import IFormCreateGroup from "@/interfaces/IFormCreateGroup";
+import IRolesForm from "@/interfaces/IRolesForm";
 interface paramsUpdateStepOne {
   nameGroup: string;
   description: string
@@ -6,7 +7,7 @@ interface paramsUpdateStepOne {
 
 class FormCreateGroup implements IFormCreateGroup {
 
-  constructor(private _nameGroup = "", private _description = "", private _emailParticipants = [""]) { }
+  constructor(private _nameGroup = "", private _description = "", private _emailParticipants = [""], private _roles = []) { }
 
   updateFormStepOne({ nameGroup, description }: paramsUpdateStepOne) {
     this._nameGroup = nameGroup
@@ -40,7 +41,13 @@ class FormCreateGroup implements IFormCreateGroup {
   public get emailParticipants() {
     return this._emailParticipants;
   }
-
+  public get roles() {
+    return this._roles;
+  }
+  
+  public set roles(value) {
+    this._roles = value;
+  }
   public set emailParticipants(value) {
     this._emailParticipants = value;
   }
