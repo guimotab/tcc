@@ -8,12 +8,19 @@ import stepCreateGroup from "@/types/stepCreateGroup"
 import StepTwo from "./components/StepTwo"
 import FormCreateGroup from "@/utils/FormCreateGroup"
 import { useState } from "react"
+import StepThree from "./components/StepThree"
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
+import StepFour from "./components/StepFour"
+
+export function nextStepCreateGroup(router: AppRouterInstance, stepURL: string) {
+  router.push(`./create-group/?step=${Number(stepURL) + 1}`)
+}
 
 const Chat = () => {
   const searchParams = useSearchParams()
   const stepURL = searchParams.get("step") as stepCreateGroup
 
-  const [formSteps, setFormSteps] = useState(new FormCreateGroup())
+  const [formSteps, setFormSteps] = useState(new FormCreateGroup("Grupo Teste Guilherme", "grupo criado para testes"))
 
   return (
     <main className="flex w-screen h-screen">
@@ -26,11 +33,15 @@ const Chat = () => {
           <div id="divisor" className="bg-slate-200 h-full w-[2px]"></div>
 
           <div className="flex flex-col gap-3 w-full">
-              <h1 className="text-2xl font-medium">{stepURL}° Etapa</h1>
+            <h1 className="text-2xl font-medium">{stepURL}° Etapa</h1>
 
-            <StepOne formSteps={formSteps} setFormSteps={setFormSteps}/>
+            <StepOne formSteps={formSteps} setFormSteps={setFormSteps} />
 
-            <StepTwo formSteps={formSteps} setFormSteps={setFormSteps}/>
+            <StepTwo formSteps={formSteps} setFormSteps={setFormSteps} />
+
+            <StepThree formSteps={formSteps} setFormSteps={setFormSteps}/>
+
+            <StepFour formSteps={formSteps} setFormSteps={setFormSteps}/>
 
           </div>
 

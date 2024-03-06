@@ -12,6 +12,8 @@ import { Dispatch, SetStateAction } from "react"
 import { useForm, FormProvider } from "react-hook-form"
 import { z } from "zod"
 import { AiOutlineUserDelete } from "react-icons/ai";
+import { nextStepCreateGroup } from "../page"
+import IParticipantsGroup from "@/interfaces/IParticipantsGroup"
 interface StepTwoProps {
   formSteps: FormCreateGroup
   setFormSteps: Dispatch<SetStateAction<FormCreateGroup>>
@@ -32,15 +34,19 @@ const StepTwo = ({ formSteps, setFormSteps }: StepTwoProps) => {
     },
   })
   function onAddParticipant(formValues: z.infer<typeof formSchema>) {
-    formSteps.updateFormStepTwo(formValues.emailParticipant)
+    const participantGroup = {
+      email: formValues.emailParticipant,
+      role: "Usuário"
+    } as IParticipantsGroup
+    formSteps.updateFormStepTwo(participantGroup)
     setFormSteps(formSteps)
   }
-  
+
   function nextStep() {
-    if (formSteps.emailParticipants.length === 0) {
+    if (formSteps.participants.length === 0) {
       return
     }
-    router.push(`./create-group/?step=${Number(stepURL) + 1}`)
+    nextStepCreateGroup(router, stepURL)
   }
 
   const fieldsForm = [

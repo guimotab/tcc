@@ -12,7 +12,7 @@ import { MdGroupAdd } from "react-icons/md";
 import { FaSquarePlus } from "react-icons/fa6";
 import { Separator } from "../ui/separator"
 interface AsideProps {
-  page: "home" | "chat" | "createGroup" | "createMeet" | 'myGroup'
+  page: "home" | "chat" | "createGroup" | "createMeet" | 'myGroups'
 }
 
 const Aside = ({ page }: AsideProps) => {
@@ -23,7 +23,7 @@ const Aside = ({ page }: AsideProps) => {
       redirect: "/m2/home"
     }, {
       icon: MdGroups,
-      active: page === "myGroup",
+      active: page === "myGroups",
       redirect: "/m2/my-groups",
     }, {
       icon: MdGroupAdd,

@@ -31,14 +31,12 @@ const AsideCreateGroup = ({ formSteps }: AsideCreateGroupProps) => {
     let canNavigate = true
 
     if (isNextStep) {
-      if (step === "1") {
+      if (step === "2") {
         canNavigate = formSteps.verifyStepOne()
-      } else if (step === "2") {
-        canNavigate = formSteps.verifyStepTwo()
       } else if (step === "3") {
-        canNavigate = false
+        canNavigate = formSteps.verifyStepTwo()
       } else if (step === "4") {
-        canNavigate = false
+        canNavigate = formSteps.verifyStepThree()
       }
     }
 
