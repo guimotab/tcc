@@ -65,7 +65,7 @@ const StepFour = ({ formSteps, setFormSteps }: StepFourProps) => {
                 <Label>Participantes</Label>
                 <ul className="space-y-3">
                   {formSteps.participants[0] && formSteps.participants.map(participant =>
-                    <li>
+                    <li key={participant.email}>
                       <Card className="flex items-center justify-between px-6 py-2">
                         <div className="flex items-center gap-3">
                           <Avatar className="flex items-center">
@@ -88,24 +88,26 @@ const StepFour = ({ formSteps, setFormSteps }: StepFourProps) => {
               <div className="flex items-center justify-between w-full max-w-[17rem]">
                 <Button onClick={prevStep} variant={"outline"}>Voltar</Button>
                 <Dialog>
-                  <DialogTrigger>
+                  <DialogTrigger asChild>
                     <Button>Finalizar</Button>
                   </DialogTrigger>
                   <DialogContent>
                     <DialogHeader>
                       <DialogTitle><p className="text-xl">Aviso!</p></DialogTitle>
-                      <DialogDescription className="space-y-4">
-                        <div className="text-base">
-                          Ao confirmar, você enviará no email de cada participante o acesso ao seu grupo, podendo eles aceitarem ou não.
-                        </div>
-                        <div className="flex justify-center">
-                          <div className="flex justify-between w-full max-w-[15rem]">
-                            <DialogClose asChild>
-                              <Button variant={"outline"} >Voltar</Button>
-                            </DialogClose>
-                            <DialogClose asChild>
-                              <Button>Entendi</Button>
-                            </DialogClose>
+                      <DialogDescription asChild className="space-y-4">
+                        <div>
+                          <div className="text-base">
+                            Ao confirmar, você enviará no email de cada participante o acesso ao seu grupo, podendo eles aceitarem ou não.
+                          </div>
+                          <div className="flex justify-center">
+                            <div className="flex justify-between w-full max-w-[15rem]">
+                              <DialogClose asChild>
+                                <Button variant={"outline"} >Voltar</Button>
+                              </DialogClose>
+                              <DialogClose asChild>
+                                <Button>Entendi</Button>
+                              </DialogClose>
+                            </div>
                           </div>
                         </div>
                       </DialogDescription>
