@@ -2,27 +2,32 @@
 // o sistema deve criar reuniões para dividir tarefas pelas pessoas pelas suas aptidões e resolver conflitos
 
 ------------- Requisitos Funcionais (RF) -------------
-(admin)
-- deve ser possível gerenciar reuniões
-- deve ser possível escolher pessoas pelo email para participar de reuniões
-- deve ser possível gerenciar usuários das reuniões
-- deve ser possível criar enquetes de múltiplas/única escolha
-- deve ser possível criar distribuidor de tarefas
-
-(usuario)
-- deve ter tela de login para usuários acessarem reunião em que foram chamados
-- deve votar/escolher as propostas que achar mais interessantes para si
-- devem poder conversar em um grupo
+- deve conter aba de criação de grupo
+- deve conter abab de edição dos grupos
+- deve conter aba chat
+- deve conter aba de configurações
+- deve conter aba de reuniões, enquetes e distribuidor de tarefas
 
 ------------- Requisitos Não Funcionais -------------
 
 - login com tokens
+- login no google
 
 ------------- Regras de Negócio (RN) -------------
  
-- projeto deve ser feito com redux, next, shadcn, tailwind, postgress, prisma
+- projeto deve ser feito com redux, next, shadcn, tailwind, postgress e mongo, prisma
 - o convite com o acesso deve ser recebido por email
 
 - as reuniões criadas podem ser criadas podendo receber intervenção pelo criador da reunião ou não
 - mostrar se houve intervenção do criador na reunião no final e mostrar em quem interviu
 - se não houver intervenção, os conflitos devem ser resolvidos automaticamente
+
+- usuário - criador {
+  - tem a capacidade sobre todo o grupo
+  - pode inserir novos integrantes
+  - pode criar cargos e atribuir funcionalidades a eles
+}
+
+- usuário - com permissão {
+  - pode executar as funções que o criador permitiu
+}
