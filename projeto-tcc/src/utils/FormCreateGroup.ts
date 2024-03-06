@@ -1,4 +1,5 @@
 import IFormCreateGroup from "@/interfaces/IFormCreateGroup";
+import IParticipantsGroup from "@/interfaces/IParticipantsGroup";
 import IRolesForm from "@/interfaces/IRolesForm";
 interface paramsUpdateStepOne {
   nameGroup: string;
@@ -7,15 +8,19 @@ interface paramsUpdateStepOne {
 
 class FormCreateGroup implements IFormCreateGroup {
 
-  constructor(private _nameGroup = "", private _description = "", private _emailParticipants = [""], private _roles = []) { }
+  constructor(
+    private _nameGroup = "",
+    private _description = "",
+    private _participants = [{ email: "guimota22@gmail", role: "Líder" }, { email: "pedro22@gmail", role: "Admin" }, { email: "teste22@gmail", role: "Usuário" }],
+    private _roles = [{ level: 0, name: "Líder" },{ level: 1, name: "Admin" },{ level: 0, name: "Usuário" }] as IRolesForm[]) { }
 
   updateFormStepOne({ nameGroup, description }: paramsUpdateStepOne) {
     this._nameGroup = nameGroup
     this._description = description
   }
 
-  updateFormStepTwo(emailParticipants: string) {
-    this._emailParticipants.push(emailParticipants)
+  updateFormStepTwo(emailParticipants: IParticipantsGroup) {
+    this.participants.push(emailParticipants)
   }
 
   verifyStepOne() {
@@ -31,6 +36,12 @@ class FormCreateGroup implements IFormCreateGroup {
     }
     return false
   }
+  verifyStepThree() {
+    if (this._nameGroup !== "" && this._description !== "") {
+      return true
+    }
+    return false
+  }
 
   public get nameGroup(): string {
     return this._nameGroup;
@@ -38,18 +49,18 @@ class FormCreateGroup implements IFormCreateGroup {
   public get description(): string {
     return this._description;
   }
-  public get emailParticipants() {
-    return this._emailParticipants;
+  public get participants() {
+    return this._participants;
   }
   public get roles() {
     return this._roles;
   }
-  
+
   public set roles(value) {
     this._roles = value;
   }
-  public set emailParticipants(value) {
-    this._emailParticipants = value;
+  public set participants(value) {
+    this._participants = value;
   }
   public set nameGroup(value: string) {
     this._nameGroup = value;

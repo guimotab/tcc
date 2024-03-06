@@ -8,6 +8,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { Dispatch, SetStateAction } from "react"
 import { useForm, FormProvider } from "react-hook-form"
 import { z } from "zod"
+import { nextStepCreateGroup } from "../page"
 interface StepOneProps {
   formSteps: FormCreateGroup
   setFormSteps: Dispatch<SetStateAction<FormCreateGroup>>
@@ -25,17 +26,17 @@ const StepOne = ({ formSteps, setFormSteps }: StepOneProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      nameGroup: "",
-      description: "",
+      nameGroup: formSteps.nameGroup,
+      description: formSteps.description,
     },
   })
   function onSubmit(formValues: z.infer<typeof formSchema>) {
     formSteps.updateFormStepOne(formValues)
     const canNextStep = formSteps.verifyStepOne()
-    if(canNextStep){
+    // if(canNextStep){
       setFormSteps(formSteps)
-      router.push(`./create-group/?step=${Number(stepURL) + 1}`)
-    } 
+      nextStepCreateGroup(router, stepURL)
+    // } 
   }
 
   const fieldsForm = [

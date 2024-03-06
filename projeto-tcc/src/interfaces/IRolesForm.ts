@@ -1,6 +1,8 @@
+import defaultRoles from "@/types/defaultRoles"
+
 interface IRolesForm {
   level: number
-  name: string
+  name: defaultRoles | string
 }
 
 export default IRolesForm
