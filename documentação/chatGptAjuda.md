@@ -1,4 +1,4 @@
-Integração com Calendário:
+Integração com Calendário: 
 
 Permita que os usuários sincronizem as reuniões com seus calendários pessoais, como o Google Calendar, para que recebam lembretes e mantenham-se atualizados sobre as próximas atividades.
 Atribuição Automática de Tarefas:
