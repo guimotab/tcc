@@ -1,0 +1,19 @@
+{
+  "name": "projeto-back",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.11.2",
+    "typescript": "^5.4.2"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "pg": "^8.11.3"
+  }
+}
