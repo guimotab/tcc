@@ -31,3 +31,7 @@
 - usuário - com permissão {
   - pode executar as funções que o criador permitiu
 }
+
+
+Modelo conceitual - brModelo
+Modelo Lógico - MySql Workbench
