@@ -1,0 +1,27 @@
+{
+  "name": "projeto-back",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ./dist/js/app.js",
+    "tsc": "tsc -w",
+    "compile": "npx tsc"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.11.2",
+    "typescript": "^5.4.2"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@prisma/client": "^5.12.1",
+    "nodemon": "^3.1.0",
+    "pg": "^8.11.3",
+    "prisma": "^5.12.1",
+    "ts-node": "^10.9.2"
+  },
+  "type": "module"
+}

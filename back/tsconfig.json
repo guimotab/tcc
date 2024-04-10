@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "outDir": "dist/js",
+    "target": "ES2019",
+    "esModuleInterop": true,
+    "module": "esnext",
+    "noEmitOnError": false,
+    "noImplicitAny": true,
+    "removeComments": true,
+    "strictNullChecks": true,
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false /* Skip type checking all .d.ts files. */
+  },
+  "include": [
+    "src/**/*",
+    "src/app.ts" 
+  ]
+}
