@@ -3,7 +3,7 @@
     "outDir": "dist/js",
     "target": "ES2019",
     "esModuleInterop": true,
-    "module": "esnext",
+    "module": "ESNext",
     "noEmitOnError": false,
     "noImplicitAny": true,
     "removeComments": true,
