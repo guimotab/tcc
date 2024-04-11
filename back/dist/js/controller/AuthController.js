@@ -9,9 +9,7 @@ export default class AuthController {
             return res.json({ resp: "Esse email já está sendo usado!" });
         }
         try {
-            const salt = await bcrypt.genSalt(12);
-            const passwordHash = await bcrypt.hash(password, salt);
-            const user = await prismaPg.user.create({ data: { name, email, password: passwordHash } });
+            const user = await prismaPg.user.create({ data: { name, email, password } });
             const secret = process.env.SECRET;
             const secretRefresh = process.env.REFRESH;
             const token = jwt.sign({ id: user.id, }, secret, { expiresIn: "5m" });

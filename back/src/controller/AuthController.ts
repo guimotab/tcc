@@ -24,10 +24,7 @@ export default abstract class AuthController {
     }
 
     try {
-      const salt = await bcrypt.genSalt(12)
-      const passwordHash = await bcrypt.hash(password, salt)
-
-      const user = await prismaPg.user.create({ data: { name, email, password: passwordHash } })
+      const user = await prismaPg.user.create({ data: { name, email, password } })
 
       const secret = process.env.SECRET!
       const secretRefresh = process.env.REFRESH!

@@ -5,7 +5,7 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/comp
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import stepCreateGroup from "@/types/stepCreateGroup"
-import FormCreateGroup from "@/utils/FormCreateGroup"
+import FormCreateGroup from "@/classes/FormCreateGroup"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Dispatch, SetStateAction } from "react"

@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import stepCreateGroup from "@/types/stepCreateGroup"
-import FormCreateGroup from "@/utils/FormCreateGroup"
+import FormCreateGroup from "@/classes/FormCreateGroup"
 import { useRouter, useSearchParams } from "next/navigation"
 
 interface AsideCreateGroupProps {

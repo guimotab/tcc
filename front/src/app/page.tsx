@@ -17,8 +17,8 @@ export default function Login() {
   //   password: z.string().min(4).max(20),
   // })
   const formSchema = z.object({
-    email: z.string(),
-    password: z.string(),
+    email: z.string().min(1, "O email é obrigatório").email("Email inválido"),
+    password: z.string().min(1, "A senha é obrigatória"),
   })
 
   const form = useForm<z.infer<typeof formSchema>>({
