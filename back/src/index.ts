@@ -1,19 +1,21 @@
-import { PrismaClient as PrismaClient1 } from '../prisma/generated/postgre'
+import { PrismaClient as PrismaPostgreClient } from '../prisma/generated/postgre'
 import express from "express"
 import cors from "cors"
 import bodyParser from 'body-parser'
+import routes from './routes'
+const port = 4000
 
-//permite as origens fazer requisição ("*" - todas)
 const app = express()
-app.listen(4000, () => console.log("servidor conectado"))
+app.listen(port, () => console.log("servidor conectado"))
 app.use(bodyParser.json({ limit: "1mb" }))
-app.use(cors({ origin: "*" }))
-// routes(app)
+app.use(cors({ origin: "*" })) 
+routes(app)
 
-const prisma = new PrismaClient1()
+const prismaPg = new PrismaPostgreClient()
 try {
-  await prisma.$connect()
-  console.log("Conexão feita com sucesso\n\n");
+  await prismaPg.$connect()
+  console.log(`Conexão feita com sucesso (porta: ${port})`); 
 } catch (err) {
-  console.log("Houve um problema na conexão", err); 
+  console.log("Houve um problema na conexão", err);
 }
+export default prismaPg
