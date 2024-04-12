@@ -1,5 +1,7 @@
 import AuthService from "@/service/AuthService";
 import HashUtils from "@/utils/HashUtils";
+import { deleteCookies, setCookies } from "./CookiesController";
+import TokensController from "./TokensController";
 
 export default abstract class AuthController {
   private static authService = new AuthService()
@@ -12,6 +14,14 @@ export default abstract class AuthController {
 
   static async login(email: string, password: string) {
     const resp = await this.authService.login(email, password)
+    if (resp.data) {
+      setCookies(resp.data)
+    }
     return resp
+  }
+
+  static async logout(){
+    deleteCookies()
+    TokensController.getToken()
   }
 }

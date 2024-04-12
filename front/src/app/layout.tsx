@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
-import NextAuthSessionProvider from "@/providers/sessionProvider";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,9 +16,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Toaster />
-
       <body suppressHydrationWarning>
-        <NextAuthSessionProvider>{children}</NextAuthSessionProvider>
+          {children}
       </body>
     </html>
   );

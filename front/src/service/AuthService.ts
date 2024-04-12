@@ -3,7 +3,7 @@ import IUser from "@/interfaces/IUser"
 import HashUtils from "@/utils/HashUtils"
 import axios from "axios"
 
-interface IAuthResponse {
+export interface IAuthResponse {
   token: string,
   refresh: string,
   user: IUser

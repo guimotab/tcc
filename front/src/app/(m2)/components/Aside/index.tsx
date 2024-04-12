@@ -12,12 +12,21 @@ import { MdGroupAdd } from "react-icons/md";
 import { FaSquarePlus } from "react-icons/fa6";
 import { Separator } from "../../../../components/ui/separator"
 import { FaGithub } from "react-icons/fa6";
+import AuthController from "@/controllers/AuthController"
+import { redirect, useRouter } from "next/navigation"
 
 interface AsideProps {
   page: "home" | "chat" | "createGroup" | "createMeet" | 'myGroups' | 'project'
 }
 
 const Aside = ({ page }: AsideProps) => {
+  const router = useRouter()
+
+  function signOut() {
+    AuthController.logout()
+    router.push("/")
+  }
+
   const pages = [
     {
       icon: AiFillHome,
@@ -70,11 +79,9 @@ const Aside = ({ page }: AsideProps) => {
       <Button variant={"ghost"} className="py-4 h-fit">
         <FaGear className="text-2xl text-gray-800 self-end" />
       </Button>
-      <Link href={"/"}>
-        <Button variant={"ghost"} className="py-4 h-fit bg-accent hover:bg-slate-300">
-          <LuLogOut className="text-2xl text-gray-800 self-end" />
-        </Button>
-      </Link>
+      <Button onClick={signOut} variant={"ghost"} className="py-4 h-fit bg-accent hover:bg-slate-300">
+        <LuLogOut className="text-2xl text-gray-800 self-end" />
+      </Button>
     </div>
   )
 }

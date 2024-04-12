@@ -57,18 +57,7 @@ const SignIn = () => {
         return createToast(errorResponse)
       }
 
-      const result = await signIn("credentials", {
-        email,
-        password,
-        redirect: false
-      })
-
-      if (result?.error) {
-        const error = result.error as "CredentialsSignin"
-        const errorResponse = new ResolveResponseErrors(error)
-        return createToast(errorResponse)
-      }
-      router.push("/home")
+      router.replace("/home")
 
     } else {
       setErrors("password", "As senhas devem ser iguais!")
