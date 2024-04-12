@@ -1,6 +1,6 @@
-import { errorsResponse } from "@/types/errorsResponse"
+import { messageResponse } from "@/types/messageResponse"
 
 export default interface IAxiosResponse<T> {
-  resp: errorsResponse
+  resp: messageResponse
   data?: T
 }

@@ -1,0 +1,1 @@
+export type messageResponse = "AxiosError" | "Success" | "CredentialsSignin"

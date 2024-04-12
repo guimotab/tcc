@@ -4,7 +4,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import AuthController from "@/controllers/AuthController";
-import resolveResponseErrors from "@/utils/resolveResponseErrors";
+import ResolveResponseErrors from "@/utils/resolveResponseErrors";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -13,6 +13,7 @@ import { useForm, FormProvider, useFieldArray } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
 import { toast } from "sonner";
 import { z } from "zod";
+import { signIn } from "next-auth/react"
 
 type nameFields = "name" | "email" | "password" | "confirmPassword"
 
@@ -28,7 +29,7 @@ const SignIn = () => {
 
   const formSchema = z.object({
     name: z.string().min(1, "O nome é obrigatório"),
-    email: z.string().min(1, "O email é obrigatório"),
+    email: z.string().min(1, "O email é obrigatório").email("Email inválido"),
     password: z.string().min(1, "A senha é obrigatória"),
     confirmPassword: z.string()
   })
@@ -50,25 +51,33 @@ const SignIn = () => {
       const email = values.email
       const password = values.password
 
-      const resp = await AuthController.sign(name, email, password)
-      if (resp.resp === "Seccess") {
-        router.push("/home")
-      } else {
-        const [title, description] = resolveResponseErrors(resp.resp) as [title: string, description?: string]
-        createToast(title, description)
+      const result = await signIn("credentials", {
+        name,
+        email,
+        password,
+        redirect: false
+      })
+
+      if (result?.error) {
+        const error = result.error as "CredentialsSignin"
+        const errorResponse = new ResolveResponseErrors(error)
+        createToast(errorResponse)
+        return
       }
+      router.push("/home")
     } else {
       setErrors("password", "As senhas devem ser iguais!")
       setErrors("confirmPassword")
     }
   }
 
-  function createToast(title: string, description?: string) {
+  function createToast(resolveResponse: ResolveResponseErrors) {
+    const [title, description] = resolveResponse.resolveError()
     toast(title, {
       description: description,
       action: {
-        label: "Undo",
-        onClick: () => console.log("Undo"),
+        label: "Entendi",
+        onClick: () => "",
       },
     })
   }

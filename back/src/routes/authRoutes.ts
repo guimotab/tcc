@@ -5,6 +5,6 @@ const authRoutes = express.Router()
 authRoutes
     //coloca do caminho mais específico pro menos específico
     .post("/auth", AuthController.sign)
-    .get("/auth/:email/:password", AuthController.login)
+    .get("/auth/:email/:password", AuthController.login) 
 
 export default authRoutes

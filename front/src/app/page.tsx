@@ -9,13 +9,23 @@ import { z } from "zod"
 import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { HTMLInputTypeAttribute } from "react";
+import ResolveResponseErrors from "@/utils/resolveResponseErrors";
+import { toast } from "sonner";
+import { signIn } from "next-auth/react"
+
+type nameFields = "email" | "password"
+
+interface IFields {
+  name: nameFields
+  label: string
+  placeholder: string
+  type: HTMLInputTypeAttribute | undefined
+}
+
 export default function Login() {
   const router = useRouter()
 
-  // const formSchema = z.object({
-  //   email: z.string().min(2).max(50),
-  //   password: z.string().min(4).max(20),
-  // })
   const formSchema = z.object({
     email: z.string().min(1, "O email é obrigatório").email("Email inválido"),
     password: z.string().min(1, "A senha é obrigatória"),
@@ -28,9 +38,51 @@ export default function Login() {
       password: ""
     },
   })
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    router.push("/m2/home")
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const email = values.email
+    const password = values.password
+
+    const result = await signIn("credentials", {
+      email,
+      password,
+      redirect: false
+    })
+
+    if (result?.error) {
+      const error = result.error as "CredentialsSignin"
+      const errorResponse = new ResolveResponseErrors(error)
+      createToast(errorResponse)
+      return
+    }
+    //inicia um histórico novo
+    router.replace("/home")
   }
+
+  function createToast(errorResponse: ResolveResponseErrors) {
+    const [title, description] = errorResponse.resolveError()
+    toast(title, {
+      description: description,
+      action: {
+        label: "Entendi",
+        onClick: () => "",
+      },
+    })
+  }
+
+  const fields = [
+    {
+      name: "email",
+      label: "Email",
+      placeholder: "Insira seu email",
+    },
+    {
+      name: "password",
+      label: "Senha",
+      placeholder: "Insira sua senha",
+      type: "password",
+    },
+  ] as IFields[]
 
   return (
     <main className="flex h-screen items-center justify-between p-24">
@@ -59,32 +111,24 @@ export default function Login() {
             </div>
             <FormProvider {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col space-y-3">
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
-                      <FormControl>
-                        <Input placeholder="shadcn" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Senha</FormLabel>
-                      <FormControl>
-                        <Input placeholder="shadcn" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+
+                {fields.map(fieldForm =>
+                  <FormField
+                    key={fieldForm.name}
+                    control={form.control}
+                    name={fieldForm.name}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{fieldForm.label}</FormLabel>
+                        <FormControl>
+                          <Input type={fieldForm.type} placeholder={fieldForm.placeholder}{...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+
                 <Button type="submit">Entrar</Button>
               </form>
             </FormProvider>

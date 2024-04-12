@@ -14,8 +14,13 @@ export default class AuthService {
   private url = "http://localhost:4000/auth"
 
   async sign(name: string, email: string, hashPassword: HashUtils) {
-    const passord = await hashPassword.generateSalt()
-    const result = await axios.post(`${this.url}`, { name, email, passord }).catch(e => ({ resp: "AxiosError" })) as IAxiosResponse<IAuthResponse>
-    return result
+    const password = await hashPassword.generateSalt()
+    const result = await axios.post(`${this.url}`, { name, email, password }).catch(e => ({ data: { resp: "AxiosError" } }))
+    return result.data as IAxiosResponse<IAuthResponse>
+  }
+
+  async login(email: string, password: string) {
+    const result = await axios.get(`${this.url}/${email}/${password}`).catch(e => ({ data: { resp: "AxiosError" } }))
+    return result.data as IAxiosResponse<IAuthResponse>
   }
 }
