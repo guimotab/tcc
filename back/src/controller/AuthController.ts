@@ -49,7 +49,13 @@ export default abstract class AuthController {
     try {
       const user = await prismaPg.user.create({ data: { name, email, password } })
 
-      return res.status(200).json({ resp: "Success", data: { user } } as AuthResponse)
+      const secret = process.env.SECRET!
+      const secretRefresh = process.env.REFRESH!
+
+      const token = jwt.sign({ id: user.id, }, secret, { expiresIn: "5m" })
+      const refresh = jwt.sign({ id: user.id, }, secretRefresh, { expiresIn: "30m" })
+
+      return res.status(200).json({ resp: "Success", data: { token, refresh, user } } as AuthResponse)
     } catch (err) {
       console.log(err);
       return res.json({ resp: "Ocorrou um error no servidor!" })
@@ -68,7 +74,13 @@ export default abstract class AuthController {
       return res.json({ resp: "Email ou senha incorretos!" } as AuthResponse)
     }
     try {
-      return res.status(200).json({ resp: "Success", data: { user } } as AuthResponse)
+      const secret = process.env.SECRET!
+      const secretRefresh = process.env.REFRESH!
+
+      const token = jwt.sign({ id: user.id, }, secret, { expiresIn: "5m" })
+      const refresh = jwt.sign({ id: user.id, }, secretRefresh, { expiresIn: "30m" })
+
+      return res.status(200).json({ resp: "Success", data: { token, refresh, user } } as AuthResponse)
     } catch (error) {
       console.log(error);
       return res.json({ resp: "Ocorrou um error no servidor!" } as AuthResponse)
