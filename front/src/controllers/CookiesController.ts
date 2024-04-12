@@ -20,7 +20,7 @@ export async function getCookies() {
 export async function setCookies(data: IAuthResponse) {
   // const fiveSeconds = 1000 * 5
   const oneHour = 60000 * 60
-  const expires = new Date(Date.now() + oneHour / 2)
+  const expires = new Date(Date.now() + oneHour * 24)
   const valueCookies = { token: data.token, refresh: data.refresh, expires } as valueCookies
   cookies().set("session", JSON.stringify(valueCookies), { expires, httpOnly: true })
 }

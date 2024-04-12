@@ -5,8 +5,14 @@ import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
 import { Avatar, AvatarFallback } from "@radix-ui/react-avatar"
 import { IoSendSharp } from "react-icons/io5";
+import { io } from "socket.io-client"
 
 const Chat = () => {
+
+  function handleSocket() {
+    const socket = io("http://localhost:4000/socket")
+  }
+
   return (
     <main className="flex w-screen h-screen">
       <Aside page="chat"></Aside>
@@ -117,7 +123,7 @@ const Chat = () => {
               </Avatar>
             </li>
           </ul>
-          <div className="flex max-h-[13rem] bg-white rounded-lg border max-w-[80rem] w-full border-slate-300">
+          <div onClick={handleSocket} className="flex max-h-[13rem] bg-white rounded-lg border max-w-[80rem] w-full border-slate-300">
             <textarea placeholder="Digite sua mensagem..." cols={30} rows={3} className="h-auto resize-none text-lg w-full outline-none rounded-lg px-3 py-2 overflow-hidden" />
             <IoSendSharp className="text-3xl relative right-2 bottom-2 text-slate-700 hover:text-slate-500 self-end" />
           </div>

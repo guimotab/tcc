@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import prismaPg from "..";
 import { messagesResponse } from '../types/messagesResponse';
 import IUser from '../interface/IUser';
+import { prismaPg } from '..';
 
 interface AuthResponse {
   resp: messagesResponse
@@ -38,6 +38,7 @@ export default abstract class AuthController {
   //     return res.json({ resp: "Ocorrou um error no servidor!" })
   //   }
   // }
+
   static async sign(req: Request, res: Response) {
     const { name, email, password } = req.body
 
@@ -53,7 +54,7 @@ export default abstract class AuthController {
       const secretRefresh = process.env.REFRESH!
 
       const token = jwt.sign({ id: user.id, }, secret, { expiresIn: "5m" })
-      const refresh = jwt.sign({ id: user.id, }, secretRefresh, { expiresIn: "30m" })
+      const refresh = jwt.sign({ id: user.id, }, secretRefresh, { expiresIn: "1d" })
 
       return res.status(200).json({ resp: "Success", data: { token, refresh, user } } as AuthResponse)
     } catch (err) {
@@ -78,7 +79,7 @@ export default abstract class AuthController {
       const secretRefresh = process.env.REFRESH!
 
       const token = jwt.sign({ id: user.id, }, secret, { expiresIn: "5m" })
-      const refresh = jwt.sign({ id: user.id, }, secretRefresh, { expiresIn: "30m" })
+      const refresh = jwt.sign({ id: user.id, }, secretRefresh, { expiresIn: "1d" })
 
       return res.status(200).json({ resp: "Success", data: { token, refresh, user } } as AuthResponse)
     } catch (error) {
