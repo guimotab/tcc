@@ -19,9 +19,9 @@ model User {
 }
 
 model UserOnGroup {
-  user       User     @relation(fields: [userId], references: [id])
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String
-  group      Group    @relation(fields: [groupId], references: [id])
+  group      Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
   groupId    String
   assignedAt DateTime @default(now())
   assignedBy String
@@ -42,7 +42,7 @@ model Group {
 model Form {
   id        String   @id @default(uuid())
   goal      String
-  group     Group    @relation(fields: [groupId], references: [id])
+  group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
   groupId   String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

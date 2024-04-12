@@ -3,14 +3,14 @@
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar"
 import Link from "next/link"
 import { FaGear } from "react-icons/fa6"
-import { Button } from "../ui/button"
+import { Button } from "../../../../components/ui/button"
 import { IoChatbubbleEllipses } from "react-icons/io5";
 import { AiFillHome } from "react-icons/ai";
 import { LuLogOut } from "react-icons/lu";
 import { MdGroups } from "react-icons/md";
 import { MdGroupAdd } from "react-icons/md";
 import { FaSquarePlus } from "react-icons/fa6";
-import { Separator } from "../ui/separator"
+import { Separator } from "../../../../components/ui/separator"
 import { FaGithub } from "react-icons/fa6";
 
 interface AsideProps {

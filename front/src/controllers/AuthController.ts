@@ -4,9 +4,9 @@ import HashUtils from "@/utils/HashUtils";
 export default abstract class AuthController {
   private static authService = new AuthService()
 
-  static async sign(name: string, email: string, password: string) {
+  static async signUp(name: string, email: string, password: string) {
     const saltPassord = new HashUtils(password)
-    const resp = await this.authService.sign(name, email, saltPassord)
+    const resp = await this.authService.signUp(name, email, saltPassord)
     return resp
   }
 

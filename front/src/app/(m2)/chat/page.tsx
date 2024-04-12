@@ -1,5 +1,5 @@
 "use client"
-import Aside from "@/components/Aside"
+import Aside from "@/app/(m2)/components/Aside"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"

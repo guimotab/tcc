@@ -38,7 +38,7 @@ export default abstract class AuthController {
   //     return res.json({ resp: "Ocorrou um error no servidor!" })
   //   }
   // }
-  static async sign(req: Request, res: Response) { 
+  static async sign(req: Request, res: Response) {
     const { name, email, password } = req.body
 
     const existEmail = await prismaPg.user.findUnique({ where: { email } })
@@ -57,7 +57,7 @@ export default abstract class AuthController {
   }
 
   static async login(req: Request, res: Response) {
-    const { email, password } = req.params
+    const { email, password } = req.body
 
     const user = await prismaPg.user.findUnique({ where: { email: email } })
     if (!user) {
@@ -68,13 +68,7 @@ export default abstract class AuthController {
       return res.json({ resp: "Email ou senha incorretos!" } as AuthResponse)
     }
     try {
-
-      const secret = process.env.SECRET!
-      const secretRefresh = process.env.REFRESH!
-      const token = jwt.sign({ id: user.id, }, secret, { expiresIn: "5m" })
-      const refresh = jwt.sign({ id: user.id, }, secretRefresh, { expiresIn: "30m" })
-
-      return res.status(200).json({ resp: "Success", data: { token: token, refresh: refresh, user: user } } as AuthResponse)
+      return res.status(200).json({ resp: "Success", data: { user } } as AuthResponse)
     } catch (error) {
       console.log(error);
       return res.json({ resp: "Ocorrou um error no servidor!" } as AuthResponse)

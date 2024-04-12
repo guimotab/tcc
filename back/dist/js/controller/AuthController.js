@@ -4,6 +4,7 @@ import prismaPg from "..";
 export default class AuthController {
     static async sign(req, res) {
         const { name, email, password } = req.body;
+        console.log("🚀 ~ AuthController ~ sign ~ name, email, password:", name, email, password);
         const existEmail = await prismaPg.user.findUnique({ where: { email } });
         if (existEmail) {
             return res.json({ resp: "Esse email já está sendo usado!" });
@@ -19,6 +20,7 @@ export default class AuthController {
     }
     static async login(req, res) {
         const { email, password } = req.params;
+        console.log("🚀 ~ AuthController ~ login ~ email, password:", email, password);
         const user = await prismaPg.user.findUnique({ where: { email: email } });
         if (!user) {
             return res.json({ resp: "Email ou senha incorretos!" });

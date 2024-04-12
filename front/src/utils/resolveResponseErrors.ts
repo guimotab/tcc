@@ -13,7 +13,7 @@ const arrayErrors = {
     title: "Ocorreu um erro no servidor!",
     description: "Verifique sua conexão."
   },
-  CredentialsSignin:{
+  CredentialsSignin: {
     title: "Esse email já existe!",
   }
 } as Record<messageResponse, ImessageErrors>
@@ -25,7 +25,12 @@ export default class ResolveResponseErrors {
     this._error = error
   }
   resolveError() {
-    const { title, description } = this._arrayErrors[this._error]
-    return [title, description] as [title: string, description?: string]
+    // try {
+      const { title, description } = this._arrayErrors[this._error]
+      return [title, description] as [title: string, description?: string]
+    // } catch {
+    //   const [title, description] = ["Ocorreu um erro no servidor!", "Tente novamente mais tarde."]
+    //   return [title, description] as [title: string, description?: string]
+    // }
   }
 }

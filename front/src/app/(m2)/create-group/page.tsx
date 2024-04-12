@@ -1,5 +1,5 @@
 "use client"
-import Aside from "@/components/Aside"
+import Aside from "@/app/(m2)/components/Aside"
 import { Card } from "@/components/ui/card"
 import AsideCreateGroup from "./components/AsideCreateGroup"
 import { useParams, useRouter, useSearchParams } from "next/navigation"

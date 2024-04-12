@@ -1,4 +1,4 @@
-import Aside from "@/components/Aside"
+import Aside from "@/app/(m2)/components/Aside"
 
 const Home = () => {
   return (

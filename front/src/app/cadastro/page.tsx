@@ -51,8 +51,13 @@ const SignIn = () => {
       const email = values.email
       const password = values.password
 
+      const resp = await AuthController.signUp(name, email, password)
+      if (resp.resp !== "Success") {
+        const errorResponse = new ResolveResponseErrors(resp.resp)
+        return createToast(errorResponse)
+      }
+
       const result = await signIn("credentials", {
-        name,
         email,
         password,
         redirect: false
@@ -61,10 +66,10 @@ const SignIn = () => {
       if (result?.error) {
         const error = result.error as "CredentialsSignin"
         const errorResponse = new ResolveResponseErrors(error)
-        createToast(errorResponse)
-        return
+        return createToast(errorResponse)
       }
       router.push("/home")
+
     } else {
       setErrors("password", "As senhas devem ser iguais!")
       setErrors("confirmPassword")

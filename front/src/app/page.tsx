@@ -13,6 +13,7 @@ import { HTMLInputTypeAttribute } from "react";
 import ResolveResponseErrors from "@/utils/resolveResponseErrors";
 import { toast } from "sonner";
 import { signIn } from "next-auth/react"
+import AuthController from "@/controllers/AuthController";
 
 type nameFields = "email" | "password"
 
@@ -43,6 +44,8 @@ export default function Login() {
     const email = values.email
     const password = values.password
 
+    const teste = await AuthController.login(email, password)
+    
     const result = await signIn("credentials", {
       email,
       password,

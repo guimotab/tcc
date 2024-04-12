@@ -1,5 +1,5 @@
 "use client"
-import Aside from "@/components/Aside"
+import Aside from "@/app/(m2)/components/Aside"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"

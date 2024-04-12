@@ -1,1 +1,1 @@
-export type messageResponse = "AxiosError" | "Success" | "CredentialsSignin"
+export type messageResponse = "AxiosError" | "Success" | "CredentialsSignin" 

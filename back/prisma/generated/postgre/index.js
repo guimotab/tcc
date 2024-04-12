@@ -148,7 +148,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "D:\\Guilherme\\Lógica\\Meus-programas\\tcc\\back\\prisma\\generated\\postgre",
+      "value": "C:\\Users\\90178\\Desktop\\MeuComputador\\tcc-ifro\\back\\prisma\\generated\\postgre",
       "fromEnvVar": null
     },
     "config": {
@@ -175,7 +175,6 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
