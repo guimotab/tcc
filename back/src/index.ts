@@ -1,4 +1,4 @@
-import express from "express"
+import express, { response } from "express"
 import http from "http"
 import bodyParser from 'body-parser'
 import routes from './routes'
@@ -7,15 +7,27 @@ import { Server } from 'socket.io'
 import { PrismaClient as PrismaPostgreClient } from '../prisma/generated/postgre'
 
 
+const port = 4000
 const app = express()
+const prismaPg = new PrismaPostgreClient()
+const serverHttp = http.createServer(app);
+const io = new Server(serverHttp, { cors: { origin: "*" } })
+
 app.use(bodyParser.json({ limit: "1mb" }), cors2({ origin: "*" }))
 routes(app)
 
-const serverHttp = http.createServer(app);
-const io = new Server(serverHttp, { cors: { origin: "*" } })
-const port = 4000
 serverHttp.listen(port, () => console.log("servidor conectado"))
-const prismaPg = new PrismaPostgreClient()
+
+io.of("/chat").on("connection", socket => {
+  console.log("oi");
+
+  socket.on('chat message', (msg) => {
+    console.log('message: ' + msg);
+  });
+  socket.on('disconnect', (msg) => {
+    console.log('user disconnected');
+  });
+})
 
 try {
   await prismaPg.$connect()
@@ -24,4 +36,4 @@ try {
   console.log("Houve um problema na conexão", err);
 }
 
-export { prismaPg, io, serverHttp }
+export { prismaPg, serverHttp }

@@ -10,7 +10,8 @@ import { io } from "socket.io-client"
 const Chat = () => {
 
   function handleSocket() {
-    const socket = io("http://localhost:4000/socket")
+    const socket = io("http://localhost:4000/chat")
+    socket.emit("chat message", "ola irmãos")
   }
 
   return (
