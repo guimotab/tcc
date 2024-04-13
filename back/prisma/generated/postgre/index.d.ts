@@ -2154,6 +2154,7 @@ export namespace Prisma {
   export type UserOnGroupMinAggregateOutputType = {
     userId: string | null
     groupId: string | null
+    role: string | null
     assignedAt: Date | null
     assignedBy: string | null
   }
@@ -2161,6 +2162,7 @@ export namespace Prisma {
   export type UserOnGroupMaxAggregateOutputType = {
     userId: string | null
     groupId: string | null
+    role: string | null
     assignedAt: Date | null
     assignedBy: string | null
   }
@@ -2168,6 +2170,7 @@ export namespace Prisma {
   export type UserOnGroupCountAggregateOutputType = {
     userId: number
     groupId: number
+    role: number
     assignedAt: number
     assignedBy: number
     _all: number
@@ -2177,6 +2180,7 @@ export namespace Prisma {
   export type UserOnGroupMinAggregateInputType = {
     userId?: true
     groupId?: true
+    role?: true
     assignedAt?: true
     assignedBy?: true
   }
@@ -2184,6 +2188,7 @@ export namespace Prisma {
   export type UserOnGroupMaxAggregateInputType = {
     userId?: true
     groupId?: true
+    role?: true
     assignedAt?: true
     assignedBy?: true
   }
@@ -2191,6 +2196,7 @@ export namespace Prisma {
   export type UserOnGroupCountAggregateInputType = {
     userId?: true
     groupId?: true
+    role?: true
     assignedAt?: true
     assignedBy?: true
     _all?: true
@@ -2271,6 +2277,7 @@ export namespace Prisma {
   export type UserOnGroupGroupByOutputType = {
     userId: string
     groupId: string
+    role: string
     assignedAt: Date
     assignedBy: string
     _count: UserOnGroupCountAggregateOutputType | null
@@ -2295,6 +2302,7 @@ export namespace Prisma {
   export type UserOnGroupSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     userId?: boolean
     groupId?: boolean
+    role?: boolean
     assignedAt?: boolean
     assignedBy?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -2304,6 +2312,7 @@ export namespace Prisma {
   export type UserOnGroupSelectScalar = {
     userId?: boolean
     groupId?: boolean
+    role?: boolean
     assignedAt?: boolean
     assignedBy?: boolean
   }
@@ -2323,6 +2332,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       userId: string
       groupId: string
+      role: string
       assignedAt: Date
       assignedBy: string
     }, ExtArgs["result"]["userOnGroup"]>
@@ -2724,6 +2734,7 @@ export namespace Prisma {
   interface UserOnGroupFieldRefs {
     readonly userId: FieldRef<"UserOnGroup", 'String'>
     readonly groupId: FieldRef<"UserOnGroup", 'String'>
+    readonly role: FieldRef<"UserOnGroup", 'String'>
     readonly assignedAt: FieldRef<"UserOnGroup", 'DateTime'>
     readonly assignedBy: FieldRef<"UserOnGroup", 'String'>
   }
@@ -4967,6 +4978,7 @@ export namespace Prisma {
   export const UserOnGroupScalarFieldEnum: {
     userId: 'userId',
     groupId: 'groupId',
+    role: 'role',
     assignedAt: 'assignedAt',
     assignedBy: 'assignedBy'
   };
@@ -5128,6 +5140,7 @@ export namespace Prisma {
     NOT?: UserOnGroupWhereInput | UserOnGroupWhereInput[]
     userId?: StringFilter<"UserOnGroup"> | string
     groupId?: StringFilter<"UserOnGroup"> | string
+    role?: StringFilter<"UserOnGroup"> | string
     assignedAt?: DateTimeFilter<"UserOnGroup"> | Date | string
     assignedBy?: StringFilter<"UserOnGroup"> | string
     user?: XOR<UserRelationFilter, UserWhereInput>
@@ -5137,6 +5150,7 @@ export namespace Prisma {
   export type UserOnGroupOrderByWithRelationInput = {
     userId?: SortOrder
     groupId?: SortOrder
+    role?: SortOrder
     assignedAt?: SortOrder
     assignedBy?: SortOrder
     user?: UserOrderByWithRelationInput
@@ -5150,6 +5164,7 @@ export namespace Prisma {
     NOT?: UserOnGroupWhereInput | UserOnGroupWhereInput[]
     userId?: StringFilter<"UserOnGroup"> | string
     groupId?: StringFilter<"UserOnGroup"> | string
+    role?: StringFilter<"UserOnGroup"> | string
     assignedAt?: DateTimeFilter<"UserOnGroup"> | Date | string
     assignedBy?: StringFilter<"UserOnGroup"> | string
     user?: XOR<UserRelationFilter, UserWhereInput>
@@ -5159,6 +5174,7 @@ export namespace Prisma {
   export type UserOnGroupOrderByWithAggregationInput = {
     userId?: SortOrder
     groupId?: SortOrder
+    role?: SortOrder
     assignedAt?: SortOrder
     assignedBy?: SortOrder
     _count?: UserOnGroupCountOrderByAggregateInput
@@ -5172,6 +5188,7 @@ export namespace Prisma {
     NOT?: UserOnGroupScalarWhereWithAggregatesInput | UserOnGroupScalarWhereWithAggregatesInput[]
     userId?: StringWithAggregatesFilter<"UserOnGroup"> | string
     groupId?: StringWithAggregatesFilter<"UserOnGroup"> | string
+    role?: StringWithAggregatesFilter<"UserOnGroup"> | string
     assignedAt?: DateTimeWithAggregatesFilter<"UserOnGroup"> | Date | string
     assignedBy?: StringWithAggregatesFilter<"UserOnGroup"> | string
   }
@@ -5357,6 +5374,7 @@ export namespace Prisma {
   }
 
   export type UserOnGroupCreateInput = {
+    role: string
     assignedAt?: Date | string
     assignedBy: string
     user: UserCreateNestedOneWithoutGroupsInput
@@ -5366,11 +5384,13 @@ export namespace Prisma {
   export type UserOnGroupUncheckedCreateInput = {
     userId: string
     groupId: string
+    role: string
     assignedAt?: Date | string
     assignedBy: string
   }
 
   export type UserOnGroupUpdateInput = {
+    role?: StringFieldUpdateOperationsInput | string
     assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     assignedBy?: StringFieldUpdateOperationsInput | string
     user?: UserUpdateOneRequiredWithoutGroupsNestedInput
@@ -5380,6 +5400,7 @@ export namespace Prisma {
   export type UserOnGroupUncheckedUpdateInput = {
     userId?: StringFieldUpdateOperationsInput | string
     groupId?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
     assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     assignedBy?: StringFieldUpdateOperationsInput | string
   }
@@ -5387,11 +5408,13 @@ export namespace Prisma {
   export type UserOnGroupCreateManyInput = {
     userId: string
     groupId: string
+    role: string
     assignedAt?: Date | string
     assignedBy: string
   }
 
   export type UserOnGroupUpdateManyMutationInput = {
+    role?: StringFieldUpdateOperationsInput | string
     assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     assignedBy?: StringFieldUpdateOperationsInput | string
   }
@@ -5399,6 +5422,7 @@ export namespace Prisma {
   export type UserOnGroupUncheckedUpdateManyInput = {
     userId?: StringFieldUpdateOperationsInput | string
     groupId?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
     assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     assignedBy?: StringFieldUpdateOperationsInput | string
   }
@@ -5635,6 +5659,7 @@ export namespace Prisma {
   export type UserOnGroupCountOrderByAggregateInput = {
     userId?: SortOrder
     groupId?: SortOrder
+    role?: SortOrder
     assignedAt?: SortOrder
     assignedBy?: SortOrder
   }
@@ -5642,6 +5667,7 @@ export namespace Prisma {
   export type UserOnGroupMaxOrderByAggregateInput = {
     userId?: SortOrder
     groupId?: SortOrder
+    role?: SortOrder
     assignedAt?: SortOrder
     assignedBy?: SortOrder
   }
@@ -5649,6 +5675,7 @@ export namespace Prisma {
   export type UserOnGroupMinOrderByAggregateInput = {
     userId?: SortOrder
     groupId?: SortOrder
+    role?: SortOrder
     assignedAt?: SortOrder
     assignedBy?: SortOrder
   }
@@ -5955,6 +5982,7 @@ export namespace Prisma {
   }
 
   export type UserOnGroupCreateWithoutUserInput = {
+    role: string
     assignedAt?: Date | string
     assignedBy: string
     group: GroupCreateNestedOneWithoutUsersInput
@@ -5962,6 +5990,7 @@ export namespace Prisma {
 
   export type UserOnGroupUncheckedCreateWithoutUserInput = {
     groupId: string
+    role: string
     assignedAt?: Date | string
     assignedBy: string
   }
@@ -5998,6 +6027,7 @@ export namespace Prisma {
     NOT?: UserOnGroupScalarWhereInput | UserOnGroupScalarWhereInput[]
     userId?: StringFilter<"UserOnGroup"> | string
     groupId?: StringFilter<"UserOnGroup"> | string
+    role?: StringFilter<"UserOnGroup"> | string
     assignedAt?: DateTimeFilter<"UserOnGroup"> | Date | string
     assignedBy?: StringFilter<"UserOnGroup"> | string
   }
@@ -6131,6 +6161,7 @@ export namespace Prisma {
   }
 
   export type UserOnGroupCreateWithoutGroupInput = {
+    role: string
     assignedAt?: Date | string
     assignedBy: string
     user: UserCreateNestedOneWithoutGroupsInput
@@ -6138,6 +6169,7 @@ export namespace Prisma {
 
   export type UserOnGroupUncheckedCreateWithoutGroupInput = {
     userId: string
+    role: string
     assignedAt?: Date | string
     assignedBy: string
   }
@@ -6249,11 +6281,13 @@ export namespace Prisma {
 
   export type UserOnGroupCreateManyUserInput = {
     groupId: string
+    role: string
     assignedAt?: Date | string
     assignedBy: string
   }
 
   export type UserOnGroupUpdateWithoutUserInput = {
+    role?: StringFieldUpdateOperationsInput | string
     assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     assignedBy?: StringFieldUpdateOperationsInput | string
     group?: GroupUpdateOneRequiredWithoutUsersNestedInput
@@ -6261,12 +6295,14 @@ export namespace Prisma {
 
   export type UserOnGroupUncheckedUpdateWithoutUserInput = {
     groupId?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
     assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     assignedBy?: StringFieldUpdateOperationsInput | string
   }
 
   export type UserOnGroupUncheckedUpdateManyWithoutUserInput = {
     groupId?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
     assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     assignedBy?: StringFieldUpdateOperationsInput | string
   }
@@ -6280,6 +6316,7 @@ export namespace Prisma {
 
   export type UserOnGroupCreateManyGroupInput = {
     userId: string
+    role: string
     assignedAt?: Date | string
     assignedBy: string
   }
@@ -6306,6 +6343,7 @@ export namespace Prisma {
   }
 
   export type UserOnGroupUpdateWithoutGroupInput = {
+    role?: StringFieldUpdateOperationsInput | string
     assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     assignedBy?: StringFieldUpdateOperationsInput | string
     user?: UserUpdateOneRequiredWithoutGroupsNestedInput
@@ -6313,12 +6351,14 @@ export namespace Prisma {
 
   export type UserOnGroupUncheckedUpdateWithoutGroupInput = {
     userId?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
     assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     assignedBy?: StringFieldUpdateOperationsInput | string
   }
 
   export type UserOnGroupUncheckedUpdateManyWithoutGroupInput = {
     userId?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
     assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     assignedBy?: StringFieldUpdateOperationsInput | string
   }

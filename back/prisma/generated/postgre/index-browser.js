@@ -131,6 +131,7 @@ exports.Prisma.UserScalarFieldEnum = {
 exports.Prisma.UserOnGroupScalarFieldEnum = {
   userId: 'userId',
   groupId: 'groupId',
+  role: 'role',
   assignedAt: 'assignedAt',
   assignedBy: 'assignedBy'
 };
