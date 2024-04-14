@@ -5,7 +5,6 @@ interface IFormCreateGroup {
   nameGroup: string,
   description: string
   participants: IParticipantsGroup[]
-  roles: IRolesForm[]
 }
 
 export default IFormCreateGroup

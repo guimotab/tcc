@@ -13,6 +13,7 @@ import { HTMLInputTypeAttribute } from "react";
 import ResolveResponseErrors from "@/utils/resolveResponseErrors";
 import { toast } from "sonner";
 import AuthController from "@/controllers/AuthController";
+import { useUpdateCurrentUser } from "../../states/hooks/useUpdateCurrentUser";
 
 type nameFields = "email" | "password"
 
@@ -25,6 +26,7 @@ interface IFields {
 
 export default function Login() {
   const router = useRouter()
+  const setCurrentUser = useUpdateCurrentUser()
 
   const formSchema = z.object({
     email: z.string().min(1, "O email é obrigatório").email("Email inválido"),
@@ -51,7 +53,8 @@ export default function Login() {
       return
     }
     //inicia um histórico novo
-    router.replace("/home")
+    setCurrentUser(resp.data!.user)
+    router.push("/home")
   }
 
   function createToast(errorResponse: ResolveResponseErrors) {

@@ -14,7 +14,7 @@ const VerifySession = ({ children }: VerifySessionProps) => {
 	async function load() {
 		const session = await getCookies()
 		if (!session) {
-			router.replace("/")
+			router.push("/")
 		}
 	}
 	return <main>{children}</main>

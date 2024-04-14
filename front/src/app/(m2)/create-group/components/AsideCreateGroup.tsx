@@ -2,11 +2,12 @@ import { Button } from "@/components/ui/button"
 import stepCreateGroup from "@/types/stepCreateGroup"
 import FormCreateGroup from "@/classes/FormCreateGroup"
 import { useRouter, useSearchParams } from "next/navigation"
+import IFormCreateGroup from "@/interfaces/IFormCreateGroup"
 
 interface AsideCreateGroupProps {
-  formSteps: FormCreateGroup
+  formStepsContext: IFormCreateGroup
 }
-const AsideCreateGroup = ({ formSteps }: AsideCreateGroupProps) => {
+const AsideCreateGroup = ({ formStepsContext }: AsideCreateGroupProps) => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const stepURL = searchParams.get("step") as stepCreateGroup
@@ -26,11 +27,12 @@ const AsideCreateGroup = ({ formSteps }: AsideCreateGroupProps) => {
     }
   ] as { label: string, step: stepCreateGroup }[]
   function navigateSteps(step: stepCreateGroup) {
-
+    
     const isNextStep = Number(step) > Number(stepURL)
     let canNavigate = true
-
+    
     if (isNextStep) {
+      const formSteps = new FormCreateGroup(formStepsContext)
       if (step === "2") {
         canNavigate = formSteps.verifyStepOne()
       } else if (step === "3") {
@@ -43,7 +45,7 @@ const AsideCreateGroup = ({ formSteps }: AsideCreateGroupProps) => {
     if (canNavigate) {
       router.push(`./create-group/?step=${step}`)
     }
-    
+
   }
   function returnBgColor(buttonStep: string) {
     if (buttonStep === stepURL) {

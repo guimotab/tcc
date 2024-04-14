@@ -1,18 +1,21 @@
 import IFormCreateGroup from "@/interfaces/IFormCreateGroup";
 import IParticipantsGroup from "@/interfaces/IParticipantsGroup";
-import IRolesForm from "@/interfaces/IRolesForm";
+import defaultRoles from "@/types/defaultRoles";
 interface paramsUpdateStepOne {
   nameGroup: string;
   description: string
 }
 
 class FormCreateGroup implements IFormCreateGroup {
+  private _nameGroup: string
+  private _description: string
+  private _participants: IParticipantsGroup[]
 
-  constructor(
-    private _nameGroup = "",
-    private _description = "",
-    private _participants = [{ email: "guimota22@gmail", role: "Líder" }, { email: "pedro22@gmail", role: "Admin" }, { email: "teste22@gmail", role: "Usuário" }],
-    private _roles = [{ level: 0, name: "Líder" },{ level: 1, name: "Admin" },{ level: 0, name: "Usuário" }] as IRolesForm[]) { }
+  constructor({ description, nameGroup, participants }: IFormCreateGroup) {
+    this._nameGroup = nameGroup
+    this._description = description
+    this._participants = participants
+  }
 
   updateFormStepOne({ nameGroup, description }: paramsUpdateStepOne) {
     this._nameGroup = nameGroup
@@ -24,23 +27,41 @@ class FormCreateGroup implements IFormCreateGroup {
   }
 
   verifyStepOne() {
-    if (this._nameGroup !== "" && this._description !== "") {
+    if (this._nameGroup !== "") {
       return true
     }
     return false
   }
 
   verifyStepTwo() {
-    if (this._nameGroup !== "" && this._description !== "") {
+    if (this.verifyStepOne() && this.participants.length > 1) {
       return true
     }
     return false
   }
   verifyStepThree() {
-    if (this._nameGroup !== "" && this._description !== "") {
+    if (this.verifyStepTwo()) {
       return true
     }
     return false
+  }
+
+  getInitialOfEmail(email: string) {
+    return email.charAt(0).toUpperCase()
+  }
+
+  deleteParticipant(emailParticipant: string) {
+    const index = this._participants.findIndex(participant => participant.email === emailParticipant)
+    this._participants.splice(index, 1)
+  }
+
+  updateRole(emailParticipant: string, newRole: defaultRoles) {
+    const newInformation = {
+      email: emailParticipant,
+      role: newRole
+    } as IParticipantsGroup
+    const index = this._participants.findIndex(participant => participant.email === emailParticipant)
+    this._participants.splice(index, 1, newInformation)
   }
 
   public get nameGroup(): string {
@@ -52,13 +73,7 @@ class FormCreateGroup implements IFormCreateGroup {
   public get participants() {
     return this._participants;
   }
-  public get roles() {
-    return this._roles;
-  }
 
-  public set roles(value) {
-    this._roles = value;
-  }
   public set participants(value) {
     this._participants = value;
   }

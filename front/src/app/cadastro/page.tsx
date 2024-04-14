@@ -14,6 +14,7 @@ import { FcGoogle } from "react-icons/fc";
 import { toast } from "sonner";
 import { z } from "zod";
 import { signIn } from "next-auth/react"
+import { useUpdateCurrentUser } from "../../../states/hooks/useUpdateCurrentUser";
 
 type nameFields = "name" | "email" | "password" | "confirmPassword"
 
@@ -26,6 +27,7 @@ interface IFields {
 
 const SignIn = () => {
   const router = useRouter()
+  const setCurrentUser = useUpdateCurrentUser()
 
   const formSchema = z.object({
     name: z.string().min(1, "O nome é obrigatório"),
@@ -56,7 +58,7 @@ const SignIn = () => {
         const errorResponse = new ResolveResponseErrors(resp.resp)
         return createToast(errorResponse)
       }
-
+      setCurrentUser(resp.data!.user)
       router.replace("/home")
 
     } else {
