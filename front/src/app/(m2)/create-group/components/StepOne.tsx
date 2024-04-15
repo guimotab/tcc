@@ -45,7 +45,7 @@ const StepOne = () => {
     formSteps.updateFormStepOne(formValues)
     const canNextStep = formSteps.verifyStepOne()
     // if(canNextStep){
-      setFormStepsContext(formSteps)
+    setFormStepsContext(formSteps)
     router.push(`./create-group/?step=${Number(stepURL) + 1}`)
     // } 
   }
@@ -86,7 +86,7 @@ const StepOne = () => {
               />
             )}
 
-            <Button type="submit">Avançar etapa</Button>
+            <Button type="submit" disabled={formSteps.verifyStepOne()} variant={formSteps.verifyStepOne() ? "default" : "ghost"}>Avançar etapa</Button>
           </form>
         </FormProvider>
       }

@@ -1,21 +1,31 @@
 "use client"
 import { ReactNode, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { getCookies } from "@/controllers/CookiesController"
+import TokensController from "@/controllers/TokensController"
+import UserController from "@/controllers/UserController"
+import { useUpdateCurrentUser } from "../../states/hooks/useUpdateCurrentUser"
+import IUser from "@/interfaces/IUser"
 
 interface VerifySessionProps {
 	children: ReactNode
 }
 const VerifySession = ({ children }: VerifySessionProps) => {
 	const router = useRouter()
+	const setCurrentUser = useUpdateCurrentUser()
 	useEffect(() => {
 		load()
 	}, [])
 	async function load() {
-		const session = await getCookies()
-		if (!session) {
-			router.push("/")
+		
+		const sessionUserId = await TokensController.getToken()
+		if (sessionUserId) {
+			const currentUser = await UserController.getUserById(sessionUserId)
+			if (currentUser?.data) {
+				setCurrentUser(currentUser.data.user)
+			}
+			return
 		}
+		router.push("/")
 	}
 	return <main>{children}</main>
 }

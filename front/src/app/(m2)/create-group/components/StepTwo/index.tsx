@@ -15,9 +15,6 @@ const StepTwo = () => {
   const stepURL = searchParams.get("step") as stepCreateGroup
 
   function nextStep() {
-    if (formSteps.participants.length === 0) {
-      return
-    }
     router.push(`./create-group/?step=${Number(stepURL) + 1}`)
   }
 
@@ -37,7 +34,7 @@ const StepTwo = () => {
             </ul>
           </div>
 
-          <Button onClick={nextStep} variant={formSteps.verifyStepTwo() ? "default" : "ghost"}>Avançar etapa</Button>
+          <Button onClick={nextStep} disabled={!formSteps.verifyStepTwo()} variant={formSteps.verifyStepTwo() ? "default" : "ghost"}>Avançar etapa</Button>
         </>
       }
     </>
