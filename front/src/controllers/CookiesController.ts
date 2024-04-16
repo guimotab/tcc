@@ -28,8 +28,9 @@ export async function setCookies(data: IAuthResponse) {
 export async function updateCookies(token: string, refresh: string) {
   const session = cookies().get("session")!.value
   const tokens = JSON.parse(session) as valueCookies
-  const valueCookies = { token, refresh, expires: tokens.expires } as valueCookies
-  cookies().set("session", JSON.stringify(valueCookies), { expires: tokens.expires, httpOnly: true })
+  const dateTokens = new Date(tokens.expires)
+  const valueCookies = { token, refresh, expires: dateTokens } as valueCookies
+  cookies().set("session", JSON.stringify(valueCookies), { expires: dateTokens, httpOnly: true })
 }
 export async function deleteCookies() {
   cookies().set("session", "", { expires: new Date(0) })

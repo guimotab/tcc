@@ -74,7 +74,7 @@ export default abstract class AuthController {
     if (!checkPassword) {
       return res.json({ resp: "Email ou senha incorretos!" } as AuthResponse)
     }
-    try {
+    try { 
       const secret = process.env.SECRET!
       const secretRefresh = process.env.REFRESH!
 

@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import prismaPg from "..";
 import { messagesResponse } from '../types/messagesResponse';
 import IUser from '../interface/IUser';
-import IGroup from '../interface/IGroup';
 
 interface UserResponse {
   resp: messagesResponse
@@ -13,10 +12,10 @@ interface UserResponse {
 
 export default abstract class UserController {
   static async get(req: Request, res: Response) {
-    const { userId } = req.params
+    const { id } = req.params
 
     try {
-      const user = await prismaPg.user.findUnique({ where: { id: userId } })
+      const user = await prismaPg.user.findUnique({ where: { id } })
 
       if (!user) {
         return res.json({ resp: "Grupo não encontrado" } as UserResponse)

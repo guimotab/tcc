@@ -10,10 +10,18 @@ import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { FormChatContext } from "../page"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
+import GroupController from "@/controllers/GroupController"
+import IGroup from "@/interfaces/IGroup"
+import InvitesController from "@/controllers/InvitesController"
+import useCurrentUser from "../../../../../states/hooks/useCurrentUser"
+import EmailController from "@/controllers/EmailController"
+import IEmail from "@/interfaces/IEmail"
 interface StepFourProps {
 }
 
 const StepFour = ({ }: StepFourProps) => {
+
+  const currentUser = useCurrentUser()
   const router = useRouter()
   const { formStepsContext, setFormStepsContext } = useContext(FormChatContext)
   const formSteps = new FormCreateGroup(formStepsContext)
@@ -25,8 +33,20 @@ const StepFour = ({ }: StepFourProps) => {
       router.back()
     }
   }
-  function finish() {
+  async function finish() {
+    const dataGroup = {
+      name: formSteps.nameGroup,
+      description: formSteps.description,
+    } as IGroup
 
+    const respGroup = await GroupController.createGroup(dataGroup, currentUser, formSteps.participants)
+
+    if (respGroup.resp !== "Success") {
+      console.log(respGroup.resp);
+      return
+    }
+
+    console.log("Sucesso");
   }
 
   return (
@@ -92,7 +112,7 @@ const StepFour = ({ }: StepFourProps) => {
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Voltar</AlertDialogCancel>
-                      <AlertDialogAction>Continuar</AlertDialogAction>
+                      <AlertDialogAction onClick={finish}>Continuar</AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>

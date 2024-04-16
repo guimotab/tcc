@@ -1,6 +1,7 @@
 import IAxiosResponse from "@/interfaces/IAxiosResponse"
 import IUser from "@/interfaces/IUser"
 import axios from "axios"
+import HttpService from "./HttpService"
 
 export interface IUserResponse {
   resp: string
@@ -9,17 +10,11 @@ export interface IUserResponse {
   }
 }
 
-export default class UserService {
+export default class UserService extends HttpService<IUser, IUserResponse> {
 
-  private url = "http://localhost:4000/user"
-
-  async getByUserId(userId: string) {
-    const result = await axios.get(`${this.url}/${userId}`).catch(this.handleError)
-    return result.data as IAxiosResponse<IUserResponse>
+  constructor() {
+    super("user")
   }
 
-  private handleError(error: any) {
-    console.log(error)
-    return { data: { resp: "AxiosError" } }
-  }
+
 }

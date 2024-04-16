@@ -3,6 +3,7 @@ import prismaPg from "..";
 import { messagesResponse } from '../types/messagesResponse';
 import IUser from '../interface/IUser';
 import IGroup from '../interface/IGroup';
+import EmailController from './EmailController';
 
 interface GroupResponse {
   resp: messagesResponse
@@ -11,12 +12,23 @@ interface GroupResponse {
   }
 }
 
+interface createGroup {
+  name: string,
+  user: IUser
+  description?: string,
+  quantity: number
+  participants: {
+    email: string
+    role: string
+  }[]
+}
+
 export default abstract class GroupController {
   static async get(req: Request, res: Response) {
-    const { groupId } = req.params
+    const { id } = req.params
 
     try {
-      const group = await prismaPg.group.findUnique({ where: { id: groupId } })
+      const group = await prismaPg.group.findUnique({ where: { id } })
 
       if (!group) {
         return res.json({ resp: "Grupo não encontrado" } as GroupResponse)
@@ -30,8 +42,7 @@ export default abstract class GroupController {
   }
 
   static async create(req: Request, res: Response) {
-    const { name, description, user } = req.body as { name: string, description: string, user: IUser }
-
+    const { name, description = "", user, participants } = req.body as createGroup
     try {
       const group = await prismaPg.group.create({
         data: {
@@ -39,7 +50,7 @@ export default abstract class GroupController {
           description,
           users: {
             create: {
-              role: "admin",
+              role: "Admin",
               assignedBy: user.name,
               user: {
                 connect: {
@@ -51,10 +62,31 @@ export default abstract class GroupController {
         }
       })
 
+      participants.forEach(async participant => {
+        if (participant.email !== user.email) {
+          const invites = await prismaPg.invites.create({ data: { group: { connect: { id: group.id } } } })
+          EmailController.sendEmail({ from: { email: user.email, role: "Líder", name: user.name, project: name }, link: invites.id, to: participant.email })
+        }
+      })
+
       return res.status(200).json({ resp: "Success", data: { group } } as GroupResponse)
     } catch (error) {
       console.log(error);
       return res.json({ resp: "Ocorrou um error no servidor!" } as GroupResponse)
+    }
+  }
+
+  static async delete(req: Request, res: Response) {
+    const { id } = req.params
+
+    try {
+      await prismaPg.group.delete({ where: { id } })
+
+
+      return res.status(200).json({ resp: "Success" } as GroupResponse)
+    } catch (err) {
+      console.log(err);
+      return res.json({ resp: "Ocorrou um error no servidor!" })
     }
   }
 }

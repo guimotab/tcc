@@ -86,7 +86,7 @@ const StepOne = () => {
               />
             )}
 
-            <Button type="submit" disabled={formSteps.verifyStepOne()} variant={formSteps.verifyStepOne() ? "default" : "ghost"}>Avançar etapa</Button>
+            <Button type="submit" disabled={form.getValues("nameGroup").length === 0} variant={form.getValues("nameGroup").length !== 0 ? "default" : "ghost"}>Avançar etapa</Button>
           </form>
         </FormProvider>
       }

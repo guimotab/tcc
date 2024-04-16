@@ -22,7 +22,7 @@ const FormAddUsers = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      emailParticipant: "",
+      emailParticipant: "guimotab22@gmail.com",
     },
   })
   function onAddParticipant(formValues: z.infer<typeof formSchema>) {

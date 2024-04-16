@@ -2,9 +2,10 @@
 import { ReactNode, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import TokensController from "@/controllers/TokensController"
-import UserController from "@/controllers/UserController"
 import { useUpdateCurrentUser } from "../../states/hooks/useUpdateCurrentUser"
 import IUser from "@/interfaces/IUser"
+import UserController from "@/controllers/UserController"
+import useCurrentUser from "../../states/hooks/useCurrentUser"
 
 interface VerifySessionProps {
 	children: ReactNode
@@ -12,14 +13,17 @@ interface VerifySessionProps {
 const VerifySession = ({ children }: VerifySessionProps) => {
 	const router = useRouter()
 	const setCurrentUser = useUpdateCurrentUser()
+	const currentUser = useCurrentUser()
+
 	useEffect(() => {
 		load()
 	}, [])
+
 	async function load() {
-		
+
 		const sessionUserId = await TokensController.getToken()
 		if (sessionUserId) {
-			const currentUser = await UserController.getUserById(sessionUserId)
+			const currentUser = await UserController.get(sessionUserId)
 			if (currentUser?.data) {
 				setCurrentUser(currentUser.data.user)
 			}
@@ -27,7 +31,7 @@ const VerifySession = ({ children }: VerifySessionProps) => {
 		}
 		router.push("/")
 	}
-	return <main>{children}</main>
+	return <main>{currentUser && children}</main>
 }
 
 export default VerifySession

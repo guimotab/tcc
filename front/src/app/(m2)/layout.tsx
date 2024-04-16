@@ -3,7 +3,6 @@ import "../globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import VerifySession from "@/providers/VerifySession";
 import { Suspense } from "react";
-import { RecoilRoot } from "recoil";
 
 export default function RootLayout({
   children,

@@ -24,7 +24,7 @@ export default abstract class TokensController {
         const result = jwt.verify(this._token, secret) as { id: string }
         return result.id
       } catch (err) {
-        console.log(err);
+        // console.log(err);
         
         const id = this.verifyRefresh()
         if (id) {
