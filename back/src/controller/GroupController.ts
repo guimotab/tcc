@@ -118,7 +118,6 @@ export default abstract class GroupController {
         }
       })
 
-      console.log("final");
       return res.status(200).json({ resp: "Success", data: { group } } as GroupResponse)
     } catch (error) {
       console.log(error);

@@ -30,7 +30,9 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-transporter.setupProxy("http://10.20.0.4:3128")
+if (process.env.http_proxy) {
+  transporter.setupProxy(process.env.http_proxy)
+}
 
 
 export default abstract class EmailController {
@@ -73,8 +75,5 @@ export default abstract class EmailController {
           <a href="http://localhost:3000/invites/${link}">https://chatworker/invites/${link}</a>
           `
     });
-    console.log("email");
-
   }
-
 }

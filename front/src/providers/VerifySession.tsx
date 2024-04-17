@@ -1,20 +1,20 @@
 "use client"
-import { ReactNode, useEffect } from "react"
+import { ReactNode, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import TokensController from "@/controllers/TokensController"
 import { useUpdateCurrentUser } from "../../states/hooks/useUpdateCurrentUser"
-import IUser from "@/interfaces/IUser"
 import UserController from "@/controllers/UserController"
-import useCurrentUser from "../../states/hooks/useCurrentUser"
 
 interface VerifySessionProps {
 	children: ReactNode
+	redirectSucess?: "/home"
+	redirectErrorNoToken?: "/"
 }
-const VerifySession = ({ children }: VerifySessionProps) => {
+const VerifySession = ({ children, redirectSucess, redirectErrorNoToken }: VerifySessionProps) => {
 	const router = useRouter()
 	const setCurrentUser = useUpdateCurrentUser()
-	const currentUser = useCurrentUser()
-
+	const [canLoad, setCanLoad] = useState(false)
+	
 	useEffect(() => {
 		load()
 	}, [])
@@ -26,12 +26,20 @@ const VerifySession = ({ children }: VerifySessionProps) => {
 			const currentUser = await UserController.get(sessionUserId)
 			if (currentUser?.data) {
 				setCurrentUser(currentUser.data.user)
+				if (redirectSucess) {
+					router.replace(redirectSucess)
+					return setCanLoad(false)
+				}
+				return setCanLoad(true)
 			}
-			return
 		}
-		router.push("/")
+		if (redirectErrorNoToken) {
+			router.replace("/")
+			return setCanLoad(false)
+		}
+		return setCanLoad(true)
 	}
-	return <main>{currentUser && children}</main>
+	return canLoad && <main>{children}</main>
 }
 
 export default VerifySession
