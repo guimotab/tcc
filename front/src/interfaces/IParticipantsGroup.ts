@@ -2,7 +2,7 @@ import defaultRoles from "@/types/defaultRoles"
 
 interface IParticipantsGroup{
   email: string
-  role: defaultRoles | string
+  role: defaultRoles
 }
 
 export default IParticipantsGroup

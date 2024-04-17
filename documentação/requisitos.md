@@ -7,6 +7,7 @@
 - deve conter aba chat
 - deve conter aba de configurações
 - deve conter aba de reuniões, enquetes e distribuidor de tarefas
+- deve ser enviado por email o convite para se entrar no grupo
 
 ------------- Requisitos Não Funcionais -------------
 

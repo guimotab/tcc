@@ -1,1 +1,8 @@
-export type messageResponse = "AxiosError" | "Success" | "CredentialsSignin" 
+type frontErrors = "AxiosError" | "CredentialsSignin"
+export type messageResponse = frontErrors | "Success" |
+  "ServerError" |
+  "EmailAlreadyUsed" |
+  "IncorrectCredentials" |
+  "GroupNotFound" |
+  "InvalidInvite" |
+  "UserExistOnGroup"

@@ -1,26 +1,27 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import { messagesResponse } from '../types/messagesResponse';
+import prismaPg from "..";
+import { messageResponse } from '../types/messageResponse';
 import IUser from '../interface/IUser';
-import { prismaPg } from '..';
+import dot from "dotenv"
 
 interface AuthResponse {
-  resp: messagesResponse
+  resp: messageResponse
   data?: {
     token: string,
     refresh: string
     user: IUser
   }
 }
-
+dot.config()
 export default abstract class AuthController {
   // static async sign(req: Request, res: Response) {
   //   const { name, email, password } = req.body
 
   //   const existEmail = await prismaPg.user.findUnique({ where: { email } })
   //   if (existEmail) {
-  //     return res.json({ resp: "Esse email já está sendo usado!" } as AuthResponse)
+  //     return res.json({ resp: "EmailAlreadyUsed" } as AuthResponse)
   //   }
 
   //   try {
@@ -35,7 +36,7 @@ export default abstract class AuthController {
   //     return res.status(200).json({ resp: "Success", data: { token, refresh, user } } as AuthResponse)
   //   } catch (err) {
   //     console.log(err);
-  //     return res.json({ resp: "Ocorrou um error no servidor!" })
+  //     return res.json({ resp: "ServerError" })
   //   }
   // }
 
@@ -44,7 +45,7 @@ export default abstract class AuthController {
 
     const existEmail = await prismaPg.user.findUnique({ where: { email } })
     if (existEmail) {
-      return res.json({ resp: "Esse email já está sendo usado!" } as AuthResponse)
+      return res.json({ resp: "EmailAlreadyUsed" } as AuthResponse)
     }
 
     try {
@@ -59,7 +60,7 @@ export default abstract class AuthController {
       return res.status(200).json({ resp: "Success", data: { token, refresh, user } } as AuthResponse)
     } catch (err) {
       console.log(err);
-      return res.json({ resp: "Ocorrou um error no servidor!" })
+      return res.json({ resp: "ServerError" })
     }
   }
 
@@ -68,13 +69,13 @@ export default abstract class AuthController {
 
     const user = await prismaPg.user.findUnique({ where: { email: email } })
     if (!user) {
-      return res.json({ resp: "Email ou senha incorretos!" } as AuthResponse)
+      return res.json({ resp: "IncorrectCredentials" } as AuthResponse)
     }
     const checkPassword = await bcrypt.compare(password, user.password)
     if (!checkPassword) {
-      return res.json({ resp: "Email ou senha incorretos!" } as AuthResponse)
+      return res.json({ resp: "IncorrectCredentials" } as AuthResponse)
     }
-    try {
+    try { 
       const secret = process.env.SECRET!
       const secretRefresh = process.env.REFRESH!
 
@@ -84,7 +85,7 @@ export default abstract class AuthController {
       return res.status(200).json({ resp: "Success", data: { token, refresh, user } } as AuthResponse)
     } catch (error) {
       console.log(error);
-      return res.json({ resp: "Ocorrou um error no servidor!" } as AuthResponse)
+      return res.json({ resp: "ServerError" } as AuthResponse)
     }
   }
 }
