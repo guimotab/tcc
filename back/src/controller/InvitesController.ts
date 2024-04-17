@@ -1,18 +1,17 @@
 import { Request, Response } from 'express';
 import prismaPg from "..";
-import { messagesResponse } from '../types/messagesResponse';
+import { messageResponse } from '../types/messageResponse';
 import IInvites from '../interface/IInvites';
-import EmailController from './EmailController';
 
 interface InviteResponse {
-  resp: messagesResponse
+  resp: messageResponse
   data?: {
     invites: IInvites
   }
 }
 
 interface InviteArrayResponse {
-  resp: messagesResponse
+  resp: messageResponse
   data?: {
     invites: IInvites[]
   }
@@ -20,19 +19,19 @@ interface InviteArrayResponse {
 
 export default abstract class InvitesController {
   static async get(req: Request, res: Response) {
-    const { inviteId } = req.params
+    const { id } = req.params
 
     try {
-      const invites = await prismaPg.invites.findUnique({ where: { id: inviteId } })
+      const invites = await prismaPg.invites.findUnique({ where: { id } })
 
       if (!invites) {
-        return res.json({ resp: "Convite inexistente" } as InviteResponse)
+        return res.json({ resp: "InvalidInvite" } as InviteResponse)
       }
 
       return res.status(200).json({ resp: "Success", data: { invites } } as InviteResponse)
     } catch (err) {
       console.log(err);
-      return res.json({ resp: "Ocorrou um error no servidor!" })
+      return res.json({ resp: "ServerError" })
     }
   }
 
@@ -43,14 +42,14 @@ export default abstract class InvitesController {
       const arrayInvites = [] as IInvites[]
 
       for (let i = 0; i < quantity; i++) {
-        const invites = await prismaPg.invites.create({ data: { group: { connect: { id: groupId } } } })
-        arrayInvites.push(invites)
+        // const invites = await prismaPg.invites.create({ data: { group: { connect: { id: groupId } } } })
+        // arrayInvites.push(invites)
       }
 
       return res.status(200).json({ resp: "Success", data: { invites: arrayInvites } } as InviteArrayResponse)
     } catch (error) {
       console.log(error);
-      return res.json({ resp: "Ocorrou um error no servidor!" } as InviteResponse)
+      return res.json({ resp: "ServerError" } as InviteResponse)
     }
   }
 }

@@ -1,12 +1,13 @@
 import { Request, Response } from 'express';
 import prismaPg from "..";
-import { messagesResponse } from '../types/messagesResponse';
+import { messageResponse } from '../types/messageResponse';
 import IUser from '../interface/IUser';
 import IGroup from '../interface/IGroup';
 import EmailController from './EmailController';
+import IInvites from '../interface/IInvites';
 
 interface GroupResponse {
-  resp: messagesResponse
+  resp: messageResponse
   data?: {
     group: IGroup
   }
@@ -23,6 +24,11 @@ interface createGroup {
   }[]
 }
 
+interface addParticipantReq {
+  invite: IInvites
+  participant: IUser
+}
+
 export default abstract class GroupController {
   static async get(req: Request, res: Response) {
     const { id } = req.params
@@ -31,13 +37,52 @@ export default abstract class GroupController {
       const group = await prismaPg.group.findUnique({ where: { id } })
 
       if (!group) {
-        return res.json({ resp: "Grupo não encontrado" } as GroupResponse)
+        return res.json({ resp: "GroupNotFound" } as GroupResponse)
       }
 
       return res.status(200).json({ resp: "Success", data: { group } } as GroupResponse)
     } catch (err) {
       console.log(err);
-      return res.json({ resp: "Ocorrou um error no servidor!" })
+      return res.json({ resp: "ServerError" })
+    }
+  }
+
+  static async addNewParticipant(req: Request, res: Response) {
+    const { invite, participant } = req.body as addParticipantReq
+    try {
+      const participantAlreadyExist = await prismaPg.userOnGroup.findUnique({ where: { userId_groupId: { userId: participant.id, groupId: invite.groupId } } })
+
+      if (participantAlreadyExist) {
+        return res.json({ resp: "UserExistOnGroup" } as GroupResponse)
+      }
+
+      const group = await prismaPg.group.update({
+        data: {
+          users: {
+            create: {
+              role: invite.role,
+              user: {
+                connect: {
+                  id: participant.id
+                }
+              },
+              assignedBy: participant.name
+            }
+          }
+        },
+        where: { id: invite.groupId }
+      })
+
+      if (!group) {
+        return res.json({ resp: "GroupNotFound" } as GroupResponse)
+      }
+
+      await prismaPg.invites.delete({ where: { id: invite.id } })
+
+      return res.status(200).json({ resp: "Success", data: { group } } as GroupResponse)
+    } catch (err) {
+      console.log(err);
+      return res.json({ resp: "ServerError" })
     }
   }
 
@@ -50,7 +95,7 @@ export default abstract class GroupController {
           description,
           users: {
             create: {
-              role: "Admin",
+              role: "Líder",
               assignedBy: user.name,
               user: {
                 connect: {
@@ -64,15 +109,20 @@ export default abstract class GroupController {
 
       participants.forEach(async participant => {
         if (participant.email !== user.email) {
-          const invites = await prismaPg.invites.create({ data: { group: { connect: { id: group.id } } } })
-          EmailController.sendEmail({ from: { email: user.email, role: "Líder", name: user.name, project: name }, link: invites.id, to: participant.email })
+          const invites = await prismaPg.invites.create({ data: { role: participant.role, group: { connect: { id: group.id } } } })
+          EmailController.sendEmail({
+            from: { email: user.email, role: "Líder", name: user.name, project: name },
+            link: invites.id,
+            to: participant
+          })
         }
       })
 
+      console.log("final");
       return res.status(200).json({ resp: "Success", data: { group } } as GroupResponse)
     } catch (error) {
       console.log(error);
-      return res.json({ resp: "Ocorrou um error no servidor!" } as GroupResponse)
+      return res.json({ resp: "ServerError" } as GroupResponse)
     }
   }
 
@@ -86,7 +136,7 @@ export default abstract class GroupController {
       return res.status(200).json({ resp: "Success" } as GroupResponse)
     } catch (err) {
       console.log(err);
-      return res.json({ resp: "Ocorrou um error no servidor!" })
+      return res.json({ resp: "ServerError" })
     }
   }
 }

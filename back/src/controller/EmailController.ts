@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
-import { messagesResponse } from '../types/messagesResponse';
+import { messageResponse } from '../types/messageResponse';
 import nodemailer from "nodemailer"
 
 interface EmailResponse {
-  resp: messagesResponse
+  resp: messageResponse
 }
 
 interface reqBodyEmail {
@@ -13,7 +13,10 @@ interface reqBodyEmail {
     project: string
     role: string
   }
-  to: string,
+  to: {
+    email: string;
+    role: string;
+  }
   link: string
 }
 
@@ -37,7 +40,7 @@ export default abstract class EmailController {
     try {
       const invite = await transporter.sendMail({
         from: `"ChatWorker" <${from.email}>`, // sender address
-        to, // list of receivers "guimota22@gmail.com, baz@example.com"
+        to: to.email, // list of receivers "guimota22@gmail.com, baz@example.com"
         subject: `Você foi convidado(a) para participar do projeto ${from.project}`, // Subject line
         text: "Convite de grupo!", // plain text body
         html: `
@@ -52,24 +55,26 @@ export default abstract class EmailController {
       return res.status(200).json({ resp: "Success", data: { invite } } as EmailResponse)
     } catch (err) {
       console.log(err);
-      return res.json({ resp: "Ocorrou um error no servidor!" })
+      return res.json({ resp: "ServerError" })
     }
   }
 
-  static sendEmail({ from, link, to }: reqBodyEmail) {
-    transporter.sendMail({
+  static async sendEmail({ from, link, to }: reqBodyEmail) {
+    await transporter.sendMail({
       from: `"ChatWorker" <${from.email}>`, // sender address
-      to, // list of receivers "guimota22@gmail.com, baz@example.com"
+      to: to.email, // list of receivers "guimota22@gmail.com, baz@example.com"
       subject: `Você foi convidado(a) para participar do projeto ${from.project}`, // Subject line
       text: "Convite de grupo!", // plain text body
       html: `
           <h3>Olá</h3>
-          <p>Você foi convidado(a) pelo ${from.name}(${from.role}) para participar do projeto ${from.project}!</p>
+          <p>Você foi convidado(a) pelo ${from.name} (${from.role} do projeto ${from.project}) ${to.role === "Usuário" ? "" : `com o cargo de ${to.role.toLowerCase()}!`}</p>
           <p>Para aceitar o convite, basta clicar no link abaixo 👇</p>
           <br />
           <a href="http://localhost:3000/invites/${link}">https://chatworker/invites/${link}</a>
           `
     });
+    console.log("email");
+
   }
 
 }

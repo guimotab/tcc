@@ -1,5 +1,4 @@
-type frontErrors = "AxiosError" | "CredentialsSignin"
-export type messageResponse = frontErrors | "Success" |
+export type messageResponse = "Success" |
   "ServerError" |
   "EmailAlreadyUsed" |
   "IncorrectCredentials" |

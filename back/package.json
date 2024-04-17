@@ -7,7 +7,7 @@
     "start": "npx tsx watch src/index.ts",
     "tsc": "tsc -w",
     "compile": "npx tsc",
-    "prisma": "prisma migrate dev --name  --schema prisma/schema1.prisma",
+    "prisma": "prisma migrate dev --name --schema prisma/schema1.prisma",
     "prisma-generate": "prisma generate --schema prisma/schema1.prisma"
   },
   "devDependencies": {

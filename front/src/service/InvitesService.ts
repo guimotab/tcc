@@ -7,7 +7,7 @@ import { messageResponse } from "@/types/messageResponse"
 export interface IInvitesResponse {
   resp: messageResponse
   data: {
-    group: IInvites
+    invites: IInvites
   }
 }
 

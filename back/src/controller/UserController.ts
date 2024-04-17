@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
 import prismaPg from "..";
-import { messagesResponse } from '../types/messagesResponse';
+import { messageResponse } from '../types/messageResponse';
 import IUser from '../interface/IUser';
 
 interface UserResponse {
-  resp: messagesResponse
+  resp: messageResponse
   data?: {
     user: IUser
   }
@@ -18,13 +18,13 @@ export default abstract class UserController {
       const user = await prismaPg.user.findUnique({ where: { id } })
 
       if (!user) {
-        return res.json({ resp: "Grupo não encontrado" } as UserResponse)
+        return res.json({ resp: "GroupNotFound" } as UserResponse)
       }
 
       return res.status(200).json({ resp: "Success", data: { user } } as UserResponse)
     } catch (err) {
       console.log(err);
-      return res.json({ resp: "Ocorrou um error no servidor!" })
+      return res.json({ resp: "ServerError" })
     }
   }
 

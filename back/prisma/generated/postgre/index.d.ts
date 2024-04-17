@@ -4161,6 +4161,7 @@ export namespace Prisma {
 
   export type InvitesMinAggregateOutputType = {
     id: string | null
+    role: string | null
     groupId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -4168,6 +4169,7 @@ export namespace Prisma {
 
   export type InvitesMaxAggregateOutputType = {
     id: string | null
+    role: string | null
     groupId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -4175,6 +4177,7 @@ export namespace Prisma {
 
   export type InvitesCountAggregateOutputType = {
     id: number
+    role: number
     groupId: number
     createdAt: number
     updatedAt: number
@@ -4184,6 +4187,7 @@ export namespace Prisma {
 
   export type InvitesMinAggregateInputType = {
     id?: true
+    role?: true
     groupId?: true
     createdAt?: true
     updatedAt?: true
@@ -4191,6 +4195,7 @@ export namespace Prisma {
 
   export type InvitesMaxAggregateInputType = {
     id?: true
+    role?: true
     groupId?: true
     createdAt?: true
     updatedAt?: true
@@ -4198,6 +4203,7 @@ export namespace Prisma {
 
   export type InvitesCountAggregateInputType = {
     id?: true
+    role?: true
     groupId?: true
     createdAt?: true
     updatedAt?: true
@@ -4278,6 +4284,7 @@ export namespace Prisma {
 
   export type InvitesGroupByOutputType = {
     id: string
+    role: string
     groupId: string
     createdAt: Date
     updatedAt: Date
@@ -4302,6 +4309,7 @@ export namespace Prisma {
 
   export type InvitesSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    role?: boolean
     groupId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -4310,6 +4318,7 @@ export namespace Prisma {
 
   export type InvitesSelectScalar = {
     id?: boolean
+    role?: boolean
     groupId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -4327,6 +4336,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      role: string
       groupId: string
       createdAt: Date
       updatedAt: Date
@@ -4726,6 +4736,7 @@ export namespace Prisma {
    */ 
   interface InvitesFieldRefs {
     readonly id: FieldRef<"Invites", 'String'>
+    readonly role: FieldRef<"Invites", 'String'>
     readonly groupId: FieldRef<"Invites", 'String'>
     readonly createdAt: FieldRef<"Invites", 'DateTime'>
     readonly updatedAt: FieldRef<"Invites", 'DateTime'>
@@ -6024,6 +6035,7 @@ export namespace Prisma {
 
   export const InvitesScalarFieldEnum: {
     id: 'id',
+    role: 'role',
     groupId: 'groupId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -6294,6 +6306,7 @@ export namespace Prisma {
     OR?: InvitesWhereInput[]
     NOT?: InvitesWhereInput | InvitesWhereInput[]
     id?: StringFilter<"Invites"> | string
+    role?: StringFilter<"Invites"> | string
     groupId?: StringFilter<"Invites"> | string
     createdAt?: DateTimeFilter<"Invites"> | Date | string
     updatedAt?: DateTimeFilter<"Invites"> | Date | string
@@ -6302,6 +6315,7 @@ export namespace Prisma {
 
   export type InvitesOrderByWithRelationInput = {
     id?: SortOrder
+    role?: SortOrder
     groupId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -6313,6 +6327,7 @@ export namespace Prisma {
     AND?: InvitesWhereInput | InvitesWhereInput[]
     OR?: InvitesWhereInput[]
     NOT?: InvitesWhereInput | InvitesWhereInput[]
+    role?: StringFilter<"Invites"> | string
     groupId?: StringFilter<"Invites"> | string
     createdAt?: DateTimeFilter<"Invites"> | Date | string
     updatedAt?: DateTimeFilter<"Invites"> | Date | string
@@ -6321,6 +6336,7 @@ export namespace Prisma {
 
   export type InvitesOrderByWithAggregationInput = {
     id?: SortOrder
+    role?: SortOrder
     groupId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -6334,6 +6350,7 @@ export namespace Prisma {
     OR?: InvitesScalarWhereWithAggregatesInput[]
     NOT?: InvitesScalarWhereWithAggregatesInput | InvitesScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Invites"> | string
+    role?: StringWithAggregatesFilter<"Invites"> | string
     groupId?: StringWithAggregatesFilter<"Invites"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Invites"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Invites"> | Date | string
@@ -6585,6 +6602,7 @@ export namespace Prisma {
 
   export type InvitesCreateInput = {
     id?: string
+    role: string
     createdAt?: Date | string
     updatedAt?: Date | string
     group: GroupCreateNestedOneWithoutInvitesInput
@@ -6592,6 +6610,7 @@ export namespace Prisma {
 
   export type InvitesUncheckedCreateInput = {
     id?: string
+    role: string
     groupId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -6599,6 +6618,7 @@ export namespace Prisma {
 
   export type InvitesUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     group?: GroupUpdateOneRequiredWithoutInvitesNestedInput
@@ -6606,6 +6626,7 @@ export namespace Prisma {
 
   export type InvitesUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
     groupId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -6613,6 +6634,7 @@ export namespace Prisma {
 
   export type InvitesCreateManyInput = {
     id?: string
+    role: string
     groupId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -6620,12 +6642,14 @@ export namespace Prisma {
 
   export type InvitesUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type InvitesUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
     groupId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -6866,6 +6890,7 @@ export namespace Prisma {
 
   export type InvitesCountOrderByAggregateInput = {
     id?: SortOrder
+    role?: SortOrder
     groupId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -6873,6 +6898,7 @@ export namespace Prisma {
 
   export type InvitesMaxOrderByAggregateInput = {
     id?: SortOrder
+    role?: SortOrder
     groupId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -6880,6 +6906,7 @@ export namespace Prisma {
 
   export type InvitesMinOrderByAggregateInput = {
     id?: SortOrder
+    role?: SortOrder
     groupId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -7417,12 +7444,14 @@ export namespace Prisma {
 
   export type InvitesCreateWithoutGroupInput = {
     id?: string
+    role: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type InvitesUncheckedCreateWithoutGroupInput = {
     id?: string
+    role: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -7501,6 +7530,7 @@ export namespace Prisma {
     OR?: InvitesScalarWhereInput[]
     NOT?: InvitesScalarWhereInput | InvitesScalarWhereInput[]
     id?: StringFilter<"Invites"> | string
+    role?: StringFilter<"Invites"> | string
     groupId?: StringFilter<"Invites"> | string
     createdAt?: DateTimeFilter<"Invites"> | Date | string
     updatedAt?: DateTimeFilter<"Invites"> | Date | string
@@ -7662,6 +7692,7 @@ export namespace Prisma {
 
   export type InvitesCreateManyGroupInput = {
     id?: string
+    role: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -7710,18 +7741,21 @@ export namespace Prisma {
 
   export type InvitesUpdateWithoutGroupInput = {
     id?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type InvitesUncheckedUpdateWithoutGroupInput = {
     id?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type InvitesUncheckedUpdateManyWithoutGroupInput = {
     id?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

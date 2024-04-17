@@ -146,6 +146,7 @@ exports.Prisma.GroupScalarFieldEnum = {
 
 exports.Prisma.InvitesScalarFieldEnum = {
   id: 'id',
+  role: 'role',
   groupId: 'groupId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

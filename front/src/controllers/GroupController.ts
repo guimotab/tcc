@@ -1,4 +1,5 @@
 import IGroup from "@/interfaces/IGroup";
+import IInvites from "@/interfaces/IInvites";
 import IParticipantsGroup from "@/interfaces/IParticipantsGroup";
 import IUser from "@/interfaces/IUser";
 import GroupService, { IGroupResponse } from "@/service/GroupService";
@@ -6,6 +7,10 @@ import GroupService, { IGroupResponse } from "@/service/GroupService";
 export default abstract class GroupController {
 
   private static _groupService = new GroupService();
+
+  static async addNewParticipant(currentUser: IUser, invite: IInvites) {
+    return await this._groupService.addNewParticipant(currentUser, invite) as IGroupResponse
+  }
 
   static async get(id: string) {
     return await this._groupService.get(id) as IGroupResponse

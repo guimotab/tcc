@@ -9,6 +9,9 @@ export default abstract class AuthController {
   static async signUp(name: string, email: string, password: string) {
     const saltPassord = new HashUtils(password)
     const resp = await this.authService.signUp(name, email, saltPassord)
+    if (resp.data) {
+      setCookies(resp.data)
+    }
     return resp
   }
 
