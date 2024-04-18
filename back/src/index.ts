@@ -6,7 +6,6 @@ import cors2 from 'cors'
 import { Server } from 'socket.io'
 import { PrismaClient as PrismaPostgreClient } from '../prisma/generated/postgre'
 
-
 const port = 4000
 const app = express()
 const prismaPg = new PrismaPostgreClient()
@@ -19,14 +18,15 @@ routes(app)
 serverHttp.listen(port, () => console.log("servidor conectado"))
 
 io.of("/chat").on("connection", socket => {
-  console.log("oi");
 
   socket.on('chat message', (msg) => {
     console.log('message: ' + msg);
   });
+
   socket.on('disconnect', (msg) => {
     console.log('user disconnected');
   });
+
 })
 
 try {

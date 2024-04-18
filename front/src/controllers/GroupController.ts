@@ -2,7 +2,7 @@ import IGroup from "@/interfaces/IGroup";
 import IInvites from "@/interfaces/IInvites";
 import IParticipantsGroup from "@/interfaces/IParticipantsGroup";
 import IUser from "@/interfaces/IUser";
-import GroupService, { IGroupResponse } from "@/service/GroupService";
+import GroupService, { IGroupArrayResponse, IGroupResponse } from "@/service/GroupService";
 
 export default abstract class GroupController {
 
@@ -10,6 +10,9 @@ export default abstract class GroupController {
 
   static async addNewParticipant(currentUser: IUser, invite: IInvites) {
     return await this._groupService.addNewParticipant(currentUser, invite) as IGroupResponse
+  }
+  static async getAllByUserId(userId: string) {
+    return await this._groupService.getAllByUserId(userId) as IGroupArrayResponse
   }
 
   static async get(id: string) {

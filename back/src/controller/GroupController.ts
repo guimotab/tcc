@@ -1,15 +1,24 @@
 import { Request, Response } from 'express';
-import prismaPg from "..";
+import { prismaPg } from "..";
 import { messageResponse } from '../types/messageResponse';
 import IUser from '../interface/IUser';
 import IGroup from '../interface/IGroup';
 import EmailController from './EmailController';
 import IInvites from '../interface/IInvites';
+import IUserOnGroup from '../interface/IUserOnGroup';
 
 interface GroupResponse {
   resp: messageResponse
   data?: {
     group: IGroup
+  }
+}
+
+interface GroupArrayResponse {
+  resp: messageResponse
+  data?: {
+    userOnGroups: IUserOnGroup[]
+    groups: IGroup[]
   }
 }
 
@@ -41,6 +50,36 @@ export default abstract class GroupController {
       }
 
       return res.status(200).json({ resp: "Success", data: { group } } as GroupResponse)
+    } catch (err) {
+      console.log(err);
+      return res.json({ resp: "ServerError" })
+    }
+  }
+
+  static async getAllByUserId(req: Request, res: Response) {
+    const { userId = "" } = req.params
+
+    try {
+
+      const userOnGroups = await prismaPg.userOnGroup.findMany({ where: { userId } })
+      if (!userOnGroups) {
+        return res.json({ resp: "GroupNotFound" } as GroupArrayResponse)
+      }
+
+      //todos os grupos que o usuário logado está
+      const groups = await Promise.all(userOnGroups.map(async (group) => {
+
+        const respGroup = await prismaPg.group.findUnique({ where: { id: group.groupId } });
+        if (respGroup) {
+          return respGroup
+        }
+
+      }).filter(group => group !== undefined)) as IGroup[]
+      if (!groups) {
+        return res.json({ resp: "GroupNotFound" } as GroupArrayResponse)
+      }
+
+      return res.status(200).json({ resp: "Success", data: { userOnGroups, groups } } as GroupArrayResponse)
     } catch (err) {
       console.log(err);
       return res.json({ resp: "ServerError" })

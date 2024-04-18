@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import prismaPg from "..";
 import { messageResponse } from '../types/messageResponse';
 import IUser from '../interface/IUser';
 import dot from "dotenv"
+import { prismaPg } from '..';
 
 interface AuthResponse {
   resp: messageResponse

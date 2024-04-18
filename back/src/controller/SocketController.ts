@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { io } from '..';
 
 export default abstract class SocketController {
 

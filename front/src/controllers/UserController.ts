@@ -1,10 +1,13 @@
-import UserService, { IUserResponse } from "@/service/UserService";
+import UserService, { IUserArrayResponse, IUserResponse } from "@/service/UserService";
 import IUser from "@/interfaces/IUser";
 
 export default class UserController {
 
   private static _userService = new UserService()
 
+  static async getAllByGroupId(groupId: string) {
+    return await this._userService.getAllByGroupId(groupId) as IUserArrayResponse
+  }
   static async get(id: string) {
     return await this._userService.get(id) as IUserResponse
   }

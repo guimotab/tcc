@@ -5,5 +5,6 @@ const userRoutes = express.Router()
 userRoutes
     //coloca do caminho mais específico pro menos específico
     .get("/user/:id", UserController.get)
+    .get("/user/all/group/:groupId", UserController.getAllbyGroupId)
 
 export default userRoutes

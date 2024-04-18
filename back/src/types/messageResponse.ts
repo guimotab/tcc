@@ -4,4 +4,5 @@ export type messageResponse = "Success" |
   "IncorrectCredentials" |
   "GroupNotFound" |
   "InvalidInvite" |
-  "UserExistOnGroup"
+  "UserExistOnGroup" |
+  "UserNotFound"

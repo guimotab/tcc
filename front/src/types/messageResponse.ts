@@ -5,4 +5,5 @@ export type messageResponse = frontErrors | "Success" |
   "IncorrectCredentials" |
   "GroupNotFound" |
   "InvalidInvite" |
-  "UserExistOnGroup"
+  "UserExistOnGroup" |
+  "UserNotFound"

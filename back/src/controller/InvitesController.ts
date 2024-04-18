@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import prismaPg from "..";
+import { prismaPg } from "..";
 import { messageResponse } from '../types/messageResponse';
 import IInvites from '../interface/IInvites';
 

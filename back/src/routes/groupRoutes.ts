@@ -4,7 +4,8 @@ import GroupController from "../controller/GroupController";
 const groupRoutes = express.Router()
 groupRoutes
     //coloca do caminho mais específico pro menos específico
-    .get("/group/:id", )
+    .get("/group/:id", GroupController.get)
+    .get("/group/all/user/:userId", GroupController.getAllByUserId)
     .post("/group", GroupController.create)
     .post("/group/addParticipant", GroupController.addNewParticipant)
     .delete("/group/:id", GroupController.delete)
