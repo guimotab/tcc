@@ -8,7 +8,8 @@
     "tsc": "tsc -w",
     "compile": "npx tsc",
     "prisma": "prisma migrate dev --name --schema prisma/schema1.prisma",
-    "prisma-generate": "prisma generate --schema prisma/schema1.prisma"
+    "prisma-generate": "prisma generate --schema prisma/schema1.prisma",
+    "prisma-generate2": "prisma generate --schema prisma/schema2.prisma --watch"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",

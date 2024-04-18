@@ -1,11 +1,12 @@
 import { Request, Response } from 'express';
-import { prismaPg } from "..";
+import { prismaMongo, prismaPg } from "..";
 import { messageResponse } from '../types/messageResponse';
 import IUser from '../interface/IUser';
 import IGroup from '../interface/IGroup';
 import EmailController from './EmailController';
 import IInvites from '../interface/IInvites';
 import IUserOnGroup from '../interface/IUserOnGroup';
+import ChatController from './ChatController';
 
 interface GroupResponse {
   resp: messageResponse
@@ -157,6 +158,11 @@ export default abstract class GroupController {
         }
       })
 
+      const respChat = await ChatController.createChat(group.id)
+      if (respChat.resp === "ServerError") {
+        throw new Error()
+      }
+
       return res.status(200).json({ resp: "Success", data: { group } } as GroupResponse)
     } catch (error) {
       console.log(error);
@@ -171,7 +177,7 @@ export default abstract class GroupController {
       await prismaPg.group.delete({ where: { id } })
 
 
-      return res.status(200).json({ resp: "Success" } as GroupResponse)
+      return res.status(200).json({ resp: "Success" } as GroupResponse) 
     } catch (err) {
       console.log(err);
       return res.json({ resp: "ServerError" })

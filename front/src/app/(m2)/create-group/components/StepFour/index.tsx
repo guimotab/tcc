@@ -17,6 +17,7 @@ import useCurrentUser from "../../../../../../states/hooks/useCurrentUser"
 import EmailController from "@/controllers/EmailController"
 import IEmail from "@/interfaces/IEmail"
 import Participants from "./components/Participants"
+import BlockScreenLoading from "@/components/BlockScreenLoading"
 interface StepFourProps {
 }
 
@@ -54,6 +55,7 @@ const StepFour = ({ }: StepFourProps) => {
     <>
       {stepURL === "4" &&
         <div className="flex flex-col gap-5">
+          <BlockScreenLoading canShow={true} />
           <div>
             <h1 className="text-xl font-medium">Revise as informações</h1>
             <Label htmlFor="">Clique nas etapas ao lado para fazer alterações caso precise.</Label>

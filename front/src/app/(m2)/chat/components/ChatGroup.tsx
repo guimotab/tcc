@@ -2,17 +2,43 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { IoSendSharp } from "react-icons/io5"
 import { io } from "socket.io-client"
 import { DataContext } from "../page"
+import { messageResponse } from "@/types/messageResponse"
+import IMessage from "@/interfaces/Chats/IMessage"
+
+interface MessageArrayResponse {
+  resp: messageResponse
+  data?: {
+    messages: IMessage[]
+  }
+}
 
 const ChatGroup = () => {
+  const socket = io("http://localhost:4000/chat")
   const { currentGroup, groups, setDataContext, userOnGroups, currentUsers } = useContext(DataContext)
+  const [canRender, setCanRender] = useState(false)
+  
+  useEffect(() => {
+    setCanRender(false)
+    if (currentGroup) {
+      load()
+    }
+  }, [currentGroup])
+
   const groupAcronym = formAcronym()
 
+  function load() {
+    socket.emit("load messages", currentGroup!.id)
+    socket.on("messages loaded", (respMessages: MessageArrayResponse) => {
+      console.log(respMessages.data!.messages)
+    })
+    setCanRender(true)
+  }
+
   function handleSocket() {
-    const socket = io("http://localhost:4000/chat")
     socket.emit("chat message", "ola irmãos")
   }
 
@@ -31,7 +57,7 @@ const ChatGroup = () => {
     }
   }
 
-  return currentGroup && (
+  return canRender && currentGroup && (
     <div className="flex flex-col flex-1">
 
       <div className="flex items-center px-7 w-full h-20 bg-white gap-3">

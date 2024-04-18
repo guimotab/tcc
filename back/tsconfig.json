@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "dist/js",
-    "target": "ES2019",
+    "target": "ES2022",
     "esModuleInterop": true,
     "module": "ESNext",
     "noEmitOnError": false,
