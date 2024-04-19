@@ -55,16 +55,16 @@ export default abstract class ChatController {
           },
           sender: {
             create: {
-              id: senderId,
+              idUser: senderId,
               name: sender.name
             }
           },
         }
       })
-
       return { resp: "Success", data: { message } } as MessageResponse
-    } catch {
-      return { resp: "ServerError" } as ChatResponse
+    } catch (err){
+      console.log(err);
+      return { resp: "ServerError" } as MessageResponse
     }
   }
 

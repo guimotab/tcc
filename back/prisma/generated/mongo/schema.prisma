@@ -17,14 +17,15 @@ model Message {
   id        String     @id @default(auto()) @map("_id") @db.ObjectId
   content   String
   sender    Sender[]
-  chat      ChatGroup? @relation(fields: [chatId], references: [id]) 
+  chat      ChatGroup? @relation(fields: [chatId], references: [id])
   chatId    String?    @db.ObjectId
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 }
 
 model Sender {
-  id        String   @id @map("_id") @db.ObjectId
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  idUser    String
   name      String
   message   Message? @relation(fields: [messageId], references: [id])
   messageId String?  @db.ObjectId

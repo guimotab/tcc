@@ -126,6 +126,7 @@ exports.Prisma.MessageScalarFieldEnum = {
 
 exports.Prisma.SenderScalarFieldEnum = {
   id: 'id',
+  idUser: 'idUser',
   name: 'name',
   messageId: 'messageId'
 };

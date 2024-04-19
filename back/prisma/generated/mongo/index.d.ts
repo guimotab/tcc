@@ -3059,18 +3059,21 @@ export namespace Prisma {
 
   export type SenderMinAggregateOutputType = {
     id: string | null
+    idUser: string | null
     name: string | null
     messageId: string | null
   }
 
   export type SenderMaxAggregateOutputType = {
     id: string | null
+    idUser: string | null
     name: string | null
     messageId: string | null
   }
 
   export type SenderCountAggregateOutputType = {
     id: number
+    idUser: number
     name: number
     messageId: number
     _all: number
@@ -3079,18 +3082,21 @@ export namespace Prisma {
 
   export type SenderMinAggregateInputType = {
     id?: true
+    idUser?: true
     name?: true
     messageId?: true
   }
 
   export type SenderMaxAggregateInputType = {
     id?: true
+    idUser?: true
     name?: true
     messageId?: true
   }
 
   export type SenderCountAggregateInputType = {
     id?: true
+    idUser?: true
     name?: true
     messageId?: true
     _all?: true
@@ -3170,6 +3176,7 @@ export namespace Prisma {
 
   export type SenderGroupByOutputType = {
     id: string
+    idUser: string
     name: string
     messageId: string | null
     _count: SenderCountAggregateOutputType | null
@@ -3193,6 +3200,7 @@ export namespace Prisma {
 
   export type SenderSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    idUser?: boolean
     name?: boolean
     messageId?: boolean
     message?: boolean | Sender$messageArgs<ExtArgs>
@@ -3200,6 +3208,7 @@ export namespace Prisma {
 
   export type SenderSelectScalar = {
     id?: boolean
+    idUser?: boolean
     name?: boolean
     messageId?: boolean
   }
@@ -3216,6 +3225,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      idUser: string
       name: string
       messageId: string | null
     }, ExtArgs["result"]["sender"]>
@@ -3641,6 +3651,7 @@ export namespace Prisma {
    */ 
   interface SenderFieldRefs {
     readonly id: FieldRef<"Sender", 'String'>
+    readonly idUser: FieldRef<"Sender", 'String'>
     readonly name: FieldRef<"Sender", 'String'>
     readonly messageId: FieldRef<"Sender", 'String'>
   }
@@ -4039,6 +4050,7 @@ export namespace Prisma {
 
   export const SenderScalarFieldEnum: {
     id: 'id',
+    idUser: 'idUser',
     name: 'name',
     messageId: 'messageId'
   };
@@ -4210,6 +4222,7 @@ export namespace Prisma {
     OR?: SenderWhereInput[]
     NOT?: SenderWhereInput | SenderWhereInput[]
     id?: StringFilter<"Sender"> | string
+    idUser?: StringFilter<"Sender"> | string
     name?: StringFilter<"Sender"> | string
     messageId?: StringNullableFilter<"Sender"> | string | null
     message?: XOR<MessageNullableRelationFilter, MessageWhereInput> | null
@@ -4217,6 +4230,7 @@ export namespace Prisma {
 
   export type SenderOrderByWithRelationInput = {
     id?: SortOrder
+    idUser?: SortOrder
     name?: SortOrder
     messageId?: SortOrder
     message?: MessageOrderByWithRelationInput
@@ -4227,6 +4241,7 @@ export namespace Prisma {
     AND?: SenderWhereInput | SenderWhereInput[]
     OR?: SenderWhereInput[]
     NOT?: SenderWhereInput | SenderWhereInput[]
+    idUser?: StringFilter<"Sender"> | string
     name?: StringFilter<"Sender"> | string
     messageId?: StringNullableFilter<"Sender"> | string | null
     message?: XOR<MessageNullableRelationFilter, MessageWhereInput> | null
@@ -4234,6 +4249,7 @@ export namespace Prisma {
 
   export type SenderOrderByWithAggregationInput = {
     id?: SortOrder
+    idUser?: SortOrder
     name?: SortOrder
     messageId?: SortOrder
     _count?: SenderCountOrderByAggregateInput
@@ -4246,6 +4262,7 @@ export namespace Prisma {
     OR?: SenderScalarWhereWithAggregatesInput[]
     NOT?: SenderScalarWhereWithAggregatesInput | SenderScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Sender"> | string
+    idUser?: StringWithAggregatesFilter<"Sender"> | string
     name?: StringWithAggregatesFilter<"Sender"> | string
     messageId?: StringNullableWithAggregatesFilter<"Sender"> | string | null
   }
@@ -4336,38 +4353,45 @@ export namespace Prisma {
   }
 
   export type SenderCreateInput = {
-    id: string
+    id?: string
+    idUser: string
     name: string
     message?: MessageCreateNestedOneWithoutSenderInput
   }
 
   export type SenderUncheckedCreateInput = {
-    id: string
+    id?: string
+    idUser: string
     name: string
     messageId?: string | null
   }
 
   export type SenderUpdateInput = {
+    idUser?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     message?: MessageUpdateOneWithoutSenderNestedInput
   }
 
   export type SenderUncheckedUpdateInput = {
+    idUser?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     messageId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type SenderCreateManyInput = {
-    id: string
+    id?: string
+    idUser: string
     name: string
     messageId?: string | null
   }
 
   export type SenderUpdateManyMutationInput = {
+    idUser?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
   }
 
   export type SenderUncheckedUpdateManyInput = {
+    idUser?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     messageId?: NullableStringFieldUpdateOperationsInput | string | null
   }
@@ -4533,18 +4557,21 @@ export namespace Prisma {
 
   export type SenderCountOrderByAggregateInput = {
     id?: SortOrder
+    idUser?: SortOrder
     name?: SortOrder
     messageId?: SortOrder
   }
 
   export type SenderMaxOrderByAggregateInput = {
     id?: SortOrder
+    idUser?: SortOrder
     name?: SortOrder
     messageId?: SortOrder
   }
 
   export type SenderMinOrderByAggregateInput = {
     id?: SortOrder
+    idUser?: SortOrder
     name?: SortOrder
     messageId?: SortOrder
   }
@@ -4843,12 +4870,14 @@ export namespace Prisma {
   }
 
   export type SenderCreateWithoutMessageInput = {
-    id: string
+    id?: string
+    idUser: string
     name: string
   }
 
   export type SenderUncheckedCreateWithoutMessageInput = {
-    id: string
+    id?: string
+    idUser: string
     name: string
   }
 
@@ -4895,6 +4924,7 @@ export namespace Prisma {
     OR?: SenderScalarWhereInput[]
     NOT?: SenderScalarWhereInput | SenderScalarWhereInput[]
     id?: StringFilter<"Sender"> | string
+    idUser?: StringFilter<"Sender"> | string
     name?: StringFilter<"Sender"> | string
     messageId?: StringNullableFilter<"Sender"> | string | null
   }
@@ -4992,19 +5022,23 @@ export namespace Prisma {
   }
 
   export type SenderCreateManyMessageInput = {
-    id: string
+    id?: string
+    idUser: string
     name: string
   }
 
   export type SenderUpdateWithoutMessageInput = {
+    idUser?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
   }
 
   export type SenderUncheckedUpdateWithoutMessageInput = {
+    idUser?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
   }
 
   export type SenderUncheckedUpdateManyWithoutMessageInput = {
+    idUser?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
   }
 
