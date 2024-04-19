@@ -20,7 +20,7 @@ interface IDataContext {
   setDataContext: Dispatch<SetStateAction<IDataContext>>
 }
 
-export const DataContext = createContext<IDataContext>({} as IDataContext);
+export const DataContext = createContext<IDataContext>({} as IDataContext);   
 const Chat = () => {
   const currentUser = useCurrentUser()
   const [canRender, setCanRender] = useState(false)
@@ -30,19 +30,16 @@ const Chat = () => {
     load()
   }, [])
 
+
+  
   async function load() {
     const respGroup = await GroupController.getAllByUserId(currentUser.id)
     if (respGroup.resp === "Success" && respGroup.data) {
       const groups = respGroup.data.groups
       const userOnGroups = respGroup.data.userOnGroups
-      const currentGroup = groups.length !== 0 ? groups[0] : undefined
+      const currentGroup =  undefined
       let currentUsers = [] as IUser[]
-      if (currentGroup) {
-        const respUsers = await UserController.getAllByGroupId(currentGroup.id)
-        if (respUsers.data) {
-          currentUsers = respUsers.data.users
-        }
-      }
+      
       setDataContext({ groups, userOnGroups, currentGroup, currentUsers, setDataContext })
       setCanRender(true)
     } else {

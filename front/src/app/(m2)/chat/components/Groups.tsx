@@ -21,7 +21,7 @@ const Groups = () => {
         currentUsers = respUsers.data.users
       }
     }
-    
+
     setDataContext(prevState => ({ ...prevState, currentGroup, currentUsers }))
   }
 
@@ -38,25 +38,25 @@ const Groups = () => {
 
   return (
     <div className="flex w-fit">
-      <div className="w-96 bg-slate-50 h-full">
+      <div className="w-96  h-full">
 
         <div className="px-4 py-6">
           <h1 className="font-semibold">Meus Grupos</h1>
         </div>
 
-        <Separator />
+        <Separator className="bg-slate-100" />
 
         <div className="h-max">
           <div className="flex flex-col ">
             {groups.map((group, index) =>
               <div key={group.id}>
                 <div
-                  className={`flex justify-between p-4  ${currentGroup && group.id === currentGroup.id ? "bg-indigo-50 hover:bg-indigo-100" : "hover:bg-slate-100"} `}
+                  className={`flex justify-between p-4 ${currentGroup && group.id === currentGroup.id ? "bg-gray-50" : "hover:bg-slate-50"} cursor-pointer `}
                   onClick={event => handleChooseGroup(group.id)}>
                   <div className="flex items-center gap-2">
                     <Avatar className="">
-                      <div className="flex items-center justify-center w-9 h-9 bg-slate-300 rounded-full">
-                        <AvatarFallback>{formAcronym(group.name)}</AvatarFallback>
+                      <div className={`flex items-center justify-center w-9 h-9 rounded-full `}>
+                        <AvatarFallback className="bg-slate-200">{formAcronym(group.name)}</AvatarFallback>
                       </div>
                     </Avatar>
                     <div className="">
@@ -66,7 +66,7 @@ const Groups = () => {
                   </div>
                   <p className="text-xs">5 min atrás</p>
                 </div>
-                {groups.length - 1 !== index && <Separator />}
+                {groups.length - 1 !== index && <Separator className="bg-slate-100" />}
               </div>
             )}
 

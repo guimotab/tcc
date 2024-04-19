@@ -7,7 +7,7 @@ import { Card } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Label } from "@radix-ui/react-label"
 
-const Chat = () => {
+const Chat = () => { 
   return (
     <main className="flex w-screen h-screen">
       <Aside page="myGroups"></Aside>
