@@ -3,6 +3,7 @@ import { messageResponse } from '../types/messageResponse';
 import IChat from "../interface/Chats/IChat";
 import IUser from "../interface/IUser";
 import IMessage from "../interface/Chats/IMessage";
+import fixId from "../utils/fixId";
 interface ChatResponse {
   resp: messageResponse
   data?: {
@@ -31,21 +32,9 @@ interface ISendMessageParams {
 }
 
 export default abstract class ChatController {
-  static async getAllMessages(chatId: string) {
-    const idFixed = this.fixId(chatId)
-    try {
-      const messages = await prismaMongo.message.findMany({ where: { chatId: idFixed } })
-      return { resp: "Success", data: { messages } } as MessageArrayResponse
-
-    } catch (err) {
-      console.log(err);
-      return { resp: "ServerError" } as MessageArrayResponse
-    }
-  }
 
   static async sendMessage({ content, sender, chatId }: ISendMessageParams) {
-    const idFixed = this.fixId(chatId)
-    const senderId = this.fixId(sender.id)
+    const idFixed = fixId(chatId)
     try {
       const message = await prismaMongo.message.create({
         data: {
@@ -55,7 +44,7 @@ export default abstract class ChatController {
           },
           sender: {
             create: {
-              idUser: senderId,
+              idUser: sender.id,
               name: sender.name
             }
           },
@@ -69,7 +58,7 @@ export default abstract class ChatController {
   }
 
   static async createChat(groupId: string) {
-    const idFixed = this.fixId(groupId)
+    const idFixed = fixId(groupId)
     try {
       const chat = await prismaMongo.chatGroup.create({ data: { id: idFixed } })
 
@@ -80,8 +69,4 @@ export default abstract class ChatController {
     }
   }
 
-  private static fixId(groupId: string) {
-    const idFixed = groupId.replaceAll("-", "").substring(0, 24)
-    return idFixed
-  }
 }

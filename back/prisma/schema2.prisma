@@ -28,5 +28,5 @@ model Sender {
   idUser    String
   name      String
   message   Message? @relation(fields: [messageId], references: [id])
-  messageId String?  @db.ObjectId
+  messageId String?  @unique @db.ObjectId
 }

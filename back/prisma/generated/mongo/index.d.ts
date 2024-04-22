@@ -4238,14 +4238,14 @@ export namespace Prisma {
 
   export type SenderWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    messageId?: string
     AND?: SenderWhereInput | SenderWhereInput[]
     OR?: SenderWhereInput[]
     NOT?: SenderWhereInput | SenderWhereInput[]
     idUser?: StringFilter<"Sender"> | string
     name?: StringFilter<"Sender"> | string
-    messageId?: StringNullableFilter<"Sender"> | string | null
     message?: XOR<MessageNullableRelationFilter, MessageWhereInput> | null
-  }, "id">
+  }, "id" | "messageId">
 
   export type SenderOrderByWithAggregationInput = {
     id?: SortOrder

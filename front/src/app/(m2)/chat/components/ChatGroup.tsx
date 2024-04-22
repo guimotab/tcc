@@ -1,16 +1,18 @@
 "use client"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Label } from "@/components/ui/label"
-import { ChangeEvent, KeyboardEventHandler, useContext, useEffect, useState } from "react"
+import { ChangeEvent, useContext, useEffect, useState } from "react"
 import { IoSendSharp } from "react-icons/io5"
-import { io } from "socket.io-client"
+import { Socket, io } from "socket.io-client"
 import { DataContext } from "../page"
-import { messageResponse } from "@/types/messageResponse"
 import IMessage from "@/interfaces/Chats/IMessage"
 import useCurrentUser from "../../../../../states/hooks/useCurrentUser"
 import ISender from "@/interfaces/Chats/ISender"
 import dayjs from 'dayjs'
 import { formAcronym } from "@/utils/formAcronym"
+import { messageResponse } from "@/types/messageResponse"
+import MessagesController from "@/controllers/MessagesController"
+import fixId from "@/utils/fixId"
 
 interface MessageArrayResponse {
   resp: messageResponse
@@ -19,47 +21,62 @@ interface MessageArrayResponse {
   }
 }
 
-interface ContentOfMessage {
+
+export interface ContentOfMessage {
   message: IMessage
   sender: ISender
   chatId: string
 }
 
-const ChatGroup = () => {
-  const socket = io("http://localhost:4000/chat")
+interface ChatGroupProps {
+  socket: Socket<any, any>
+}
+
+const ChatGroup = ({ }: ChatGroupProps) => {
   const currentUser = useCurrentUser()
-  const { currentGroup, groups, setDataContext, userOnGroups, currentUsers } = useContext(DataContext)
+  const { currentGroup, groups, setDataContext, userOnGroups, currentUsers, messages: allMessages } = useContext(DataContext)
   const [canRender, setCanRender] = useState(true)
   const [fieldChat, setFieldChat] = useState("")
   const [messages, setMessages] = useState<ContentOfMessage[]>([])
   const groupAcronym = currentGroup ? formAcronym(currentGroup.name, 2) : ""
+  const socket = io("http://localhost:4000/chat")
 
   useEffect(() => {
     setFieldChat("")
     setMessages([])
     setCanRender(false)
-    if (currentGroup) {
+    if (currentGroup && groups && allMessages) {
       load()
+      loadMessages()
     }
     return () => {
       socket.off("message")
     }
   }, [currentGroup])
 
+  function loadMessages() {
+    const chatMessage = MessagesController.converterToChatMessage(currentGroup!, allMessages) as ContentOfMessage[]
+    if (chatMessage) {
+      setMessages(chatMessage)
+    }
+  }
+
   function load() {
-    // ideia teste - para receber mensagens de todos os grupos e aparecer notificação, tem que fazer um join em todas os groups.id
     socket.emit("join-chat", groups, (respMessages: MessageArrayResponse) => {
       setCanRender(true)
     })
-    socket.on("message", createMessage)
+
+    socket.on("message", ({ message, sender, chatId }: ContentOfMessage) => createMessage({ message, sender, chatId }))
+    setCanRender(true)
   }
+
+
 
   function createMessage({ message, sender, chatId }: ContentOfMessage) {
     if (chatId === currentGroup!.id) {
       setMessages(prev => [...prev, { message, sender, chatId }])
     }
   }
-
 
   function handleTypeMessage(event: ChangeEvent<HTMLTextAreaElement>) {
     const value = event.target.value
@@ -132,10 +149,11 @@ const ChatGroup = () => {
         <div className="flex flex-col items-center justify-between h-full bg-slate-100 py-10">
           <ul className="flex flex-col max-w-[80rem] w-full h-full justify-end py-10 gap-6">
             {messages.map(message =>
-              message.sender.id === currentUser.id ?
+              message.sender.idUser === currentUser.id ?
                 <li className="flex w-full gap-4 justify-end">
                   <div className="flex flex-col max-h-[10rem] gap-1">
                     <div className="flex gap-2.5 self-end">
+
                       <p className="self-end text-xs font-medium text-gray-500">{handleDate(message.message.createdAt)}</p>
                       <p className="text-end font-medium text-gray-700 text-sm">{message.sender.name}</p>
                     </div>

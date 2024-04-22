@@ -8,9 +8,9 @@ interface ISendedMessage {
   sender: IUser,
   chatId: string
 }
-
+ 
 function chatRoutes() {
-
+ 
   io.of("/chat").on("connection", socket => {
 
     //possivelmente, podemos pegar todas as mensagens por rota, sem precisar passar por aqui
@@ -20,7 +20,7 @@ function chatRoutes() {
         // const respMessages = await ChatController.getAllMessages(chatId)
         callback("")
       }
-      )
+      ) 
     })
 
     //acredito que vá travar o envio de mensagens com o await para salvar msg no banco
@@ -28,7 +28,6 @@ function chatRoutes() {
 
       const respMessages = await ChatController.sendMessage({ content, sender, chatId })
       const message = { ...respMessages.data!.message }
-
       socket.to(chatId).emit("message", { message, sender, chatId })
 
 

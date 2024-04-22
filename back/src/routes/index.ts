@@ -1,10 +1,10 @@
 import express, { Application } from 'express'
 import authRoutes from './authRoutes'
-import socketRoutes from './socketRoutes'
 import userRoutes from './userRoutes'
 import invitesRoutes from './invitesRoutes'
 import groupRoutes from './groupRoutes'
 import emailRoutes from './emailRoutes'
+import messagesRoutes from './messagesRoutes'
 
 const routes = (app: Application) => { 
     app.get('/', (req, res) => {
@@ -14,9 +14,9 @@ const routes = (app: Application) => {
         express.json(),
         //busca caminhos
         authRoutes,
-        socketRoutes,
         emailRoutes,
         userRoutes,
+        messagesRoutes,
         groupRoutes,
         invitesRoutes,
     )

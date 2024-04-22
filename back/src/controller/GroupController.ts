@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { prismaMongo, prismaPg } from "..";
+import { prismaPg } from "..";
 import { messageResponse } from '../types/messageResponse';
 import IUser from '../interface/IUser';
 import IGroup from '../interface/IGroup';
@@ -62,7 +62,7 @@ export default abstract class GroupController {
 
     try {
 
-      const userOnGroups = await prismaPg.userOnGroup.findMany({ where: { userId } })
+      const userOnGroups = await prismaPg.userOnGroup.findMany({ where: { userId }})
       if (!userOnGroups) {
         return res.json({ resp: "GroupNotFound" } as GroupArrayResponse)
       }
