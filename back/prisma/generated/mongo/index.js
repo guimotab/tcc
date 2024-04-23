@@ -127,7 +127,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\90178\\Desktop\\MeuComputador\\tcc-ifro\\back\\prisma\\generated\\mongo",
+      "value": "D:\\Guilherme\\Lógica\\Meus-programas\\tcc\\back\\prisma\\generated\\mongo",
       "fromEnvVar": null
     },
     "config": {

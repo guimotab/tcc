@@ -70,17 +70,7 @@ const Chat = () => {
   }
 
   async function loadFirstsMessages(groups: IGroup[]) {
-    const messages = await Promise.all(groups.map(async group => {
-      const messageResp = await MessagesController.getAllByGroupIdLimited(group.id, 0, 3)
-      if (messageResp.data && messageResp.data.messages.length !== 0) {
-        const dataMessages = messageResp.data
-        const chatId = dataMessages.messages[0].chatId
-        const recordMessage = {
-          [chatId]: dataMessages
-        }
-        return recordMessage as recordMessage
-      }
-    })) as recordMessage[]
+    const messages = await MessagesController.constructAllRecordMessages(groups, 0, 3)
     return messages.filter((message) => message !== undefined)
   }
 
@@ -96,7 +86,7 @@ const Chat = () => {
   }
 
   return (
-    <main className="flex  h-screen">
+    <main className="flex">
       <Aside page="chat"></Aside>
 
       <DataContext.Provider value={dataContext}>

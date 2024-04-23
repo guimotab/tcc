@@ -4,10 +4,8 @@ import { useContext, useEffect, useState } from "react"
 import { DataContext } from "../../page"
 import UserController from "@/controllers/UserController"
 import IUser from "@/interfaces/IUser"
-import { ContentOfMessage } from "../ChatGroup"
+import { IChatMessage } from "../ChatGroup"
 import { Socket, io } from "socket.io-client"
-import fixId from "@/utils/fixId"
-import dayjs from "dayjs"
 import { messageResponse } from "@/types/messageResponse"
 import IMessage from "@/interfaces/Chats/IMessage"
 import IGroup from "@/interfaces/IGroup"
@@ -26,15 +24,15 @@ interface GroupProps {
 
 const Group = ({ group }: GroupProps) => {
   const { groups, currentGroup, setDataContext, messages } = useContext(DataContext)
-  const [lastMessage, setLastMessage] = useState<ContentOfMessage>()
+  const [lastMessage, setLastMessage] = useState<IChatMessage>()
+  const [firstRender, setFirstRender] = useState(true)
   const socket = io("http://localhost:4000/chat")
 
   useEffect(() => {
     if (groups) {
       loadMessages()
       // ideia teste - para receber mensagens de todos os grupos e aparecer notificação, tem que fazer um join em todas os groups.id
-      socket.emit("join-chat", groups, () => {
-      })
+      socket.emit("join-chat", groups)
       socket.on("message", handleLastMessage)
     }
 
@@ -44,14 +42,14 @@ const Group = ({ group }: GroupProps) => {
   }, [groups])
 
   function loadMessages() {
-    const chatMessage = MessagesController.converterToChatMessage(group, messages, true) as ContentOfMessage
+    const chatMessage = MessagesController.converterToChatMessage(group, messages, true) as IChatMessage
     if (chatMessage) {
       setLastMessage(chatMessage)
     }
   }
 
 
-  function handleLastMessage({ message, sender, chatId }: ContentOfMessage) {
+  function handleLastMessage({ message, sender, chatId }: IChatMessage) {
     if (chatId === group.id) {
       setLastMessage({ message, sender, chatId })
     }
@@ -63,12 +61,21 @@ const Group = ({ group }: GroupProps) => {
     let currentUsers = [] as IUser[]
     if (newCurrentGroup) {
       const respUsers = await UserController.getAllByGroupId(newCurrentGroup.id)
+
       if (respUsers.data) {
         currentUsers = respUsers.data.users
+        
+        if (firstRender) {
+          const recordMessage = await MessagesController.constructAllRecordMessages(groups, 3, 30)
+          const prevStateMessages = [...messages, ...recordMessage]
+          
+          setFirstRender(false)
+          setDataContext(prevState => ({ ...prevState, currentGroup: newCurrentGroup, currentUsers, messages: prevStateMessages }))
+        }
+        setDataContext(prevState => ({ ...prevState, currentGroup: newCurrentGroup, currentUsers }))
       }
     }
 
-    setDataContext(prevState => ({ ...prevState, currentGroup: newCurrentGroup, currentUsers }))
   }
 
   function formAcronym(word: string) {
@@ -87,16 +94,16 @@ const Group = ({ group }: GroupProps) => {
       <div
         className={`flex justify-between p-4 ${currentGroup && group.id === currentGroup.id ? "bg-gray-50" : "hover:bg-slate-50"} cursor-pointer `}
         onClick={() => handleChooseGroup(group.id)}>
-        <div className="flex items-center gap-2 flex-1">
+        <div className="flex items-center gap-2 flex-1 max-w-[80%]">
           <Avatar className="">
             <div className={`flex items-center justify-center w-9 h-9 rounded-full `}>
               <AvatarFallback className="bg-slate-200">{formAcronym(group.name)}</AvatarFallback>
             </div>
           </Avatar>
           <div className="w-full">
-            <p className="font-medium text-sm max-w-[80%] w-full">{group.name}</p>
+            <p className="font-medium text-sm w-full">{group.name}</p>
             {lastMessage &&
-              <p className="text-sm truncate max-w-[80%] text-slate-500 w-full">   {lastMessage.sender.name}: {lastMessage.message.content} </p>
+              <p className="text-sm truncate text-slate-500 w-full"> {lastMessage.sender.name}: {lastMessage.message.content} </p>
             }
           </div>
         </div>

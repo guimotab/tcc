@@ -1,15 +1,8 @@
 "use client"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
-import useCurrentUser from "../../../../../../states/hooks/useCurrentUser"
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect } from "react"
 import { DataContext } from "../../page"
-import UserController from "@/controllers/UserController"
-import IUser from "@/interfaces/IUser"
-import { ContentOfMessage } from "../ChatGroup"
 import { Socket, io } from "socket.io-client"
-import fixId from "@/utils/fixId"
-import dayjs from "dayjs"
 import { messageResponse } from "@/types/messageResponse"
 import IMessage from "@/interfaces/Chats/IMessage"
 import Group from "./Group"
@@ -26,7 +19,6 @@ interface GroupsProps {
 }
 
 const Groups = ({ }: GroupsProps) => {
-  const currentUser = useCurrentUser()
   const { groups } = useContext(DataContext)
   const socket = io("http://localhost:4000/chat")
 
@@ -49,7 +41,7 @@ const Groups = ({ }: GroupsProps) => {
 
   return groups && (
     <div className="flex w-fit shadow-sm">
-      <div className="w-96  h-full">
+      <div className="w-96 ">
 
         <div className="px-4 py-6">
           <h1 className="font-semibold">Meus Grupos</h1>
@@ -57,7 +49,6 @@ const Groups = ({ }: GroupsProps) => {
 
         <Separator className="bg-slate-100" />
 
-        <div className="h-max">
           <div className="flex flex-col ">
             {groups.map((group, index) =>
               <div key={group.id}>
@@ -65,9 +56,7 @@ const Groups = ({ }: GroupsProps) => {
                 {groups.length - 1 !== index && <Separator className="bg-slate-100" />}
               </div>
             )}
-
           </div>
-        </div>
       </div>
     </div>
   )

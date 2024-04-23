@@ -20,7 +20,7 @@ export default abstract class MessageController {
     const idFixed = fixId(chatId)
 
     try {
-      const messages = await prismaMongo.message.findMany({ where: { chatId: idFixed } })
+      const messages = await prismaMongo.message.findMany({ where: { chatId: idFixed }, orderBy: { createdAt: "asc" } })
       return { resp: "Success", data: { messages } } as MessageArrayResponse
 
     } catch (err) {
@@ -36,7 +36,7 @@ export default abstract class MessageController {
     const takeNumber = Number(take)
 
     try {
-      const messages = await prismaMongo.message.findMany({ where: { chatId: idFixed }, skip: skipNumber, take: takeNumber })
+      const messages = await prismaMongo.message.findMany({ where: { chatId: idFixed }, skip: skipNumber, take: takeNumber, orderBy: { createdAt: "desc" } })
 
       const senders = await Promise.all(messages.map(
         async message => await prismaMongo.sender.findUnique({ where: { messageId: message.id } })

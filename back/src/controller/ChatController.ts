@@ -4,6 +4,7 @@ import IChat from "../interface/Chats/IChat";
 import IUser from "../interface/IUser";
 import IMessage from "../interface/Chats/IMessage";
 import fixId from "../utils/fixId";
+import ISender from "../interface/Chats/ISender";
 interface ChatResponse {
   resp: messageResponse
   data?: {
@@ -15,6 +16,7 @@ interface MessageResponse {
   resp: messageResponse
   data?: {
     message: IMessage
+    sender: ISender
   }
 }
 
@@ -48,10 +50,12 @@ export default abstract class ChatController {
               name: sender.name
             }
           },
-        }
+        },
+        include: { sender: true }
       })
-      return { resp: "Success", data: { message } } as MessageResponse
-    } catch (err){
+
+      return { resp: "Success", data: { message, sender: message.sender[0] } } as MessageResponse
+    } catch (err) {
       console.log(err);
       return { resp: "ServerError" } as MessageResponse
     }
@@ -62,7 +66,7 @@ export default abstract class ChatController {
     try {
       const chat = await prismaMongo.chatGroup.create({ data: { id: idFixed } })
 
-      return { resp: "Success", data: { chat } } as ChatResponse 
+      return { resp: "Success", data: { chat } } as ChatResponse
     } catch (err) {
       console.log(err);
       return { resp: "ServerError" } as ChatResponse
