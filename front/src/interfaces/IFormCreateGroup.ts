@@ -1,5 +1,4 @@
 import IParticipantsGroup from "./IParticipantsGroup"
-import IRolesForm from "./IRolesForm"
 
 interface IFormCreateGroup {
   nameGroup: string,
@@ -7,4 +6,4 @@ interface IFormCreateGroup {
   participants: IParticipantsGroup[]
 }
 
-export default IFormCreateGroup
+export default IFormCreateGroup 

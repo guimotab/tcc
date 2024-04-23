@@ -1,7 +1,7 @@
 "use client"
 import Aside from "@/app/(m2)/components/Aside"
 import Groups from "./components/Groups"
-import ChatGroup from "./components/ChatGroup"
+import ChatGroup, { IChatMessage } from "./components/ChatGroup"
 import useCurrentUser from "../../../../states/hooks/useCurrentUser"
 import { Dispatch, SetStateAction, Suspense, createContext, useEffect, useState } from "react"
 import IGroup from "@/interfaces/IGroup"
@@ -14,7 +14,7 @@ import { io } from "socket.io-client"
 import { messageResponse } from "@/types/messageResponse"
 import IMessage from "@/interfaces/Chats/IMessage"
 import MessagesController from "@/controllers/MessagesController"
-import { recordMessage } from "@/types/recordMessage"
+import { recordChat } from "@/types/recordChat"
 
 
 interface MessageArrayResponse {
@@ -29,7 +29,7 @@ interface IDataContext {
   userOnGroups: IUserOnGroup[] | []
   currentUsers: IUser[] | []
   currentGroup: IGroup | undefined
-  messages: recordMessage[]
+  chats: recordChat[]
   setDataContext: Dispatch<SetStateAction<IDataContext>>
 }
 
@@ -54,24 +54,18 @@ const Chat = () => {
 
       setCanRender(true)
 
-      // ideia teste - para receber mensagens de todos os grupos e aparecer notificação, tem que fazer um join em todas os groups.id
       socket.emit("join-chat", groups, (respMessages: MessageArrayResponse) => {
         setCanRender(true)
       })
 
-      const messages = await loadFirstsMessages(groups)
+      const chats = await MessagesController.recordAllChats(groups, 0, 3)
 
-      setDataContext({ groups, userOnGroups, currentGroup, currentUsers, messages, setDataContext })
+      setDataContext({ groups, userOnGroups, currentGroup, currentUsers, chats, setDataContext })
 
     } else {
       const errorResponse = new ResolveResponseErrors(respGroup.resp)
       createToast(errorResponse)
     }
-  }
-
-  async function loadFirstsMessages(groups: IGroup[]) {
-    const messages = await MessagesController.constructAllRecordMessages(groups, 0, 3)
-    return messages.filter((message) => message !== undefined)
   }
 
   function createToast(errorResponse: ResolveResponseErrors) {
@@ -86,7 +80,7 @@ const Chat = () => {
   }
 
   return (
-    <main className="flex">
+    <main className="flex h-full">
       <Aside page="chat"></Aside>
 
       <DataContext.Provider value={dataContext}>

@@ -39,7 +39,7 @@ const VerifySession = ({ children, redirectSucess, redirectErrorNoToken }: Verif
 		}
 		return setCanLoad(true)
 	}
-	return canLoad && <main>{children}</main>
+	return canLoad && <>{children}</>
 }
 
 export default VerifySession

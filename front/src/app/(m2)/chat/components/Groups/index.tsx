@@ -34,8 +34,7 @@ const Groups = ({ }: GroupsProps) => {
 
   function handleSockets() {
     // ideia teste - para receber mensagens de todos os grupos e aparecer notificação, tem que fazer um join em todas os groups.id
-    socket.emit("join-chat", groups, (respMessages: MessageArrayResponse) => {
-    })
+    socket.emit("join-chat", groups)
   }
 
 

@@ -3,8 +3,12 @@ import IMessage from "@/interfaces/Chats/IMessage";
 import ISender from "@/interfaces/Chats/ISender";
 import IGroup from "@/interfaces/IGroup";
 import MessageService, { IMessageArrayResponse, IMessageResponse } from "@/service/MessageService";
-import { recordMessage } from "@/types/recordMessage";
-import fixId from "@/utils/fixId";
+import { recordChat } from "@/types/recordChat";
+
+interface responseRecordMessage {
+  messages: IMessage[]
+  senders: ISender[]
+}
 
 export default abstract class MessagesController {
 
@@ -18,59 +22,90 @@ export default abstract class MessagesController {
   }
 
   /**
-   * Função que retorna um array de recordMessage do getAll das mensagens do banco 
+   * Função que retorna um array de recordMessage, facilitando a gravação das mensagens para se fazer busca depois
    * @param groups Array de IGroup
    * @param skip Posição de início na busca no banco
    * @param take Quantidade de elementos que serão trazidos do banco
    * @returns array de recordMessage
    */
-  static async constructAllRecordMessages(groups: IGroup[], skip: number, take: number) {
-    const messages = await Promise.all(groups.map(async group => {
+  static async recordAllChats(groups: IGroup[], skip: number, take: number) {
+
+    const chatMessage = await Promise.all(groups.map(async group => {
       const messageResp = await MessagesController.getAllByGroupIdLimited(group.id, skip, take)
-      if (messageResp.data && messageResp.data.messages.length !== 0) {
-        const dataMessages = messageResp.data
-        const recordMessage = MessagesController.constructRecordMessage(dataMessages)
-        return recordMessage
+      const dataMessages = messageResp.data
+
+      if (dataMessages && dataMessages.messages.length !== 0) {
+
+        const chatMessage = this.converterToRecordChat(group, dataMessages) as recordChat
+        if (chatMessage) {
+          return chatMessage
+        }
+
       }
-    })) as recordMessage[]
-    return messages
+    }))
+    const filteredMessages = chatMessage.filter(message => message !== undefined) as recordChat[]
+    return filteredMessages
+  }
+
+  static async recordOneChat(group: IGroup, skip: number, take: number) {
+    const messageResp = await MessagesController.getAllByGroupIdLimited(group.id, skip, take)
+    const dataMessages = messageResp.data
+
+    if (dataMessages && dataMessages.messages.length !== 0) {
+
+      const chatMessage = this.converterToRecordChat(group, dataMessages) as recordChat
+      if (chatMessage) {
+        return chatMessage
+      }
+    }
   }
 
   /**
-     * Função que retorna um recordMessage 
-     * @param dataMessages Objeto que contém elemento do tipo IMessage[] e ISender[]
-     * @returns recordMessage
-     */
-  static constructRecordMessage(dataMessages: { messages: IMessage[]; senders: ISender[]; }) {
-    const chatId = dataMessages.messages[0].chatId
-    const recordMessage = {
-      [chatId]: dataMessages
+   * Utilizada para converter um array de recordMessage em IChatMessage[], tipo correto para ser usado na renderização do chat
+   * @param group grupo atual
+   * @param allMessages objeto que contenha o array de messages e senders
+   * @param returnLastMessage se igual true, retorna somente a última mensagem do array (padrão = falso) 
+   * @returns retorna IChatMessage[] ou IChatMessage se returnLastMessage = true
+   */
+  static convertToChatMessages(group: IGroup, allMessages: recordChat[] | recordChat, returnLastMessage = false) {
+    let messages = allMessages as recordChat
+
+    if (Array.isArray(allMessages)) {
+      const findedMessages = allMessages.find(recordMessage => recordMessage && recordMessage[group.id])
+      if (findedMessages) {
+        messages = findedMessages
+      } else {
+        return
+      }
     }
-    return recordMessage as recordMessage
+
+    const chatMessages = messages[group.id]
+
+    if (returnLastMessage) {
+      const recordMessage = chatMessages[chatMessages.length - 1]
+      return recordMessage
+    }
+
+    return chatMessages
   }
 
-  static converterToChatMessage(group: IGroup, allMessages: recordMessage[], returnLastMessage = false) {
-    const convertedId = fixId(group.id)
-    const messageFinded = allMessages.find(message => message && message[convertedId])
+  /**
+   * Utilizada para converter um objeto de mensagens e senders em um objeto que facilita a gravação deles
+   * @param group grupo atual
+   * @param allMessages objeto que contenha o array de messages e senders
+   */
+  private static converterToRecordChat(group: IGroup, allMessages: responseRecordMessage) {
+    if (allMessages) {
 
-    if (messageFinded) {
-      const groupMessages = messageFinded[convertedId]
+      const contentMessage = allMessages.messages.map(dataMessage => {
 
-      if (groupMessages) {
-        const contentMessage = groupMessages.messages.map(dataMessage => {
-          const findedSender = groupMessages.senders.find(sender => sender.messageId === dataMessage.id)
-          return {
-            chatId: dataMessage.chatId,
-            message: dataMessage,
-            sender: findedSender
-          } as IChatMessage
-        })
+        const findedSender = allMessages.senders.find(sender => sender.messageId === dataMessage.id)
+        return { chatId: group.id, message: dataMessage, sender: findedSender } as IChatMessage
 
-        if (returnLastMessage) {
-          return contentMessage.reverse()[contentMessage.length - 1]
-        }
-        return contentMessage.reverse()
-      }
+      })
+
+      const recordMessage = { [group.id]: contentMessage.reverse() }
+      return recordMessage as recordChat
     }
   }
 

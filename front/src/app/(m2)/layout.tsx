@@ -13,7 +13,7 @@ export default function RootLayout({
     <html lang="en">
       <Toaster />
 
-      <body suppressHydrationWarning>
+      <body suppressHydrationWarning className="h-screen">
         <Suspense fallback={<p>teste...</p>}>
           <VerifySession redirectErrorNoToken="/">
             {children}

@@ -23,9 +23,8 @@ interface GroupProps {
 }
 
 const Group = ({ group }: GroupProps) => {
-  const { groups, currentGroup, setDataContext, messages } = useContext(DataContext)
+  const { groups, currentGroup, setDataContext, chats: messages } = useContext(DataContext)
   const [lastMessage, setLastMessage] = useState<IChatMessage>()
-  const [firstRender, setFirstRender] = useState(true)
   const socket = io("http://localhost:4000/chat")
 
   useEffect(() => {
@@ -42,7 +41,7 @@ const Group = ({ group }: GroupProps) => {
   }, [groups])
 
   function loadMessages() {
-    const chatMessage = MessagesController.converterToChatMessage(group, messages, true) as IChatMessage
+    const chatMessage = MessagesController.convertToChatMessages(group, messages, true) as IChatMessage
     if (chatMessage) {
       setLastMessage(chatMessage)
     }
@@ -64,14 +63,6 @@ const Group = ({ group }: GroupProps) => {
 
       if (respUsers.data) {
         currentUsers = respUsers.data.users
-        
-        if (firstRender) {
-          const recordMessage = await MessagesController.constructAllRecordMessages(groups, 3, 30)
-          const prevStateMessages = [...messages, ...recordMessage]
-          
-          setFirstRender(false)
-          setDataContext(prevState => ({ ...prevState, currentGroup: newCurrentGroup, currentUsers, messages: prevStateMessages }))
-        }
         setDataContext(prevState => ({ ...prevState, currentGroup: newCurrentGroup, currentUsers }))
       }
     }
