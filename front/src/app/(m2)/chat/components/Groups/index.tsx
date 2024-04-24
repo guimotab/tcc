@@ -19,24 +19,7 @@ interface GroupsProps {
 }
 
 const Groups = ({ }: GroupsProps) => {
-  const { groups } = useContext(DataContext)
-  const socket = io("http://localhost:4000/chat")
-
-  useEffect(() => {
-    if (groups) {
-      handleSockets()
-    }
-
-    return () => {
-      socket.off("message")
-    }
-  }, [groups])
-
-  function handleSockets() {
-    // ideia teste - para receber mensagens de todos os grupos e aparecer notificação, tem que fazer um join em todas os groups.id
-    socket.emit("join-chat", groups)
-  }
-
+  const { groups, socket } = useContext(DataContext)
 
   return groups && (
     <div className="flex w-fit shadow-sm">

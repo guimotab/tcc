@@ -1,20 +1,19 @@
 "use client"
-import { ChangeEvent, useContext, useEffect, useState } from "react"
+import { ChangeEvent, useContext, useEffect, useRef, useState } from "react"
 import { IoSendSharp } from "react-icons/io5"
-import { io } from "socket.io-client"
 import { DataContext } from "../../page"
 import useCurrentUser from "../../../../../../states/hooks/useCurrentUser"
 
 const ChatInput = () => {
   const currentUser = useCurrentUser()
-  const { currentGroup } = useContext(DataContext)
+  const { currentGroup, socket } = useContext(DataContext)
   const [fieldChat, setFieldChat] = useState("")
-  const socket = io("http://localhost:4000/chat")
+  const inputChat = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
     setFieldChat("")
-    return () => {
-      socket.off("message")
+    if(inputChat.current){
+      inputChat.current.focus()
     }
   }, [currentGroup])
 
@@ -30,7 +29,7 @@ const ChatInput = () => {
       setFieldChat(value => value + "\n")
     } else if (event.key === "Enter") {
       event.preventDefault();
-      // handleSendMessage()
+      handleSendMessage()
     }
   }
   function handleSendMessage() {
@@ -40,7 +39,7 @@ const ChatInput = () => {
       const sender = currentUser
       const chatId = currentGroup!.id
       socket.emit("message", { content, sender, chatId })
-      // setFieldChat("")
+      setFieldChat("")
     }
   }
 
@@ -50,14 +49,17 @@ const ChatInput = () => {
   };
 
   return (
-    <div className="flex max-h-[13rem] bg-white border-slate-300 max-w-[80rem] w-full rounded-lg">
+    <div className="flex max-h-[13rem] bg-white border-slate-300  w-full rounded-lg">
       <div className="flex max-h-[13rem] overflow-y-auto rounded-lg w-full ">
         <textarea
+        value={fieldChat}
+          autoFocus
+          ref={inputChat}
           onKeyDown={handleKeyBoard}
           onChange={handleTypeMessage}
+          rows={1}
           placeholder="Digite sua mensagem..."
-          cols={30}
-          className="flex-1 min-h-[40px] resize-none text-lg w-full border-none outline-none rounded-lg px-3 py-2 overflow-hidden" />
+          className="resize-none text-lg w-full border-none outline-none rounded-lg px-3 py-2 overflow-hidden" />
       </div>
       <IoSendSharp
         onClick={handleSendMessage}

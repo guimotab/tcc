@@ -7,30 +7,14 @@ import useCurrentUser from "../../../../../../states/hooks/useCurrentUser"
 import dayjs from 'dayjs'
 import { formAcronym } from "@/utils/formAcronym"
 import { IChatMessage } from "."
+import { Label } from "@/components/ui/label"
 
 interface ChatMessagesProps {
   messages: IChatMessage
-  createMessage({ message, sender, chatId }: IChatMessage): void
 }
 
-const Messages = ({ messages, createMessage }: ChatMessagesProps) => {
+const Messages = ({ messages }: ChatMessagesProps) => {
   const currentUser = useCurrentUser()
-  const { currentGroup, groups, chats } = useContext(DataContext)
-  const socket = io("http://localhost:4000/chat")
-  
-  useEffect(() => {
-    if (currentGroup && groups && chats) {
-      load()
-    }
-    return () => {
-      socket.off("message")
-    }
-  }, [currentGroup])
-
-
-  async function load() {
-    socket.on("message", ({ message, sender, chatId }: IChatMessage) => createMessage({ message, sender, chatId }))
-  }
 
   function handleDate(date: Date) {
     const dateMessage = dayjs(date)
@@ -52,10 +36,9 @@ const Messages = ({ messages, createMessage }: ChatMessagesProps) => {
     messages.sender.idUser === currentUser.id ?
       <li className="flex w-full gap-4 justify-end">
         <div className="flex flex-col max-h-[10rem] gap-1">
-          <div className="flex gap-2.5 self-end">
-
-            <p className="self-end text-xs font-medium text-gray-500">{handleDate(messages.message.createdAt)}</p>
-            <p className="text-end font-medium text-gray-700 text-sm">{messages.sender.name}</p>
+          <div className="flex items-center gap-2.5 self-end">
+            <Label className=" text-xs font-medium text-gray-500">{handleDate(messages.message.createdAt)}</Label>
+            <Label className="text-end font-medium text-gray-700 text-sm">{messages.sender.name}</Label>
           </div>
           <div className="text-wrap bg-blue-700 h-full max-h-[10rem] max-w-[25rem] w-fit rounded-l-lg rounded-b-lg px-4 py-2 self-end">
             <p className="text-white">{messages.message.content}</p>
@@ -75,9 +58,9 @@ const Messages = ({ messages, createMessage }: ChatMessagesProps) => {
           </div>
         </Avatar>
         <div className="flex flex-col h-full max-h-[10rem] gap-1">
-          <div className="flex gap-4">
-            <p className="font-medium text-gray-700 text-sm">{messages.sender.name}</p>
-            <p className="self-end text-xs font-medium text-gray-500">{handleDate(messages.message.createdAt)}</p>
+          <div className="flex items-center gap-4">
+            <Label className="font-medium text-gray-700 text-sm">{messages.sender.name}</Label>
+            <Label className=" text-xs font-medium text-gray-500">{handleDate(messages.message.createdAt)}</Label>
           </div>
           <div className="text-wrap bg-white h-full max-h-[10rem] max-w-[25rem] w-fit rounded-e-lg rounded-b-lg px-4 py-2">
             <p>{messages.message.content}</p>

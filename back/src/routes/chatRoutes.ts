@@ -7,26 +7,23 @@ interface ISendedMessage {
   content: string,
   sender: IUser,
   chatId: string
-} 
+}
 
-function chatRoutes() { 
+function chatRoutes() {
 
-  io.of("/chat").on("connection", socket => { 
+  io.of("/chat").on("connection", socket => {
 
-    //possivelmente, podemos pegar todas as mensagens por rota, sem precisar passar por aqui
-    socket.on("join-chat", async (groups: IGroup[]) => {
-      groups.forEach(async chatId => {
-        socket.join(chatId.id)
-      })
+    //possivelmente, podemos pegar todas as mensagens por rota, sem precisar passar  por aqui
+    socket.on("join-chat", (groups: IGroup[]) => {
+      const idGroups = groups.map(chatId => chatId.id)
+      socket.join(idGroups)
     })
 
     //acredito que vá travar o envio de mensagens com o await para salvar msg no banco
     socket.on('message', async ({ content, sender, chatId }: ISendedMessage) => {
-
       const respMessages = await ChatController.sendMessage({ content, sender, chatId })
       const { message, sender: newSender } = { ...respMessages.data! }
-      socket.to(chatId).emit("message", { message, sender: newSender, chatId })
-
+      io.of("/chat").to(chatId).emit("message", { message, sender: newSender, chatId })
 
       // socket.emit(convertToEmit(respMessages))
     });

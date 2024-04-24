@@ -10,11 +10,12 @@ import ResolveResponseErrors from "@/utils/resolveResponseErrors"
 import { toast } from "sonner"
 import IUserOnGroup from "@/interfaces/IUserOnGroup"
 import IUser from "@/interfaces/IUser"
-import { io } from "socket.io-client"
+import { Socket, io } from "socket.io-client"
 import { messageResponse } from "@/types/messageResponse"
 import IMessage from "@/interfaces/Chats/IMessage"
 import MessagesController from "@/controllers/MessagesController"
 import { recordChat } from "@/types/recordChat"
+import RecordChats from "@/classes/RecordChats"
 
 
 interface MessageArrayResponse {
@@ -29,8 +30,9 @@ interface IDataContext {
   userOnGroups: IUserOnGroup[] | []
   currentUsers: IUser[] | []
   currentGroup: IGroup | undefined
-  chats: recordChat[]
+  recordChats: recordChat[]
   setDataContext: Dispatch<SetStateAction<IDataContext>>
+  socket: Socket
 }
 
 export const DataContext = createContext<IDataContext>({} as IDataContext);
@@ -42,6 +44,9 @@ const Chat = () => {
 
   useEffect(() => {
     load()
+    return () => {
+      socket.off("message")
+    }
   }, [])
 
   async function load() {
@@ -54,18 +59,28 @@ const Chat = () => {
 
       setCanRender(true)
 
-      socket.emit("join-chat", groups, (respMessages: MessageArrayResponse) => {
-        setCanRender(true)
-      })
 
-      const chats = await MessagesController.recordAllChats(groups, 0, 3)
+      const recordChats = await MessagesController.recordAllChats(groups, 0, 3)
 
-      setDataContext({ groups, userOnGroups, currentGroup, currentUsers, chats, setDataContext })
-
+      setDataContext({ groups, userOnGroups, currentGroup, currentUsers, recordChats, setDataContext, socket })
+      handleSockets(groups)
     } else {
       const errorResponse = new ResolveResponseErrors(respGroup.resp)
       createToast(errorResponse)
     }
+  }
+
+  function handleSockets(groups: IGroup[]) {
+    socket.emit("join-chat", groups)
+    socket.on("message", ({ message, sender, chatId }: IChatMessage) => createMessage({ message, sender, chatId }))
+  }
+
+  function createMessage({ message, sender, chatId }: IChatMessage) {
+    if (chatId === currentGroup!.id) {
+      setChat(prev => [...prev, { message, sender, chatId }])
+    }
+    chats.addRecordChat(chatId, { message, sender, chatId })
+    setDataContext(prevState => ({ ...prevState, recordChats: chats.chats }))
   }
 
   function createToast(errorResponse: ResolveResponseErrors) {

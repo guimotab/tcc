@@ -11,6 +11,7 @@ import HeaderGroup from "./HeaderGroup"
 import { recordChat } from "@/types/recordChat"
 import { setTimeout } from "timers"
 import LoadingMessage from "../LoadingMessages"
+import RecordChats from "@/classes/RecordChats"
 
 export interface IChatMessage {
   message: IMessage
@@ -24,24 +25,23 @@ interface ChatGroupProps {
 
 const ChatGroup = ({ }: ChatGroupProps) => {
 
-  const { currentGroup, groups, currentUsers, chats, setDataContext } = useContext(DataContext)
+  const { currentGroup, groups, currentUsers, recordChats, setDataContext, socket } = useContext(DataContext)
   const [canRender, setCanRender] = useState(true)
   const [chat, setChat] = useState<IChatMessage[]>([])
-  const [isLoadingMessage, setOldestMessageLoaded] = useState(true)
-  const socket = io("http://localhost:4000/chat")
+  const [isLoadingMessage, setOldestMessageLoaded] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const chats = new RecordChats(recordChats)
 
   useEffect(() => {
     setCanRender(false)
+    setOldestMessageLoaded(false)
     setChat([])
     if (currentGroup && groups && chats) {
       loadSockets()
       loadMessages()
     }
-    return () => {
-      socket.off("message")
-    }
-  }, [currentGroup])
+    
+  }, [currentGroup, socket])
 
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -52,10 +52,10 @@ const ChatGroup = ({ }: ChatGroupProps) => {
   function loadMessages() {
     const chatMessage = MessagesController.convertToChatMessages(currentGroup!, chats) as IChatMessage[]
     if (chatMessage) {
-
       if (chatMessage.length < 4) {
         setChat(chatMessage)
         loadOldestMessages(chatMessage)
+        setOldestMessageLoaded(true)
       } else {
         setChat(chatMessage)
       }
@@ -75,31 +75,31 @@ const ChatGroup = ({ }: ChatGroupProps) => {
           ...chatMessage,
         ]
       }] as recordChat[]
-      const loadedMessages = MessagesController.convertToChatMessages(currentGroup!, newObj) as IChatMessage[]
+      const newChats = new RecordChats(newObj)
+      const loadedMessages = MessagesController.convertToChatMessages(currentGroup!, newChats) as IChatMessage[]
 
       if (loadedMessages) {
-        const chatFindedIndex = chats.findIndex(message => message && message[currentGroup!.id])
-        chats.splice(chatFindedIndex, 1, ...newObj)
+        chats.spliceChat(currentGroup!.id, ...newObj)
         setOldestMessageLoaded(true)
         setChat(loadedMessages)
-        setDataContext(prevState => ({ ...prevState, currentGroup, currentUsers, chats }))
+        setDataContext(prevState => ({ ...prevState, currentGroup, currentUsers, recordChats: chats.chats }))
       }
     }
+    setOldestMessageLoaded(false)
   }
 
   function loadSockets() {
-    socket.emit("join-chat", groups, () => {
-      setCanRender(true)
-    })
+    socket.emit("join-chat", groups)
 
-    socket.on("message", ({ message, sender, chatId }: IChatMessage) => createMessage({ message, sender, chatId }))
     setCanRender(true)
-  }
 
+  }
   function createMessage({ message, sender, chatId }: IChatMessage) {
     if (chatId === currentGroup!.id) {
       setChat(prev => [...prev, { message, sender, chatId }])
     }
+    chats.addRecordChat(chatId, { message, sender, chatId })
+    setDataContext(prevState => ({ ...prevState, recordChats: chats.chats }))
   }
 
   return currentGroup && (
@@ -108,14 +108,16 @@ const ChatGroup = ({ }: ChatGroupProps) => {
       <HeaderGroup />
 
       {canRender &&
-        <div className="flex flex-col items-center justify-end h-full gap-10 bg-slate-100 p-10 ">
-          <ul className="flex flex-col w-full gap-6 max-h-[calc(100vh-(72px+192px))] overflow-auto px-5 ">
-            {isLoadingMessage && <LoadingMessage />}
-            {chat.map(chat =>
-              <Messages key={chat.message.id} createMessage={createMessage} messages={chat} />
-            )}
-            <div ref={messagesEndRef} />
-          </ul>
+        <div className="flex flex-col items-center justify-end h-full bg-slate-100 px-16 pb-10 ">
+          <div className="w-full px-1">
+            <ul className="flex flex-col w-full gap-6 max-h-[calc(100vh-(72px+112px))] overflow-auto px-5 pt-10 ">
+              {isLoadingMessage && <LoadingMessage />}
+              {chat.map(chat =>
+                <Messages key={chat.message.id}  messages={chat} />
+              )}
+              <div ref={messagesEndRef} />
+            </ul>
+          </div>
           <ChatInput />
         </div>
       }

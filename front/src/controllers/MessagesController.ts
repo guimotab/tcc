@@ -1,4 +1,5 @@
 import { IChatMessage } from "@/app/(m2)/chat/components/ChatGroup";
+import RecordChats from "@/classes/RecordChats";
 import IMessage from "@/interfaces/Chats/IMessage";
 import ISender from "@/interfaces/Chats/ISender";
 import IGroup from "@/interfaces/IGroup";
@@ -67,15 +68,13 @@ export default abstract class MessagesController {
    * @param returnLastMessage se igual true, retorna somente a última mensagem do array (padrão = falso) 
    * @returns retorna IChatMessage[] ou IChatMessage se returnLastMessage = true
    */
-  static convertToChatMessages(group: IGroup, allMessages: recordChat[] | recordChat, returnLastMessage = false) {
-    let messages = allMessages as recordChat
+  static convertToChatMessages(group: IGroup, recordChat: RecordChats | recordChat, returnLastMessage = false) {
+    let messages = recordChat as recordChat
 
-    if (Array.isArray(allMessages)) {
-      const findedMessages = allMessages.find(recordMessage => recordMessage && recordMessage[group.id])
+    if (recordChat instanceof RecordChats) {
+      const findedMessages = recordChat.currentChat(group.id)
       if (findedMessages) {
         messages = findedMessages
-      } else {
-        return
       }
     }
 

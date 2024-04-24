@@ -10,6 +10,7 @@ import { messageResponse } from "@/types/messageResponse"
 import IMessage from "@/interfaces/Chats/IMessage"
 import IGroup from "@/interfaces/IGroup"
 import MessagesController from "@/controllers/MessagesController"
+import RecordChats from "@/classes/RecordChats"
 
 interface MessageArrayResponse {
   resp: messageResponse
@@ -23,38 +24,34 @@ interface GroupProps {
 }
 
 const Group = ({ group }: GroupProps) => {
-  const { groups, currentGroup, setDataContext, chats: messages } = useContext(DataContext)
+  const { currentGroup, groups, setDataContext, recordChats, socket } = useContext(DataContext)
+  const chats = new RecordChats(recordChats)
   const [lastMessage, setLastMessage] = useState<IChatMessage>()
-  const socket = io("http://localhost:4000/chat")
 
   useEffect(() => {
-    if (groups) {
-      loadMessages()
-      // ideia teste - para receber mensagens de todos os grupos e aparecer notificação, tem que fazer um join em todas os groups.id
-      socket.emit("join-chat", groups)
-      socket.on("message", handleLastMessage)
-    }
-
-    return () => {
-      socket.off("message")
-    }
-  }, [groups])
+    loadMessages()
+    handleLastMessage()
+    // ideia teste - para receber mensagens de todos os grupos e aparecer notificação, tem que fazer um join em todas os groups.id
+  }, [chats])
 
   function loadMessages() {
-    const chatMessage = MessagesController.convertToChatMessages(group, messages, true) as IChatMessage
+    const chatMessage = MessagesController.convertToChatMessages(group, chats, true) as IChatMessage
     if (chatMessage) {
       setLastMessage(chatMessage)
     }
   }
 
-
-  function handleLastMessage({ message, sender, chatId }: IChatMessage) {
-    if (chatId === group.id) {
-      setLastMessage({ message, sender, chatId })
-    }
+  function handleLastMessage() {
+    const lastMessage = chats.returnLastChatMessage(group.id)
+    setLastMessage(lastMessage)
   }
 
   async function handleChooseGroup(idGroup: string) {
+    if (currentGroup && idGroup === currentGroup!.id) {
+      setDataContext(prevState => ({ ...prevState, currentGroup: undefined, currentUsers: [] }))
+      return
+    }
+
     const newCurrentGroup = groups.find(group => group.id === idGroup)
 
     let currentUsers = [] as IUser[]
@@ -83,7 +80,7 @@ const Group = ({ group }: GroupProps) => {
   return (
     <>
       <div
-        className={`flex justify-between p-4 ${currentGroup && group.id === currentGroup.id ? "bg-gray-50" : "hover:bg-slate-50"} cursor-pointer `}
+        className={`flex justify-between p-4 ${currentGroup && currentGroup.id === group.id ? "bg-gray-50" : "hover:bg-slate-50"} cursor-pointer `}
         onClick={() => handleChooseGroup(group.id)}>
         <div className="flex items-center gap-2 flex-1 max-w-[80%]">
           <Avatar className="">
