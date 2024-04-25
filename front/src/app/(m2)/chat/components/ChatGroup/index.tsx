@@ -40,7 +40,8 @@ const ChatGroup = ({ }: ChatGroupProps) => {
       loadSockets()
       loadMessages()
     }
-    
+    return () => { socket && socket.off("message") }
+
   }, [currentGroup, socket])
 
   useEffect(() => {
@@ -82,7 +83,7 @@ const ChatGroup = ({ }: ChatGroupProps) => {
         chats.spliceChat(currentGroup!.id, ...newObj)
         setOldestMessageLoaded(true)
         setChat(loadedMessages)
-        setDataContext(prevState => ({ ...prevState, currentGroup, currentUsers, recordChats: chats.chats }))
+        setDataContext(prevState => ({ ...prevState, currentGroup, currentUsers, recordChats: chats.recordChats }))
       }
     }
     setOldestMessageLoaded(false)
@@ -90,7 +91,7 @@ const ChatGroup = ({ }: ChatGroupProps) => {
 
   function loadSockets() {
     socket.emit("join-chat", groups)
-
+    socket.on("message", ({ message, sender, chatId }: IChatMessage) => createMessage({ message, sender, chatId }))
     setCanRender(true)
 
   }
@@ -98,8 +99,6 @@ const ChatGroup = ({ }: ChatGroupProps) => {
     if (chatId === currentGroup!.id) {
       setChat(prev => [...prev, { message, sender, chatId }])
     }
-    chats.addRecordChat(chatId, { message, sender, chatId })
-    setDataContext(prevState => ({ ...prevState, recordChats: chats.chats }))
   }
 
   return currentGroup && (
@@ -109,16 +108,18 @@ const ChatGroup = ({ }: ChatGroupProps) => {
 
       {canRender &&
         <div className="flex flex-col items-center justify-end h-full bg-slate-100 px-16 pb-10 ">
-          <div className="w-full px-1">
-            <ul className="flex flex-col w-full gap-6 max-h-[calc(100vh-(72px+112px))] overflow-auto px-5 pt-10 ">
-              {isLoadingMessage && <LoadingMessage />}
-              {chat.map(chat =>
-                <Messages key={chat.message.id}  messages={chat} />
-              )}
-              <div ref={messagesEndRef} />
-            </ul>
+          <div className="flex flex-col items-center max-w-[70rem] w-full">
+            <div className="flex  w-full px-1 scrollbar">
+              <ul className="flex flex-col w-full gap-6 max-h-[calc(100vh-(72px+84px))] overflow-auto  px-5 pt-10 ">
+                {isLoadingMessage && <LoadingMessage />}
+                {chat.map(chat =>
+                  <Messages key={chat.message.id} messages={chat} />
+                )}
+                <div ref={messagesEndRef} />
+              </ul>
+            </div>
+            <ChatInput />
           </div>
-          <ChatInput />
         </div>
       }
     </div>

@@ -6,7 +6,7 @@ export default class RecordChats {
 
   private _recordChats: recordChat[];
 
-  constructor(chats: recordChat[] | []) {
+  constructor(chats: recordChat[]) {
     this._recordChats = chats
   }
 
@@ -16,11 +16,11 @@ export default class RecordChats {
    * @param newRecordedChat novo recordChat que ficará no lugar do record retirado
    */
   spliceChat(idGroup: string, newRecordChat?: recordChat) {
-    const chatFindedIndex = this.chats.findIndex(message => message && message[idGroup])
+    const chatFindedIndex = this._recordChats.findIndex(message => message && message[idGroup])
     if (newRecordChat) {
-      this.chats.splice(chatFindedIndex, 1, newRecordChat)
+      this._recordChats.splice(chatFindedIndex, 1, newRecordChat)
     } else {
-      this.chats.splice(chatFindedIndex, 1)
+      this._recordChats.splice(chatFindedIndex, 1)
     }
   }
 
@@ -30,7 +30,7 @@ export default class RecordChats {
    * @param transformChatMessage Chat Message que será transformado em RecordChat
    */
   addRecordChat(groupId: string, newChatMessage: IChatMessage) {
-    const findedChat = this.chats.find(chat => chat[groupId])
+    const findedChat = this._recordChats.find(chat => chat[groupId])
     if (findedChat) {
       findedChat[groupId].push(newChatMessage)
       this.spliceChat(groupId, findedChat)
@@ -42,7 +42,7 @@ export default class RecordChats {
    * @param groupId 
    */
   returnLastChatMessage(groupId: string) {
-    const findedChat = this.chats.find(chat => chat[groupId])
+    const findedChat = this._recordChats.find(chat => chat[groupId])
     if (findedChat) {
       const chat = findedChat[groupId]
       const chatMessage = chat[chat.length - 1]
@@ -55,11 +55,11 @@ export default class RecordChats {
     return findedChat
   }
 
-  public get chats(): recordChat[] {
+  public get recordChats(): recordChat[] {
     return this._recordChats;
   }
 
-  public set chats(value: recordChat[]) {
+  public set recordChats(value: recordChat[]) {
     this._recordChats = value;
   }
 }

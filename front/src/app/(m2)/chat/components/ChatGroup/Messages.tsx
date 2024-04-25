@@ -1,8 +1,5 @@
 "use client"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react"
-import { io } from "socket.io-client"
-import { DataContext } from "../../page"
 import useCurrentUser from "../../../../../../states/hooks/useCurrentUser"
 import dayjs from 'dayjs'
 import { formAcronym } from "@/utils/formAcronym"
@@ -34,13 +31,13 @@ const Messages = ({ messages }: ChatMessagesProps) => {
 
   return (
     messages.sender.idUser === currentUser.id ?
-      <li className="flex w-full gap-4 justify-end">
+      <li className="flex w-full gap-2 justify-end">
         <div className="flex flex-col max-h-[10rem] gap-1">
           <div className="flex items-center gap-2.5 self-end">
             <Label className=" text-xs font-medium text-gray-500">{handleDate(messages.message.createdAt)}</Label>
             <Label className="text-end font-medium text-gray-700 text-sm">{messages.sender.name}</Label>
           </div>
-          <div className="text-wrap bg-blue-700 h-full max-h-[10rem] max-w-[25rem] w-fit rounded-l-lg rounded-b-lg px-4 py-2 self-end">
+          <div className="text-wrap bg-blue-700 h-full max-h-[10rem] max-w-[25rem] w-fit rounded-l-lg rounded-b-lg px-4 py-1.5 self-end">
             <p className="text-white">{messages.message.content}</p>
           </div>
         </div>
@@ -51,7 +48,7 @@ const Messages = ({ messages }: ChatMessagesProps) => {
         </Avatar>
       </li>
       :
-      <li className="flex w-full gap-4">
+      <li className="flex w-full gap-2">
         <Avatar>
           <div className="flex items-center justify-center w-10 h-10 bg-slate-300 rounded-full">
             <AvatarFallback className="bg-slate-300">{formAcronym(messages.sender.name)}</AvatarFallback>
@@ -62,7 +59,7 @@ const Messages = ({ messages }: ChatMessagesProps) => {
             <Label className="font-medium text-gray-700 text-sm">{messages.sender.name}</Label>
             <Label className=" text-xs font-medium text-gray-500">{handleDate(messages.message.createdAt)}</Label>
           </div>
-          <div className="text-wrap bg-white h-full max-h-[10rem] max-w-[25rem] w-fit rounded-e-lg rounded-b-lg px-4 py-2">
+          <div className="text-wrap bg-white h-full max-h-[10rem] max-w-[25rem] w-fit rounded-e-lg rounded-b-lg px-4 py-1.5">
             <p>{messages.message.content}</p>
           </div>
         </div>

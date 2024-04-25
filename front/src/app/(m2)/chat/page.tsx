@@ -44,9 +44,8 @@ const Chat = () => {
 
   useEffect(() => {
     load()
-    return () => {
-      socket.off("message")
-    }
+    return () => { socket.off("message") }
+
   }, [])
 
   async function load() {
@@ -63,24 +62,27 @@ const Chat = () => {
       const recordChats = await MessagesController.recordAllChats(groups, 0, 3)
 
       setDataContext({ groups, userOnGroups, currentGroup, currentUsers, recordChats, setDataContext, socket })
-      handleSockets(groups)
+      handleSockets(groups, recordChats)
     } else {
       const errorResponse = new ResolveResponseErrors(respGroup.resp)
       createToast(errorResponse)
     }
   }
 
-  function handleSockets(groups: IGroup[]) {
+  function handleSockets(groups: IGroup[], recordChats: recordChat[]) {
     socket.emit("join-chat", groups)
-    socket.on("message", ({ message, sender, chatId }: IChatMessage) => createMessage({ message, sender, chatId }))
+    console.log("🚀 ~ handleSockets ~ groups:", groups)
+    socket.on("message", ({ message, sender, chatId }: IChatMessage) => createMessage({ message, sender, chatId }, recordChats))
   }
 
-  function createMessage({ message, sender, chatId }: IChatMessage) {
-    if (chatId === currentGroup!.id) {
-      setChat(prev => [...prev, { message, sender, chatId }])
+  
+  function createMessage({ message, sender, chatId }: IChatMessage, recordChats: recordChat[]) {
+    let chats = new RecordChats(recordChats)
+    if (dataContext.recordChats) {
+      chats = new RecordChats(dataContext.recordChats)
     }
     chats.addRecordChat(chatId, { message, sender, chatId })
-    setDataContext(prevState => ({ ...prevState, recordChats: chats.chats }))
+    setDataContext(prevState => ({ ...prevState, recordChats: chats.recordChats }))
   }
 
   function createToast(errorResponse: ResolveResponseErrors) {
