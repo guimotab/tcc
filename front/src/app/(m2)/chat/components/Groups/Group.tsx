@@ -4,45 +4,36 @@ import { useContext, useEffect, useState } from "react"
 import { DataContext } from "../../page"
 import UserController from "@/controllers/UserController"
 import IUser from "@/interfaces/IUser"
-import { IChatMessage } from "../ChatGroup"
-import { Socket, io } from "socket.io-client"
-import { messageResponse } from "@/types/messageResponse"
-import IMessage from "@/interfaces/Chats/IMessage"
 import IGroup from "@/interfaces/IGroup"
 import MessagesController from "@/controllers/MessagesController"
 import RecordChats from "@/classes/RecordChats"
+import { IChatMessage } from "@/interfaces/IChatMessage"
+import { recordChat } from "@/types/recordChat"
 
-interface MessageArrayResponse {
-  resp: messageResponse
-  data?: {
-    messages: IMessage[]
-  }
-}
 
 interface GroupProps {
   group: IGroup
 }
 
 const Group = ({ group }: GroupProps) => {
-  const { currentGroup, groups, setDataContext, recordChats, socket } = useContext(DataContext)
+  const { currentGroup, groups, setDataContext, recordChats } = useContext(DataContext)
   const chats = new RecordChats(recordChats)
   const [lastMessage, setLastMessage] = useState<IChatMessage>()
 
   useEffect(() => {
     loadMessages()
     handleLastMessage()
-    // ideia teste - para receber mensagens de todos os grupos e aparecer notificação, tem que fazer um join em todas os groups.id
   }, [chats])
 
   function loadMessages() {
-    const chatMessage = MessagesController.convertToChatMessages(group, chats, true) as IChatMessage
+    const chatMessage = chats.returnLastChatMessage(group)
     if (chatMessage) {
       setLastMessage(chatMessage)
     }
   }
 
   function handleLastMessage() {
-    const lastMessage = chats.returnLastChatMessage(group.id)
+    const lastMessage = chats.returnLastChatMessage(group)
     setLastMessage(lastMessage)
   }
 

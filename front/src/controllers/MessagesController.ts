@@ -1,7 +1,7 @@
-import { IChatMessage } from "@/app/(m2)/chat/components/ChatGroup";
 import RecordChats from "@/classes/RecordChats";
 import IMessage from "@/interfaces/Chats/IMessage";
 import ISender from "@/interfaces/Chats/ISender";
+import { IChatMessage } from "@/interfaces/IChatMessage";
 import IGroup from "@/interfaces/IGroup";
 import MessageService, { IMessageArrayResponse, IMessageResponse } from "@/service/MessageService";
 import { recordChat } from "@/types/recordChat";
@@ -29,7 +29,7 @@ export default abstract class MessagesController {
    * @param take Quantidade de elementos que serão trazidos do banco
    * @returns array de recordMessage
    */
-  static async recordAllChats(groups: IGroup[], skip: number, take: number) {
+  static async tranformAllChatsToRecord(groups: IGroup[], skip: number, take: number) {
 
     const chatMessage = await Promise.all(groups.map(async group => {
       const messageResp = await MessagesController.getAllByGroupIdLimited(group.id, skip, take)
@@ -48,7 +48,7 @@ export default abstract class MessagesController {
     return filteredMessages
   }
 
-  static async recordOneChat(group: IGroup, skip: number, take: number) {
+  static async transformOneChatToRecord(group: IGroup, skip: number, take: number) {
     const messageResp = await MessagesController.getAllByGroupIdLimited(group.id, skip, take)
     const dataMessages = messageResp.data
 
@@ -59,33 +59,6 @@ export default abstract class MessagesController {
         return chatMessage
       }
     }
-  }
-
-  /**
-   * Utilizada para converter um array de recordMessage em IChatMessage[], tipo correto para ser usado na renderização do chat
-   * @param group grupo atual
-   * @param allMessages objeto que contenha o array de messages e senders
-   * @param returnLastMessage se igual true, retorna somente a última mensagem do array (padrão = falso) 
-   * @returns retorna IChatMessage[] ou IChatMessage se returnLastMessage = true
-   */
-  static convertToChatMessages(group: IGroup, recordChat: RecordChats | recordChat, returnLastMessage = false) {
-    let messages = recordChat as recordChat
-
-    if (recordChat instanceof RecordChats) {
-      const findedMessages = recordChat.currentChat(group.id)
-      if (findedMessages) {
-        messages = findedMessages
-      }
-    }
-
-    const chatMessages = messages[group.id]
-
-    if (returnLastMessage) {
-      const recordMessage = chatMessages[chatMessages.length - 1]
-      return recordMessage
-    }
-
-    return chatMessages
   }
 
   /**
@@ -103,8 +76,8 @@ export default abstract class MessagesController {
 
       })
 
-      const recordMessage = { [group.id]: contentMessage.reverse() }
-      return recordMessage as recordChat
+      const recordMessage = { [group.id]: { chats: contentMessage.reverse(), loadedOldMessages: false } } as recordChat
+      return recordMessage
     }
   }
 

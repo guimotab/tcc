@@ -2,103 +2,90 @@
 import { useContext, useEffect, useRef, useState } from "react"
 import { Socket, io } from "socket.io-client"
 import { DataContext } from "../../page"
-import IMessage from "@/interfaces/Chats/IMessage"
-import ISender from "@/interfaces/Chats/ISender"
 import MessagesController from "@/controllers/MessagesController"
 import ChatInput from "./ChatInput"
-import Messages from "./Messages"
+import Message from "./Message"
 import HeaderGroup from "./HeaderGroup"
 import { recordChat } from "@/types/recordChat"
 import { setTimeout } from "timers"
 import LoadingMessage from "../LoadingMessages"
 import RecordChats from "@/classes/RecordChats"
-
-export interface IChatMessage {
-  message: IMessage
-  sender: ISender
-  chatId: string
-}
+import { IChatMessage } from "@/interfaces/IChatMessage"
+import { IChatHistoryLoader } from "@/interfaces/IChatHistoryLoader"
+import useCurrentUser from "../../../../../../states/hooks/useCurrentUser"
 
 interface ChatGroupProps {
-  socket: Socket<any, any>
 }
 
 const ChatGroup = ({ }: ChatGroupProps) => {
 
-  const { currentGroup, groups, currentUsers, recordChats, setDataContext, socket } = useContext(DataContext)
-  const [canRender, setCanRender] = useState(true)
-  const [chat, setChat] = useState<IChatMessage[]>([])
-  const [isLoadingMessage, setOldestMessageLoaded] = useState(false)
+  const { currentGroup, groups, currentUsers, recordChats, setDataContext } = useContext(DataContext)
+  const currentUser = useCurrentUser()
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const chats = new RecordChats(recordChats)
+  const [canRender, setCanRender] = useState(true)
+  const [chat, setChat] = useState<IChatMessage[]>([])
+  const [loadedOldestMessages, setLoadedOldestMessages] = useState(false)
 
   useEffect(() => {
     setCanRender(false)
-    setOldestMessageLoaded(false)
+    setLoadedOldestMessages(false)
     setChat([])
     if (currentGroup && groups && chats) {
-      loadSockets()
       loadMessages()
     }
-    return () => { socket && socket.off("message") }
-
-  }, [currentGroup, socket])
+  }, [currentGroup])
 
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'instant' });
     }
-  }, [chat])
+  }, [chats])
 
   function loadMessages() {
-    const chatMessage = MessagesController.convertToChatMessages(currentGroup!, chats) as IChatMessage[]
-    if (chatMessage) {
-      if (chatMessage.length < 4) {
-        setChat(chatMessage)
-        loadOldestMessages(chatMessage)
-        setOldestMessageLoaded(true)
-      } else {
-        setChat(chatMessage)
-      }
+    const currentChat = chats.currentChat(currentGroup!, true) as IChatHistoryLoader | undefined
+    if (!currentChat) {
+      return
     }
+
+    if (!currentChat.loadedOldMessages) {
+      setChat(currentChat.chats)
+      loadOldMessages(currentChat.chats)
+      setLoadedOldestMessages(true)
+    } else {
+      setChat(currentChat.chats)
+    }
+    setCanRender(true)
   }
 
-  async function loadOldestMessages(chatMessage: IChatMessage[]) {
+  async function loadOldMessages(chatMessage: IChatMessage[]) {
     await new Promise((resolve) => setTimeout(resolve, 1000))
-    const recordedChat = await MessagesController.recordOneChat(currentGroup!, 3, 30)
+    const recordedChat = await MessagesController.transformOneChatToRecord(currentGroup!, 3, 30)
 
     if (recordedChat) {
-      const oldestChatMessage = MessagesController.convertToChatMessages(currentGroup!, recordedChat) as IChatMessage[]
+      const oldestChatMessage = recordedChat[currentGroup!.id].chats
 
       const newObj = [{
-        [currentGroup!.id]: [
-          ...oldestChatMessage,
-          ...chatMessage,
-        ]
+        [currentGroup!.id]: {
+          chats: [
+            ...oldestChatMessage,
+            ...chatMessage,
+          ],
+          loadedOldMessages: true
+        }
       }] as recordChat[]
-      const newChats = new RecordChats(newObj)
-      const loadedMessages = MessagesController.convertToChatMessages(currentGroup!, newChats) as IChatMessage[]
+      const newRecordChat = new RecordChats(newObj)
+      const loadedMessages = newRecordChat.currentChat(currentGroup!, true) as IChatHistoryLoader | undefined
 
       if (loadedMessages) {
         chats.spliceChat(currentGroup!.id, ...newObj)
-        setOldestMessageLoaded(true)
-        setChat(loadedMessages)
+        setLoadedOldestMessages(true)
+        setChat(loadedMessages.chats)
         setDataContext(prevState => ({ ...prevState, currentGroup, currentUsers, recordChats: chats.recordChats }))
       }
     }
-    setOldestMessageLoaded(false)
-  }
 
-  function loadSockets() {
-    socket.emit("join-chat", groups)
-    socket.on("message", ({ message, sender, chatId }: IChatMessage) => createMessage({ message, sender, chatId }))
-    setCanRender(true)
-
-  }
-  function createMessage({ message, sender, chatId }: IChatMessage) {
-    if (chatId === currentGroup!.id) {
-      setChat(prev => [...prev, { message, sender, chatId }])
-    }
+    setLoadedOldestMessages(false)
   }
 
   return currentGroup && (
@@ -107,18 +94,19 @@ const ChatGroup = ({ }: ChatGroupProps) => {
       <HeaderGroup />
 
       {canRender &&
-        <div className="flex flex-col items-center justify-end h-full bg-slate-100 px-16 pb-10 ">
+        <div className="flex flex-col items-center justify-end h-full bg-slate-100 px-6 pb-10 ">
           <div className="flex flex-col items-center max-w-[70rem] w-full">
             <div className="flex  w-full px-1 scrollbar">
               <ul className="flex flex-col w-full gap-6 max-h-[calc(100vh-(72px+84px))] overflow-auto  px-5 pt-10 ">
-                {isLoadingMessage && <LoadingMessage />}
-                {chat.map(chat =>
-                  <Messages key={chat.message.id} messages={chat} />
+                {loadedOldestMessages && <LoadingMessage />}
+                {chat.map(message =>
+                  <Message key={message.message.id} message={message} />
                 )}
                 <div ref={messagesEndRef} />
               </ul>
             </div>
             <ChatInput />
+            
           </div>
         </div>
       }

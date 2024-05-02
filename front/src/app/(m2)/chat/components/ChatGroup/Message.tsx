@@ -3,14 +3,14 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import useCurrentUser from "../../../../../../states/hooks/useCurrentUser"
 import dayjs from 'dayjs'
 import { formAcronym } from "@/utils/formAcronym"
-import { IChatMessage } from "."
 import { Label } from "@/components/ui/label"
+import { IChatMessage } from "@/interfaces/IChatMessage"
 
-interface ChatMessagesProps {
-  messages: IChatMessage
+interface ChatMessageProps {
+  message: IChatMessage
 }
 
-const Messages = ({ messages }: ChatMessagesProps) => {
+const Message = ({ message }: ChatMessageProps) => {
   const currentUser = useCurrentUser()
 
   function handleDate(date: Date) {
@@ -30,20 +30,20 @@ const Messages = ({ messages }: ChatMessagesProps) => {
   }
 
   return (
-    messages.sender.idUser === currentUser.id ?
+    message.sender.idUser === currentUser.id ?
       <li className="flex w-full gap-2 justify-end">
         <div className="flex flex-col max-h-[10rem] gap-1">
           <div className="flex items-center gap-2.5 self-end">
-            <Label className=" text-xs font-medium text-gray-500">{handleDate(messages.message.createdAt)}</Label>
-            <Label className="text-end font-medium text-gray-700 text-sm">{messages.sender.name}</Label>
+            <Label className=" text-xs font-medium text-gray-500">{handleDate(message.message.createdAt)}</Label>
+            <Label className="text-end font-medium text-gray-700 text-sm">{message.sender.name}</Label>
           </div>
           <div className="text-wrap bg-blue-700 h-full max-h-[10rem] max-w-[25rem] w-fit rounded-l-lg rounded-b-lg px-4 py-1.5 self-end">
-            <p className="text-white">{messages.message.content}</p>
+            <p className="text-white">{message.message.content}</p>
           </div>
         </div>
         <Avatar>
           <div className="flex items-center justify-center w-10 h-10 bg-slate-300 rounded-full">
-            <AvatarFallback className="bg-slate-300">{formAcronym(messages.sender.name)}</AvatarFallback>
+            <AvatarFallback className="bg-slate-300">{formAcronym(message.sender.name)}</AvatarFallback>
           </div>
         </Avatar>
       </li>
@@ -51,20 +51,20 @@ const Messages = ({ messages }: ChatMessagesProps) => {
       <li className="flex w-full gap-2">
         <Avatar>
           <div className="flex items-center justify-center w-10 h-10 bg-slate-300 rounded-full">
-            <AvatarFallback className="bg-slate-300">{formAcronym(messages.sender.name)}</AvatarFallback>
+            <AvatarFallback className="bg-slate-300">{formAcronym(message.sender.name)}</AvatarFallback>
           </div>
         </Avatar>
         <div className="flex flex-col h-full max-h-[10rem] gap-1">
           <div className="flex items-center gap-4">
-            <Label className="font-medium text-gray-700 text-sm">{messages.sender.name}</Label>
-            <Label className=" text-xs font-medium text-gray-500">{handleDate(messages.message.createdAt)}</Label>
+            <Label className="font-medium text-gray-700 text-sm">{message.sender.name}</Label>
+            <Label className=" text-xs font-medium text-gray-500">{handleDate(message.message.createdAt)}</Label>
           </div>
           <div className="text-wrap bg-white h-full max-h-[10rem] max-w-[25rem] w-fit rounded-e-lg rounded-b-lg px-4 py-1.5">
-            <p>{messages.message.content}</p>
+            <p>{message.message.content}</p>
           </div>
         </div>
       </li>
   )
 }
 
-export default Messages
+export default Message

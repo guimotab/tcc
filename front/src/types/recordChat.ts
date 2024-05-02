@@ -1,7 +1,7 @@
-import { IChatMessage } from "@/app/(m2)/chat/components/ChatGroup";
-
+import { IChatHistoryLoader } from "@/interfaces/IChatHistoryLoader"
+type chatId = string
 /**
  * Utilizado para transferir as conversas dos chats pelo messages do useContext
- * @argument a chave do record deve ser o chatId
+ * @argument chatId chave do record
  */
-export type recordChat = Record<string, IChatMessage[]>
+export type recordChat = Record<chatId, IChatHistoryLoader>

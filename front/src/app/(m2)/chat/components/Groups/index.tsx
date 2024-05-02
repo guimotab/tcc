@@ -1,21 +1,11 @@
 "use client"
 import { Separator } from "@/components/ui/separator"
-import { useContext, useEffect } from "react"
+import { useContext } from "react"
 import { DataContext } from "../../page"
-import { Socket, io } from "socket.io-client"
-import { messageResponse } from "@/types/messageResponse"
-import IMessage from "@/interfaces/Chats/IMessage"
 import Group from "./Group"
 
-interface MessageArrayResponse {
-  resp: messageResponse
-  data?: {
-    messages: IMessage[]
-  }
-}
 
 interface GroupsProps {
-  socket: Socket<any, any>
 }
 
 const Groups = ({ }: GroupsProps) => {

@@ -12,7 +12,7 @@ const ChatInput = () => {
 
   useEffect(() => {
     setFieldChat("")
-    if(inputChat.current){
+    if (inputChat.current) {
       inputChat.current.focus()
     }
   }, [currentGroup])
@@ -52,7 +52,8 @@ const ChatInput = () => {
     <div className="flex max-h-[13rem] bg-white border-slate-300  w-full rounded-lg">
       <div className="flex max-h-[13rem] overflow-y-auto rounded-lg w-full ">
         <textarea
-        value={fieldChat}
+          id="textarea-chat"
+          value={fieldChat}
           autoFocus
           ref={inputChat}
           onKeyDown={handleKeyBoard}

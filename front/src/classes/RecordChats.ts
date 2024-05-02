@@ -1,8 +1,9 @@
-import { IChatMessage } from "@/app/(m2)/chat/components/ChatGroup";
+import { IChatHistoryLoader } from "@/interfaces/IChatHistoryLoader";
+import { IChatMessage } from "@/interfaces/IChatMessage";
+import IGroup from "@/interfaces/IGroup";
 import { recordChat } from "@/types/recordChat";
 
 export default class RecordChats {
-
 
   private _recordChats: recordChat[];
 
@@ -32,25 +33,40 @@ export default class RecordChats {
   addRecordChat(groupId: string, newChatMessage: IChatMessage) {
     const findedChat = this._recordChats.find(chat => chat[groupId])
     if (findedChat) {
-      findedChat[groupId].push(newChatMessage)
+      findedChat[groupId].chats.push(newChatMessage)
       this.spliceChat(groupId, findedChat)
     }
   }
 
   /**
    * Retorna a última mensagem do chat
-   * @param groupId 
+   * @param group 
    */
-  returnLastChatMessage(groupId: string) {
-    const findedChat = this._recordChats.find(chat => chat[groupId])
+  returnLastChatMessage(group: IGroup) {
+    const findedChat = this._recordChats.find(chat => chat[group.id])
     if (findedChat) {
-      const chat = findedChat[groupId]
-      const chatMessage = chat[chat.length - 1]
+      const chat = findedChat[group.id]
+      const chatMessage = chat.chats[chat.chats.length - 1]
       return chatMessage
     }
   }
 
-  currentChat(chatId: string) {
+  /**
+   * Retorna o chat atual
+   * @param group 
+   */
+  currentChat(group: IGroup , returnOnlyChatHistory: boolean) {
+    const findedChat = this._recordChats.find(chat => chat[group.id])
+    if (findedChat) {
+      if (returnOnlyChatHistory) {
+        return findedChat[group.id] as IChatHistoryLoader
+      } else {
+        return findedChat as recordChat
+      }
+    }
+  }
+
+  currentRecordObjects(chatId: string) {
     const findedChat = this._recordChats.find(chat => chat[chatId])
     return findedChat
   }

@@ -1,7 +1,7 @@
 "use client"
 import Aside from "@/app/(m2)/components/Aside"
 import Groups from "./components/Groups"
-import ChatGroup, { IChatMessage } from "./components/ChatGroup"
+import ChatGroup from "./components/ChatGroup"
 import useCurrentUser from "../../../../states/hooks/useCurrentUser"
 import { Dispatch, SetStateAction, Suspense, createContext, useEffect, useState } from "react"
 import IGroup from "@/interfaces/IGroup"
@@ -16,6 +16,7 @@ import IMessage from "@/interfaces/Chats/IMessage"
 import MessagesController from "@/controllers/MessagesController"
 import { recordChat } from "@/types/recordChat"
 import RecordChats from "@/classes/RecordChats"
+import { IChatMessage } from "@/interfaces/IChatMessage"
 
 
 interface MessageArrayResponse {
@@ -45,8 +46,8 @@ const Chat = () => {
   useEffect(() => {
     load()
     return () => { socket.off("message") }
-
   }, [])
+
 
   async function load() {
     const respGroup = await GroupController.getAllByUserId(currentUser.id)
@@ -58,8 +59,7 @@ const Chat = () => {
 
       setCanRender(true)
 
-
-      const recordChats = await MessagesController.recordAllChats(groups, 0, 3)
+      const recordChats = await MessagesController.tranformAllChatsToRecord(groups, 0, 3)
 
       setDataContext({ groups, userOnGroups, currentGroup, currentUsers, recordChats, setDataContext, socket })
       handleSockets(groups, recordChats)
@@ -71,12 +71,10 @@ const Chat = () => {
 
   function handleSockets(groups: IGroup[], recordChats: recordChat[]) {
     socket.emit("join-chat", groups)
-    console.log("🚀 ~ handleSockets ~ groups:", groups)
-    socket.on("message", ({ message, sender, chatId }: IChatMessage) => createMessage({ message, sender, chatId }, recordChats))
+    socket.on("message", ({ message, sender, chatId }: IChatMessage) => listenerNewMessage({ message, sender, chatId }, recordChats))
   }
 
-  
-  function createMessage({ message, sender, chatId }: IChatMessage, recordChats: recordChat[]) {
+  function listenerNewMessage({ message, sender, chatId }: IChatMessage, recordChats: recordChat[]) {
     let chats = new RecordChats(recordChats)
     if (dataContext.recordChats) {
       chats = new RecordChats(dataContext.recordChats)
@@ -104,8 +102,8 @@ const Chat = () => {
         <Suspense fallback={<p>Carregando...</p>}>
           {canRender &&
             <>
-              <Groups socket={socket} />
-              <ChatGroup socket={socket} />
+              <Groups />
+              <ChatGroup />
             </>
           }
         </Suspense>
