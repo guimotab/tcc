@@ -1,4 +1,4 @@
-import express, { response } from "express"
+import express from "express"
 import http from "http"
 import bodyParser from 'body-parser'
 import routes from './routes'

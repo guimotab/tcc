@@ -71,15 +71,15 @@ const Chat = () => {
 
   function handleSockets(groups: IGroup[], recordChats: recordChat[]) {
     socket.emit("join-chat", groups)
-    socket.on("message", ({ message, sender, chatId }: IChatMessage) => listenerNewMessage({ message, sender, chatId }, recordChats))
+    socket.on("message", ({ message, sender, chatId, statusMessage }: IChatMessage) => listenerNewMessage({ message, sender, chatId, statusMessage }, recordChats))
   }
 
-  function listenerNewMessage({ message, sender, chatId }: IChatMessage, recordChats: recordChat[]) {
+  function listenerNewMessage({ message, sender, chatId, statusMessage }: IChatMessage, recordChats: recordChat[]) {
     let chats = new RecordChats(recordChats)
     if (dataContext.recordChats) {
       chats = new RecordChats(dataContext.recordChats)
     }
-    chats.addRecordChat(chatId, { message, sender, chatId })
+    chats.addRecordChat(chatId, { message, sender, chatId, statusMessage })
     setDataContext(prevState => ({ ...prevState, recordChats: chats.recordChats }))
   }
 

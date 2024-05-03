@@ -13,7 +13,6 @@ function chatRoutes() {
 
   io.of("/chat").on("connection", socket => {
 
-    //possivelmente, podemos pegar todas as mensagens por rota, sem precisar passar  por aqui
     socket.on("join-chat", (groups: IGroup[]) => {
       const idGroups = groups.map(chatId => chatId.id)
       socket.join(idGroups)
@@ -22,14 +21,17 @@ function chatRoutes() {
     //acredito que vá travar o envio de mensagens com o await para salvar msg no banco
     socket.on('message', async ({ content, sender, chatId }: ISendedMessage) => {
       const respMessages = await ChatController.sendMessage({ content, sender, chatId })
-      const { message, sender: newSender } = { ...respMessages.data! }
-      io.of("/chat").to(chatId).emit("message", { message, sender: newSender, chatId })
+      
+      if (respMessages.resp !== "Success") {
+        return
+      }
 
-      // socket.emit(convertToEmit(respMessages))
+      const { message, sender: senderMessage, statusMessage } = { ...respMessages.data! }
+      io.of("/chat").to(chatId).emit("message", { message, sender: senderMessage, chatId, statusMessage })
+
     });
 
     socket.on('disconnect', (msg) => {
-      // console.log('user disconnected');
     });
   })
 }

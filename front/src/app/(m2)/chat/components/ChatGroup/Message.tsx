@@ -5,6 +5,8 @@ import dayjs from 'dayjs'
 import { formAcronym } from "@/utils/formAcronym"
 import { Label } from "@/components/ui/label"
 import { IChatMessage } from "@/interfaces/IChatMessage"
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
+import { IoCheckmarkDone } from "react-icons/io5";
 
 interface ChatMessageProps {
   message: IChatMessage
@@ -37,29 +39,51 @@ const Message = ({ message }: ChatMessageProps) => {
             <Label className=" text-xs font-medium text-gray-500">{handleDate(message.message.createdAt)}</Label>
             <Label className="text-end font-medium text-gray-700 text-sm">{message.sender.name}</Label>
           </div>
-          <div className="text-wrap bg-blue-700 h-full max-h-[10rem] max-w-[25rem] w-fit rounded-l-lg rounded-b-lg px-4 py-1.5 self-end">
-            <p className="text-white">{message.message.content}</p>
+          <div className="relative flex text-wrap bg-blue-700 h-full max-h-[10rem] max-w-[25rem] w-fit rounded-l-lg rounded-b-lg px-4 py-1 self-end">
+            <p className="text-white mr-3 ">{message.message.content}</p>
+            <div className="absolute bottom-1 right-1">
+              <HoverCard>
+                <HoverCardTrigger>
+                  <IoCheckmarkDone className="text-white" />
+                </HoverCardTrigger>
+                <HoverCardContent>
+                  <div className="flex flex-col">
+                    {message.statusMessage.readBy.length !== 0 ?
+                      <div className="flex gap-1 items-center">
+                        {message.statusMessage.readBy.map(user => <Label>{user}</Label>)}
+                      </div>
+                      :
+                      <Label>Ninguém leu</Label>
+                    }
+                  </div>
+                </HoverCardContent>
+              </HoverCard>
+            </div>
           </div>
         </div>
-        <Avatar>
-          <div className="flex items-center justify-center w-10 h-10 bg-slate-300 rounded-full">
-            <AvatarFallback className="bg-slate-300">{formAcronym(message.sender.name)}</AvatarFallback>
-          </div>
-        </Avatar>
+        <div className="self-end">
+          <Avatar className="h-fit">
+            <div className="flex items-center justify-center w-9 h-9 bg-slate-300 rounded-full">
+              <AvatarFallback className="bg-slate-300">{formAcronym(message.sender.name)}</AvatarFallback>
+            </div>
+          </Avatar>
+        </div>
       </li>
       :
       <li className="flex w-full gap-2">
-        <Avatar>
-          <div className="flex items-center justify-center w-10 h-10 bg-slate-300 rounded-full">
-            <AvatarFallback className="bg-slate-300">{formAcronym(message.sender.name)}</AvatarFallback>
-          </div>
-        </Avatar>
+        <div className="self-end">
+          <Avatar className="h-fit">
+            <div className="flex items-center justify-center w-9 h-9 bg-slate-300 rounded-full">
+              <AvatarFallback className="bg-slate-300">{formAcronym(message.sender.name)}</AvatarFallback>
+            </div>
+          </Avatar>
+        </div>
         <div className="flex flex-col h-full max-h-[10rem] gap-1">
           <div className="flex items-center gap-4">
             <Label className="font-medium text-gray-700 text-sm">{message.sender.name}</Label>
             <Label className=" text-xs font-medium text-gray-500">{handleDate(message.message.createdAt)}</Label>
           </div>
-          <div className="text-wrap bg-white h-full max-h-[10rem] max-w-[25rem] w-fit rounded-e-lg rounded-b-lg px-4 py-1.5">
+          <div className="text-wrap bg-white h-full max-h-[10rem] max-w-[25rem] w-fit rounded-e-lg rounded-b-lg px-4 py-1">
             <p>{message.message.content}</p>
           </div>
         </div>

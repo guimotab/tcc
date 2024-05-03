@@ -5,4 +5,6 @@ export type messageResponse = "Success" |
   "GroupNotFound" |
   "InvalidInvite" |
   "UserExistOnGroup" |
-  "UserNotFound"
+  "UserNotFound" |
+  "MessageNotFound" |
+  "ChatNotFound"

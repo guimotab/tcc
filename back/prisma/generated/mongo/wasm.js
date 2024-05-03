@@ -124,6 +124,18 @@ exports.Prisma.MessageScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.StatusMessageScalarFieldEnum = {
+  id: 'id',
+  messageId: 'messageId'
+};
+
+exports.Prisma.UserReadMessageScalarFieldEnum = {
+  id: 'id',
+  statusMessageId: 'statusMessageId',
+  userId: 'userId',
+  name: 'name'
+};
+
 exports.Prisma.SenderScalarFieldEnum = {
   id: 'id',
   idUser: 'idUser',
@@ -145,6 +157,8 @@ exports.Prisma.QueryMode = {
 exports.Prisma.ModelName = {
   ChatGroup: 'ChatGroup',
   Message: 'Message',
+  StatusMessage: 'StatusMessage',
+  UserReadMessage: 'UserReadMessage',
   Sender: 'Sender'
 };
 

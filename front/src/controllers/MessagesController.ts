@@ -1,25 +1,50 @@
-import RecordChats from "@/classes/RecordChats";
 import IMessage from "@/interfaces/Chats/IMessage";
 import ISender from "@/interfaces/Chats/ISender";
+import IStatusMessage from "@/interfaces/Chats/IStatusMessage";
 import { IChatMessage } from "@/interfaces/IChatMessage";
 import IGroup from "@/interfaces/IGroup";
+import IUser from "@/interfaces/IUser";
 import MessageService, { IMessageArrayResponse, IMessageResponse } from "@/service/MessageService";
 import { recordChat } from "@/types/recordChat";
 
-interface responseRecordMessage {
+export interface responseRecordMessage {
   messages: IMessage[]
   senders: ISender[]
+  statusMessages: IStatusMessage[]
 }
 
 export default abstract class MessagesController {
 
+
+
   private static _messageService = new MessageService();
 
-  static async getAllByGroupId(chatId: string) {
-    return await this._messageService.getAllByChatId(chatId) as IMessageResponse
+  /**
+   * Modifica o status das mensagens não lidas para lida
+   * @param messages array de IChatMessage
+   * @returns 
+   */
+  static async statusReadMessage(currentUser: IUser, messages: IChatMessage[]) {
+    messages.filter(message => message.statusMessage.readBy.find(userRead=> userRead === currentUser))
+    return await this._messageService.statusReadMessage(quantity) as IMessageResponse
   }
-  static async getAllByGroupIdLimited(groupId: string, skip: number, take: number) {
-    return await this._messageService.getAllByChatIdLimited(groupId, skip, take) as IMessageArrayResponse
+
+  /**
+   * Retorna todas as mensagens pelo id do Grupo
+   * @param group IGroup 
+   */
+  static async getAllByGroupId(group: IGroup) {
+    return await this._messageService.getAllByChatId(group.id) as IMessageResponse
+  }
+
+  /**
+   * Retorna algumas mensagens pelo id do Grupo
+   * @param group IGroup 
+   * @param skip quantidade de mensagens que você vai pular na requisição
+   * @param take quantidade de mensagens que você vai retornar na requisição
+   */
+  static async getSomeByGroupId(group: IGroup, skip: number, take: number) {
+    return await this._messageService.getSomeByChatId(group.id, skip, take) as IMessageArrayResponse
   }
 
   /**
@@ -32,7 +57,7 @@ export default abstract class MessagesController {
   static async tranformAllChatsToRecord(groups: IGroup[], skip: number, take: number) {
 
     const chatMessage = await Promise.all(groups.map(async group => {
-      const messageResp = await MessagesController.getAllByGroupIdLimited(group.id, skip, take)
+      const messageResp = await MessagesController.getSomeByGroupId(group, skip, take)
       const dataMessages = messageResp.data
 
       if (dataMessages && dataMessages.messages.length !== 0) {
@@ -41,15 +66,15 @@ export default abstract class MessagesController {
         if (chatMessage) {
           return chatMessage
         }
-
       }
     }))
+
     const filteredMessages = chatMessage.filter(message => message !== undefined) as recordChat[]
     return filteredMessages
   }
 
   static async transformOneChatToRecord(group: IGroup, skip: number, take: number) {
-    const messageResp = await MessagesController.getAllByGroupIdLimited(group.id, skip, take)
+    const messageResp = await MessagesController.getSomeByGroupId(group, skip, take)
     const dataMessages = messageResp.data
 
     if (dataMessages && dataMessages.messages.length !== 0) {
@@ -72,7 +97,8 @@ export default abstract class MessagesController {
       const contentMessage = allMessages.messages.map(dataMessage => {
 
         const findedSender = allMessages.senders.find(sender => sender.messageId === dataMessage.id)
-        return { chatId: group.id, message: dataMessage, sender: findedSender } as IChatMessage
+        const statusMessage = allMessages.statusMessages.find(sender => sender.messageId === dataMessage.id)
+        return { chatId: group.id, message: dataMessage, sender: findedSender, statusMessage: statusMessage } as IChatMessage
 
       })
 
@@ -81,15 +107,15 @@ export default abstract class MessagesController {
     }
   }
 
+  static async put(id: string, data: IMessage) {
+    return await this._messageService.put(id, data) as IMessageResponse
+  }
   // static async get(id: string) {
   //   return await this._messageService.get(id) as IMessageResponse
   // }
   // static async create(data: IGroup, user: IUser, participants: IParticipantsGroup[]) {
   //   const newData = { ...data, user, participants }
   //   return await this._messageService.post(newData) as IMessageResponse
-  // }
-  // static async put(id: string, data: IGroup) {
-  //   return await this._messageService.put(id, data) as IMessageResponse
   // }
   // static async delete(id: string) {
   //   return await this._messageService.delete(id) as IMessageResponse

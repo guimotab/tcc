@@ -1,5 +1,6 @@
 import IMessage from "./Chats/IMessage"
 import ISender from "./Chats/ISender"
+import IStatusMessage from "./Chats/IStatusMessage"
 
 /**
  * Interface padrão que o chat utiliza na renderização das mensagens
@@ -7,5 +8,6 @@ import ISender from "./Chats/ISender"
 export interface IChatMessage {
   message: IMessage
   sender: ISender
+  statusMessage: IStatusMessage
   chatId: string
 }

@@ -24,6 +24,16 @@ export type ChatGroup = $Result.DefaultSelection<Prisma.$ChatGroupPayload>
  */
 export type Message = $Result.DefaultSelection<Prisma.$MessagePayload>
 /**
+ * Model StatusMessage
+ * 
+ */
+export type StatusMessage = $Result.DefaultSelection<Prisma.$StatusMessagePayload>
+/**
+ * Model UserReadMessage
+ * 
+ */
+export type UserReadMessage = $Result.DefaultSelection<Prisma.$UserReadMessagePayload>
+/**
  * Model Sender
  * 
  */
@@ -138,6 +148,26 @@ export class PrismaClient<
     * ```
     */
   get message(): Prisma.MessageDelegate<ExtArgs>;
+
+  /**
+   * `prisma.statusMessage`: Exposes CRUD operations for the **StatusMessage** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more StatusMessages
+    * const statusMessages = await prisma.statusMessage.findMany()
+    * ```
+    */
+  get statusMessage(): Prisma.StatusMessageDelegate<ExtArgs>;
+
+  /**
+   * `prisma.userReadMessage`: Exposes CRUD operations for the **UserReadMessage** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UserReadMessages
+    * const userReadMessages = await prisma.userReadMessage.findMany()
+    * ```
+    */
+  get userReadMessage(): Prisma.UserReadMessageDelegate<ExtArgs>;
 
   /**
    * `prisma.sender`: Exposes CRUD operations for the **Sender** model.
@@ -620,6 +650,8 @@ export namespace Prisma {
   export const ModelName: {
     ChatGroup: 'ChatGroup',
     Message: 'Message',
+    StatusMessage: 'StatusMessage',
+    UserReadMessage: 'UserReadMessage',
     Sender: 'Sender'
   };
 
@@ -637,7 +669,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     meta: {
-      modelProps: 'chatGroup' | 'message' | 'sender'
+      modelProps: 'chatGroup' | 'message' | 'statusMessage' | 'userReadMessage' | 'sender'
       txIsolationLevel: never
     },
     model: {
@@ -786,6 +818,154 @@ export namespace Prisma {
           count: {
             args: Prisma.MessageCountArgs<ExtArgs>,
             result: $Utils.Optional<MessageCountAggregateOutputType> | number
+          }
+        }
+      }
+      StatusMessage: {
+        payload: Prisma.$StatusMessagePayload<ExtArgs>
+        fields: Prisma.StatusMessageFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.StatusMessageFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$StatusMessagePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.StatusMessageFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$StatusMessagePayload>
+          }
+          findFirst: {
+            args: Prisma.StatusMessageFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$StatusMessagePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.StatusMessageFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$StatusMessagePayload>
+          }
+          findMany: {
+            args: Prisma.StatusMessageFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$StatusMessagePayload>[]
+          }
+          create: {
+            args: Prisma.StatusMessageCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$StatusMessagePayload>
+          }
+          createMany: {
+            args: Prisma.StatusMessageCreateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          delete: {
+            args: Prisma.StatusMessageDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$StatusMessagePayload>
+          }
+          update: {
+            args: Prisma.StatusMessageUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$StatusMessagePayload>
+          }
+          deleteMany: {
+            args: Prisma.StatusMessageDeleteManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          updateMany: {
+            args: Prisma.StatusMessageUpdateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          upsert: {
+            args: Prisma.StatusMessageUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$StatusMessagePayload>
+          }
+          aggregate: {
+            args: Prisma.StatusMessageAggregateArgs<ExtArgs>,
+            result: $Utils.Optional<AggregateStatusMessage>
+          }
+          groupBy: {
+            args: Prisma.StatusMessageGroupByArgs<ExtArgs>,
+            result: $Utils.Optional<StatusMessageGroupByOutputType>[]
+          }
+          findRaw: {
+            args: Prisma.StatusMessageFindRawArgs<ExtArgs>,
+            result: Prisma.JsonObject
+          }
+          aggregateRaw: {
+            args: Prisma.StatusMessageAggregateRawArgs<ExtArgs>,
+            result: Prisma.JsonObject
+          }
+          count: {
+            args: Prisma.StatusMessageCountArgs<ExtArgs>,
+            result: $Utils.Optional<StatusMessageCountAggregateOutputType> | number
+          }
+        }
+      }
+      UserReadMessage: {
+        payload: Prisma.$UserReadMessagePayload<ExtArgs>
+        fields: Prisma.UserReadMessageFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.UserReadMessageFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserReadMessagePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.UserReadMessageFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserReadMessagePayload>
+          }
+          findFirst: {
+            args: Prisma.UserReadMessageFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserReadMessagePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.UserReadMessageFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserReadMessagePayload>
+          }
+          findMany: {
+            args: Prisma.UserReadMessageFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserReadMessagePayload>[]
+          }
+          create: {
+            args: Prisma.UserReadMessageCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserReadMessagePayload>
+          }
+          createMany: {
+            args: Prisma.UserReadMessageCreateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          delete: {
+            args: Prisma.UserReadMessageDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserReadMessagePayload>
+          }
+          update: {
+            args: Prisma.UserReadMessageUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserReadMessagePayload>
+          }
+          deleteMany: {
+            args: Prisma.UserReadMessageDeleteManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          updateMany: {
+            args: Prisma.UserReadMessageUpdateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          upsert: {
+            args: Prisma.UserReadMessageUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserReadMessagePayload>
+          }
+          aggregate: {
+            args: Prisma.UserReadMessageAggregateArgs<ExtArgs>,
+            result: $Utils.Optional<AggregateUserReadMessage>
+          }
+          groupBy: {
+            args: Prisma.UserReadMessageGroupByArgs<ExtArgs>,
+            result: $Utils.Optional<UserReadMessageGroupByOutputType>[]
+          }
+          findRaw: {
+            args: Prisma.UserReadMessageFindRawArgs<ExtArgs>,
+            result: Prisma.JsonObject
+          }
+          aggregateRaw: {
+            args: Prisma.UserReadMessageAggregateRawArgs<ExtArgs>,
+            result: Prisma.JsonObject
+          }
+          count: {
+            args: Prisma.UserReadMessageCountArgs<ExtArgs>,
+            result: $Utils.Optional<UserReadMessageCountAggregateOutputType> | number
           }
         }
       }
@@ -1039,35 +1219,35 @@ export namespace Prisma {
 
 
   /**
-   * Count Type MessageCountOutputType
+   * Count Type StatusMessageCountOutputType
    */
 
-  export type MessageCountOutputType = {
-    sender: number
+  export type StatusMessageCountOutputType = {
+    readBy: number
   }
 
-  export type MessageCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    sender?: boolean | MessageCountOutputTypeCountSenderArgs
+  export type StatusMessageCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    readBy?: boolean | StatusMessageCountOutputTypeCountReadByArgs
   }
 
   // Custom InputTypes
 
   /**
-   * MessageCountOutputType without action
+   * StatusMessageCountOutputType without action
    */
-  export type MessageCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type StatusMessageCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the MessageCountOutputType
+     * Select specific fields to fetch from the StatusMessageCountOutputType
      */
-    select?: MessageCountOutputTypeSelect<ExtArgs> | null
+    select?: StatusMessageCountOutputTypeSelect<ExtArgs> | null
   }
 
 
   /**
-   * MessageCountOutputType without action
+   * StatusMessageCountOutputType without action
    */
-  export type MessageCountOutputTypeCountSenderArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: SenderWhereInput
+  export type StatusMessageCountOutputTypeCountReadByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserReadMessageWhereInput
   }
 
 
@@ -2194,8 +2374,8 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     sender?: boolean | Message$senderArgs<ExtArgs>
+    statusMessage?: boolean | Message$statusMessageArgs<ExtArgs>
     chat?: boolean | Message$chatArgs<ExtArgs>
-    _count?: boolean | MessageCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["message"]>
 
   export type MessageSelectScalar = {
@@ -2208,15 +2388,16 @@ export namespace Prisma {
 
   export type MessageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     sender?: boolean | Message$senderArgs<ExtArgs>
+    statusMessage?: boolean | Message$statusMessageArgs<ExtArgs>
     chat?: boolean | Message$chatArgs<ExtArgs>
-    _count?: boolean | MessageCountOutputTypeDefaultArgs<ExtArgs>
   }
 
 
   export type $MessagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Message"
     objects: {
-      sender: Prisma.$SenderPayload<ExtArgs>[]
+      sender: Prisma.$SenderPayload<ExtArgs> | null
+      statusMessage: Prisma.$StatusMessagePayload<ExtArgs> | null
       chat: Prisma.$ChatGroupPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -2617,7 +2798,9 @@ export namespace Prisma {
   export interface Prisma__MessageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
 
-    sender<T extends Message$senderArgs<ExtArgs> = {}>(args?: Subset<T, Message$senderArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SenderPayload<ExtArgs>, T, 'findMany'> | Null>;
+    sender<T extends Message$senderArgs<ExtArgs> = {}>(args?: Subset<T, Message$senderArgs<ExtArgs>>): Prisma__SenderClient<$Result.GetResult<Prisma.$SenderPayload<ExtArgs>, T, 'findUniqueOrThrow'> | null, null, ExtArgs>;
+
+    statusMessage<T extends Message$statusMessageArgs<ExtArgs> = {}>(args?: Subset<T, Message$statusMessageArgs<ExtArgs>>): Prisma__StatusMessageClient<$Result.GetResult<Prisma.$StatusMessagePayload<ExtArgs>, T, 'findUniqueOrThrow'> | null, null, ExtArgs>;
 
     chat<T extends Message$chatArgs<ExtArgs> = {}>(args?: Subset<T, Message$chatArgs<ExtArgs>>): Prisma__ChatGroupClient<$Result.GetResult<Prisma.$ChatGroupPayload<ExtArgs>, T, 'findUniqueOrThrow'> | null, null, ExtArgs>;
 
@@ -3007,11 +3190,22 @@ export namespace Prisma {
      */
     include?: SenderInclude<ExtArgs> | null
     where?: SenderWhereInput
-    orderBy?: SenderOrderByWithRelationInput | SenderOrderByWithRelationInput[]
-    cursor?: SenderWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: SenderScalarFieldEnum | SenderScalarFieldEnum[]
+  }
+
+
+  /**
+   * Message.statusMessage
+   */
+  export type Message$statusMessageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StatusMessage
+     */
+    select?: StatusMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: StatusMessageInclude<ExtArgs> | null
+    where?: StatusMessageWhereInput
   }
 
 
@@ -3043,6 +3237,1970 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well.
      */
     include?: MessageInclude<ExtArgs> | null
+  }
+
+
+
+  /**
+   * Model StatusMessage
+   */
+
+  export type AggregateStatusMessage = {
+    _count: StatusMessageCountAggregateOutputType | null
+    _min: StatusMessageMinAggregateOutputType | null
+    _max: StatusMessageMaxAggregateOutputType | null
+  }
+
+  export type StatusMessageMinAggregateOutputType = {
+    id: string | null
+    messageId: string | null
+  }
+
+  export type StatusMessageMaxAggregateOutputType = {
+    id: string | null
+    messageId: string | null
+  }
+
+  export type StatusMessageCountAggregateOutputType = {
+    id: number
+    messageId: number
+    _all: number
+  }
+
+
+  export type StatusMessageMinAggregateInputType = {
+    id?: true
+    messageId?: true
+  }
+
+  export type StatusMessageMaxAggregateInputType = {
+    id?: true
+    messageId?: true
+  }
+
+  export type StatusMessageCountAggregateInputType = {
+    id?: true
+    messageId?: true
+    _all?: true
+  }
+
+  export type StatusMessageAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which StatusMessage to aggregate.
+     */
+    where?: StatusMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StatusMessages to fetch.
+     */
+    orderBy?: StatusMessageOrderByWithRelationInput | StatusMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: StatusMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StatusMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StatusMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned StatusMessages
+    **/
+    _count?: true | StatusMessageCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: StatusMessageMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: StatusMessageMaxAggregateInputType
+  }
+
+  export type GetStatusMessageAggregateType<T extends StatusMessageAggregateArgs> = {
+        [P in keyof T & keyof AggregateStatusMessage]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateStatusMessage[P]>
+      : GetScalarType<T[P], AggregateStatusMessage[P]>
+  }
+
+
+
+
+  export type StatusMessageGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StatusMessageWhereInput
+    orderBy?: StatusMessageOrderByWithAggregationInput | StatusMessageOrderByWithAggregationInput[]
+    by: StatusMessageScalarFieldEnum[] | StatusMessageScalarFieldEnum
+    having?: StatusMessageScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: StatusMessageCountAggregateInputType | true
+    _min?: StatusMessageMinAggregateInputType
+    _max?: StatusMessageMaxAggregateInputType
+  }
+
+  export type StatusMessageGroupByOutputType = {
+    id: string
+    messageId: string
+    _count: StatusMessageCountAggregateOutputType | null
+    _min: StatusMessageMinAggregateOutputType | null
+    _max: StatusMessageMaxAggregateOutputType | null
+  }
+
+  type GetStatusMessageGroupByPayload<T extends StatusMessageGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<StatusMessageGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof StatusMessageGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], StatusMessageGroupByOutputType[P]>
+            : GetScalarType<T[P], StatusMessageGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type StatusMessageSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    messageId?: boolean
+    message?: boolean | StatusMessage$messageArgs<ExtArgs>
+    readBy?: boolean | StatusMessage$readByArgs<ExtArgs>
+    _count?: boolean | StatusMessageCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["statusMessage"]>
+
+  export type StatusMessageSelectScalar = {
+    id?: boolean
+    messageId?: boolean
+  }
+
+  export type StatusMessageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    message?: boolean | StatusMessage$messageArgs<ExtArgs>
+    readBy?: boolean | StatusMessage$readByArgs<ExtArgs>
+    _count?: boolean | StatusMessageCountOutputTypeDefaultArgs<ExtArgs>
+  }
+
+
+  export type $StatusMessagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "StatusMessage"
+    objects: {
+      message: Prisma.$MessagePayload<ExtArgs> | null
+      readBy: Prisma.$UserReadMessagePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      messageId: string
+    }, ExtArgs["result"]["statusMessage"]>
+    composites: {}
+  }
+
+
+  type StatusMessageGetPayload<S extends boolean | null | undefined | StatusMessageDefaultArgs> = $Result.GetResult<Prisma.$StatusMessagePayload, S>
+
+  type StatusMessageCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<StatusMessageFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: StatusMessageCountAggregateInputType | true
+    }
+
+  export interface StatusMessageDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['StatusMessage'], meta: { name: 'StatusMessage' } }
+    /**
+     * Find zero or one StatusMessage that matches the filter.
+     * @param {StatusMessageFindUniqueArgs} args - Arguments to find a StatusMessage
+     * @example
+     * // Get one StatusMessage
+     * const statusMessage = await prisma.statusMessage.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends StatusMessageFindUniqueArgs<ExtArgs>>(
+      args: SelectSubset<T, StatusMessageFindUniqueArgs<ExtArgs>>
+    ): Prisma__StatusMessageClient<$Result.GetResult<Prisma.$StatusMessagePayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
+
+    /**
+     * Find one StatusMessage that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {StatusMessageFindUniqueOrThrowArgs} args - Arguments to find a StatusMessage
+     * @example
+     * // Get one StatusMessage
+     * const statusMessage = await prisma.statusMessage.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends StatusMessageFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, StatusMessageFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__StatusMessageClient<$Result.GetResult<Prisma.$StatusMessagePayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find the first StatusMessage that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StatusMessageFindFirstArgs} args - Arguments to find a StatusMessage
+     * @example
+     * // Get one StatusMessage
+     * const statusMessage = await prisma.statusMessage.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends StatusMessageFindFirstArgs<ExtArgs>>(
+      args?: SelectSubset<T, StatusMessageFindFirstArgs<ExtArgs>>
+    ): Prisma__StatusMessageClient<$Result.GetResult<Prisma.$StatusMessagePayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
+
+    /**
+     * Find the first StatusMessage that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StatusMessageFindFirstOrThrowArgs} args - Arguments to find a StatusMessage
+     * @example
+     * // Get one StatusMessage
+     * const statusMessage = await prisma.statusMessage.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends StatusMessageFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, StatusMessageFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__StatusMessageClient<$Result.GetResult<Prisma.$StatusMessagePayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find zero or more StatusMessages that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StatusMessageFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all StatusMessages
+     * const statusMessages = await prisma.statusMessage.findMany()
+     * 
+     * // Get first 10 StatusMessages
+     * const statusMessages = await prisma.statusMessage.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const statusMessageWithIdOnly = await prisma.statusMessage.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends StatusMessageFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, StatusMessageFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StatusMessagePayload<ExtArgs>, T, 'findMany'>>
+
+    /**
+     * Create a StatusMessage.
+     * @param {StatusMessageCreateArgs} args - Arguments to create a StatusMessage.
+     * @example
+     * // Create one StatusMessage
+     * const StatusMessage = await prisma.statusMessage.create({
+     *   data: {
+     *     // ... data to create a StatusMessage
+     *   }
+     * })
+     * 
+    **/
+    create<T extends StatusMessageCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, StatusMessageCreateArgs<ExtArgs>>
+    ): Prisma__StatusMessageClient<$Result.GetResult<Prisma.$StatusMessagePayload<ExtArgs>, T, 'create'>, never, ExtArgs>
+
+    /**
+     * Create many StatusMessages.
+     *     @param {StatusMessageCreateManyArgs} args - Arguments to create many StatusMessages.
+     *     @example
+     *     // Create many StatusMessages
+     *     const statusMessage = await prisma.statusMessage.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends StatusMessageCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, StatusMessageCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a StatusMessage.
+     * @param {StatusMessageDeleteArgs} args - Arguments to delete one StatusMessage.
+     * @example
+     * // Delete one StatusMessage
+     * const StatusMessage = await prisma.statusMessage.delete({
+     *   where: {
+     *     // ... filter to delete one StatusMessage
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends StatusMessageDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, StatusMessageDeleteArgs<ExtArgs>>
+    ): Prisma__StatusMessageClient<$Result.GetResult<Prisma.$StatusMessagePayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
+
+    /**
+     * Update one StatusMessage.
+     * @param {StatusMessageUpdateArgs} args - Arguments to update one StatusMessage.
+     * @example
+     * // Update one StatusMessage
+     * const statusMessage = await prisma.statusMessage.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends StatusMessageUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, StatusMessageUpdateArgs<ExtArgs>>
+    ): Prisma__StatusMessageClient<$Result.GetResult<Prisma.$StatusMessagePayload<ExtArgs>, T, 'update'>, never, ExtArgs>
+
+    /**
+     * Delete zero or more StatusMessages.
+     * @param {StatusMessageDeleteManyArgs} args - Arguments to filter StatusMessages to delete.
+     * @example
+     * // Delete a few StatusMessages
+     * const { count } = await prisma.statusMessage.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends StatusMessageDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, StatusMessageDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more StatusMessages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StatusMessageUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many StatusMessages
+     * const statusMessage = await prisma.statusMessage.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends StatusMessageUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, StatusMessageUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one StatusMessage.
+     * @param {StatusMessageUpsertArgs} args - Arguments to update or create a StatusMessage.
+     * @example
+     * // Update or create a StatusMessage
+     * const statusMessage = await prisma.statusMessage.upsert({
+     *   create: {
+     *     // ... data to create a StatusMessage
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the StatusMessage we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends StatusMessageUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, StatusMessageUpsertArgs<ExtArgs>>
+    ): Prisma__StatusMessageClient<$Result.GetResult<Prisma.$StatusMessagePayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
+
+    /**
+     * Find zero or more StatusMessages that matches the filter.
+     * @param {StatusMessageFindRawArgs} args - Select which filters you would like to apply.
+     * @example
+     * const statusMessage = await prisma.statusMessage.findRaw({
+     *   filter: { age: { $gt: 25 } } 
+     * })
+    **/
+    findRaw(
+      args?: StatusMessageFindRawArgs
+    ): Prisma.PrismaPromise<JsonObject>
+
+    /**
+     * Perform aggregation operations on a StatusMessage.
+     * @param {StatusMessageAggregateRawArgs} args - Select which aggregations you would like to apply.
+     * @example
+     * const statusMessage = await prisma.statusMessage.aggregateRaw({
+     *   pipeline: [
+     *     { $match: { status: "registered" } },
+     *     { $group: { _id: "$country", total: { $sum: 1 } } }
+     *   ]
+     * })
+    **/
+    aggregateRaw(
+      args?: StatusMessageAggregateRawArgs
+    ): Prisma.PrismaPromise<JsonObject>
+
+    /**
+     * Count the number of StatusMessages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StatusMessageCountArgs} args - Arguments to filter StatusMessages to count.
+     * @example
+     * // Count the number of StatusMessages
+     * const count = await prisma.statusMessage.count({
+     *   where: {
+     *     // ... the filter for the StatusMessages we want to count
+     *   }
+     * })
+    **/
+    count<T extends StatusMessageCountArgs>(
+      args?: Subset<T, StatusMessageCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], StatusMessageCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a StatusMessage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StatusMessageAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends StatusMessageAggregateArgs>(args: Subset<T, StatusMessageAggregateArgs>): Prisma.PrismaPromise<GetStatusMessageAggregateType<T>>
+
+    /**
+     * Group by StatusMessage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StatusMessageGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends StatusMessageGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: StatusMessageGroupByArgs['orderBy'] }
+        : { orderBy?: StatusMessageGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, StatusMessageGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetStatusMessageGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the StatusMessage model
+   */
+  readonly fields: StatusMessageFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for StatusMessage.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__StatusMessageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+
+    message<T extends StatusMessage$messageArgs<ExtArgs> = {}>(args?: Subset<T, StatusMessage$messageArgs<ExtArgs>>): Prisma__MessageClient<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, 'findUniqueOrThrow'> | null, null, ExtArgs>;
+
+    readBy<T extends StatusMessage$readByArgs<ExtArgs> = {}>(args?: Subset<T, StatusMessage$readByArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserReadMessagePayload<ExtArgs>, T, 'findMany'> | Null>;
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+
+
+  /**
+   * Fields of the StatusMessage model
+   */ 
+  interface StatusMessageFieldRefs {
+    readonly id: FieldRef<"StatusMessage", 'String'>
+    readonly messageId: FieldRef<"StatusMessage", 'String'>
+  }
+    
+
+  // Custom InputTypes
+
+  /**
+   * StatusMessage findUnique
+   */
+  export type StatusMessageFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StatusMessage
+     */
+    select?: StatusMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: StatusMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which StatusMessage to fetch.
+     */
+    where: StatusMessageWhereUniqueInput
+  }
+
+
+  /**
+   * StatusMessage findUniqueOrThrow
+   */
+  export type StatusMessageFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StatusMessage
+     */
+    select?: StatusMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: StatusMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which StatusMessage to fetch.
+     */
+    where: StatusMessageWhereUniqueInput
+  }
+
+
+  /**
+   * StatusMessage findFirst
+   */
+  export type StatusMessageFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StatusMessage
+     */
+    select?: StatusMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: StatusMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which StatusMessage to fetch.
+     */
+    where?: StatusMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StatusMessages to fetch.
+     */
+    orderBy?: StatusMessageOrderByWithRelationInput | StatusMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for StatusMessages.
+     */
+    cursor?: StatusMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StatusMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StatusMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StatusMessages.
+     */
+    distinct?: StatusMessageScalarFieldEnum | StatusMessageScalarFieldEnum[]
+  }
+
+
+  /**
+   * StatusMessage findFirstOrThrow
+   */
+  export type StatusMessageFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StatusMessage
+     */
+    select?: StatusMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: StatusMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which StatusMessage to fetch.
+     */
+    where?: StatusMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StatusMessages to fetch.
+     */
+    orderBy?: StatusMessageOrderByWithRelationInput | StatusMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for StatusMessages.
+     */
+    cursor?: StatusMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StatusMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StatusMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StatusMessages.
+     */
+    distinct?: StatusMessageScalarFieldEnum | StatusMessageScalarFieldEnum[]
+  }
+
+
+  /**
+   * StatusMessage findMany
+   */
+  export type StatusMessageFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StatusMessage
+     */
+    select?: StatusMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: StatusMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which StatusMessages to fetch.
+     */
+    where?: StatusMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StatusMessages to fetch.
+     */
+    orderBy?: StatusMessageOrderByWithRelationInput | StatusMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing StatusMessages.
+     */
+    cursor?: StatusMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StatusMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StatusMessages.
+     */
+    skip?: number
+    distinct?: StatusMessageScalarFieldEnum | StatusMessageScalarFieldEnum[]
+  }
+
+
+  /**
+   * StatusMessage create
+   */
+  export type StatusMessageCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StatusMessage
+     */
+    select?: StatusMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: StatusMessageInclude<ExtArgs> | null
+    /**
+     * The data needed to create a StatusMessage.
+     */
+    data: XOR<StatusMessageCreateInput, StatusMessageUncheckedCreateInput>
+  }
+
+
+  /**
+   * StatusMessage createMany
+   */
+  export type StatusMessageCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many StatusMessages.
+     */
+    data: StatusMessageCreateManyInput | StatusMessageCreateManyInput[]
+  }
+
+
+  /**
+   * StatusMessage update
+   */
+  export type StatusMessageUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StatusMessage
+     */
+    select?: StatusMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: StatusMessageInclude<ExtArgs> | null
+    /**
+     * The data needed to update a StatusMessage.
+     */
+    data: XOR<StatusMessageUpdateInput, StatusMessageUncheckedUpdateInput>
+    /**
+     * Choose, which StatusMessage to update.
+     */
+    where: StatusMessageWhereUniqueInput
+  }
+
+
+  /**
+   * StatusMessage updateMany
+   */
+  export type StatusMessageUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update StatusMessages.
+     */
+    data: XOR<StatusMessageUpdateManyMutationInput, StatusMessageUncheckedUpdateManyInput>
+    /**
+     * Filter which StatusMessages to update
+     */
+    where?: StatusMessageWhereInput
+  }
+
+
+  /**
+   * StatusMessage upsert
+   */
+  export type StatusMessageUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StatusMessage
+     */
+    select?: StatusMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: StatusMessageInclude<ExtArgs> | null
+    /**
+     * The filter to search for the StatusMessage to update in case it exists.
+     */
+    where: StatusMessageWhereUniqueInput
+    /**
+     * In case the StatusMessage found by the `where` argument doesn't exist, create a new StatusMessage with this data.
+     */
+    create: XOR<StatusMessageCreateInput, StatusMessageUncheckedCreateInput>
+    /**
+     * In case the StatusMessage was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<StatusMessageUpdateInput, StatusMessageUncheckedUpdateInput>
+  }
+
+
+  /**
+   * StatusMessage delete
+   */
+  export type StatusMessageDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StatusMessage
+     */
+    select?: StatusMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: StatusMessageInclude<ExtArgs> | null
+    /**
+     * Filter which StatusMessage to delete.
+     */
+    where: StatusMessageWhereUniqueInput
+  }
+
+
+  /**
+   * StatusMessage deleteMany
+   */
+  export type StatusMessageDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which StatusMessages to delete
+     */
+    where?: StatusMessageWhereInput
+  }
+
+
+  /**
+   * StatusMessage findRaw
+   */
+  export type StatusMessageFindRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The query predicate filter. If unspecified, then all documents in the collection will match the predicate. ${@link https://docs.mongodb.com/manual/reference/operator/query MongoDB Docs}.
+     */
+    filter?: InputJsonValue
+    /**
+     * Additional options to pass to the `find` command ${@link https://docs.mongodb.com/manual/reference/command/find/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+
+  /**
+   * StatusMessage aggregateRaw
+   */
+  export type StatusMessageAggregateRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * An array of aggregation stages to process and transform the document stream via the aggregation pipeline. ${@link https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline MongoDB Docs}.
+     */
+    pipeline?: InputJsonValue[]
+    /**
+     * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+
+  /**
+   * StatusMessage.message
+   */
+  export type StatusMessage$messageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Message
+     */
+    select?: MessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: MessageInclude<ExtArgs> | null
+    where?: MessageWhereInput
+  }
+
+
+  /**
+   * StatusMessage.readBy
+   */
+  export type StatusMessage$readByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserReadMessage
+     */
+    select?: UserReadMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserReadMessageInclude<ExtArgs> | null
+    where?: UserReadMessageWhereInput
+    orderBy?: UserReadMessageOrderByWithRelationInput | UserReadMessageOrderByWithRelationInput[]
+    cursor?: UserReadMessageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserReadMessageScalarFieldEnum | UserReadMessageScalarFieldEnum[]
+  }
+
+
+  /**
+   * StatusMessage without action
+   */
+  export type StatusMessageDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StatusMessage
+     */
+    select?: StatusMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: StatusMessageInclude<ExtArgs> | null
+  }
+
+
+
+  /**
+   * Model UserReadMessage
+   */
+
+  export type AggregateUserReadMessage = {
+    _count: UserReadMessageCountAggregateOutputType | null
+    _min: UserReadMessageMinAggregateOutputType | null
+    _max: UserReadMessageMaxAggregateOutputType | null
+  }
+
+  export type UserReadMessageMinAggregateOutputType = {
+    id: string | null
+    statusMessageId: string | null
+    userId: string | null
+    name: string | null
+  }
+
+  export type UserReadMessageMaxAggregateOutputType = {
+    id: string | null
+    statusMessageId: string | null
+    userId: string | null
+    name: string | null
+  }
+
+  export type UserReadMessageCountAggregateOutputType = {
+    id: number
+    statusMessageId: number
+    userId: number
+    name: number
+    _all: number
+  }
+
+
+  export type UserReadMessageMinAggregateInputType = {
+    id?: true
+    statusMessageId?: true
+    userId?: true
+    name?: true
+  }
+
+  export type UserReadMessageMaxAggregateInputType = {
+    id?: true
+    statusMessageId?: true
+    userId?: true
+    name?: true
+  }
+
+  export type UserReadMessageCountAggregateInputType = {
+    id?: true
+    statusMessageId?: true
+    userId?: true
+    name?: true
+    _all?: true
+  }
+
+  export type UserReadMessageAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserReadMessage to aggregate.
+     */
+    where?: UserReadMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserReadMessages to fetch.
+     */
+    orderBy?: UserReadMessageOrderByWithRelationInput | UserReadMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: UserReadMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserReadMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserReadMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UserReadMessages
+    **/
+    _count?: true | UserReadMessageCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UserReadMessageMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UserReadMessageMaxAggregateInputType
+  }
+
+  export type GetUserReadMessageAggregateType<T extends UserReadMessageAggregateArgs> = {
+        [P in keyof T & keyof AggregateUserReadMessage]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUserReadMessage[P]>
+      : GetScalarType<T[P], AggregateUserReadMessage[P]>
+  }
+
+
+
+
+  export type UserReadMessageGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserReadMessageWhereInput
+    orderBy?: UserReadMessageOrderByWithAggregationInput | UserReadMessageOrderByWithAggregationInput[]
+    by: UserReadMessageScalarFieldEnum[] | UserReadMessageScalarFieldEnum
+    having?: UserReadMessageScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UserReadMessageCountAggregateInputType | true
+    _min?: UserReadMessageMinAggregateInputType
+    _max?: UserReadMessageMaxAggregateInputType
+  }
+
+  export type UserReadMessageGroupByOutputType = {
+    id: string
+    statusMessageId: string | null
+    userId: string
+    name: string
+    _count: UserReadMessageCountAggregateOutputType | null
+    _min: UserReadMessageMinAggregateOutputType | null
+    _max: UserReadMessageMaxAggregateOutputType | null
+  }
+
+  type GetUserReadMessageGroupByPayload<T extends UserReadMessageGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UserReadMessageGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UserReadMessageGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UserReadMessageGroupByOutputType[P]>
+            : GetScalarType<T[P], UserReadMessageGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UserReadMessageSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    statusMessageId?: boolean
+    userId?: boolean
+    name?: boolean
+    StatusMessage?: boolean | UserReadMessage$StatusMessageArgs<ExtArgs>
+  }, ExtArgs["result"]["userReadMessage"]>
+
+  export type UserReadMessageSelectScalar = {
+    id?: boolean
+    statusMessageId?: boolean
+    userId?: boolean
+    name?: boolean
+  }
+
+  export type UserReadMessageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    StatusMessage?: boolean | UserReadMessage$StatusMessageArgs<ExtArgs>
+  }
+
+
+  export type $UserReadMessagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "UserReadMessage"
+    objects: {
+      StatusMessage: Prisma.$StatusMessagePayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      statusMessageId: string | null
+      userId: string
+      name: string
+    }, ExtArgs["result"]["userReadMessage"]>
+    composites: {}
+  }
+
+
+  type UserReadMessageGetPayload<S extends boolean | null | undefined | UserReadMessageDefaultArgs> = $Result.GetResult<Prisma.$UserReadMessagePayload, S>
+
+  type UserReadMessageCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<UserReadMessageFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: UserReadMessageCountAggregateInputType | true
+    }
+
+  export interface UserReadMessageDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UserReadMessage'], meta: { name: 'UserReadMessage' } }
+    /**
+     * Find zero or one UserReadMessage that matches the filter.
+     * @param {UserReadMessageFindUniqueArgs} args - Arguments to find a UserReadMessage
+     * @example
+     * // Get one UserReadMessage
+     * const userReadMessage = await prisma.userReadMessage.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends UserReadMessageFindUniqueArgs<ExtArgs>>(
+      args: SelectSubset<T, UserReadMessageFindUniqueArgs<ExtArgs>>
+    ): Prisma__UserReadMessageClient<$Result.GetResult<Prisma.$UserReadMessagePayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
+
+    /**
+     * Find one UserReadMessage that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {UserReadMessageFindUniqueOrThrowArgs} args - Arguments to find a UserReadMessage
+     * @example
+     * // Get one UserReadMessage
+     * const userReadMessage = await prisma.userReadMessage.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends UserReadMessageFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, UserReadMessageFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__UserReadMessageClient<$Result.GetResult<Prisma.$UserReadMessagePayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find the first UserReadMessage that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserReadMessageFindFirstArgs} args - Arguments to find a UserReadMessage
+     * @example
+     * // Get one UserReadMessage
+     * const userReadMessage = await prisma.userReadMessage.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends UserReadMessageFindFirstArgs<ExtArgs>>(
+      args?: SelectSubset<T, UserReadMessageFindFirstArgs<ExtArgs>>
+    ): Prisma__UserReadMessageClient<$Result.GetResult<Prisma.$UserReadMessagePayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
+
+    /**
+     * Find the first UserReadMessage that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserReadMessageFindFirstOrThrowArgs} args - Arguments to find a UserReadMessage
+     * @example
+     * // Get one UserReadMessage
+     * const userReadMessage = await prisma.userReadMessage.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends UserReadMessageFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, UserReadMessageFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__UserReadMessageClient<$Result.GetResult<Prisma.$UserReadMessagePayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find zero or more UserReadMessages that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserReadMessageFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UserReadMessages
+     * const userReadMessages = await prisma.userReadMessage.findMany()
+     * 
+     * // Get first 10 UserReadMessages
+     * const userReadMessages = await prisma.userReadMessage.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const userReadMessageWithIdOnly = await prisma.userReadMessage.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends UserReadMessageFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, UserReadMessageFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserReadMessagePayload<ExtArgs>, T, 'findMany'>>
+
+    /**
+     * Create a UserReadMessage.
+     * @param {UserReadMessageCreateArgs} args - Arguments to create a UserReadMessage.
+     * @example
+     * // Create one UserReadMessage
+     * const UserReadMessage = await prisma.userReadMessage.create({
+     *   data: {
+     *     // ... data to create a UserReadMessage
+     *   }
+     * })
+     * 
+    **/
+    create<T extends UserReadMessageCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, UserReadMessageCreateArgs<ExtArgs>>
+    ): Prisma__UserReadMessageClient<$Result.GetResult<Prisma.$UserReadMessagePayload<ExtArgs>, T, 'create'>, never, ExtArgs>
+
+    /**
+     * Create many UserReadMessages.
+     *     @param {UserReadMessageCreateManyArgs} args - Arguments to create many UserReadMessages.
+     *     @example
+     *     // Create many UserReadMessages
+     *     const userReadMessage = await prisma.userReadMessage.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends UserReadMessageCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, UserReadMessageCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a UserReadMessage.
+     * @param {UserReadMessageDeleteArgs} args - Arguments to delete one UserReadMessage.
+     * @example
+     * // Delete one UserReadMessage
+     * const UserReadMessage = await prisma.userReadMessage.delete({
+     *   where: {
+     *     // ... filter to delete one UserReadMessage
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends UserReadMessageDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, UserReadMessageDeleteArgs<ExtArgs>>
+    ): Prisma__UserReadMessageClient<$Result.GetResult<Prisma.$UserReadMessagePayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
+
+    /**
+     * Update one UserReadMessage.
+     * @param {UserReadMessageUpdateArgs} args - Arguments to update one UserReadMessage.
+     * @example
+     * // Update one UserReadMessage
+     * const userReadMessage = await prisma.userReadMessage.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends UserReadMessageUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, UserReadMessageUpdateArgs<ExtArgs>>
+    ): Prisma__UserReadMessageClient<$Result.GetResult<Prisma.$UserReadMessagePayload<ExtArgs>, T, 'update'>, never, ExtArgs>
+
+    /**
+     * Delete zero or more UserReadMessages.
+     * @param {UserReadMessageDeleteManyArgs} args - Arguments to filter UserReadMessages to delete.
+     * @example
+     * // Delete a few UserReadMessages
+     * const { count } = await prisma.userReadMessage.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends UserReadMessageDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, UserReadMessageDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserReadMessages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserReadMessageUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UserReadMessages
+     * const userReadMessage = await prisma.userReadMessage.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends UserReadMessageUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, UserReadMessageUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one UserReadMessage.
+     * @param {UserReadMessageUpsertArgs} args - Arguments to update or create a UserReadMessage.
+     * @example
+     * // Update or create a UserReadMessage
+     * const userReadMessage = await prisma.userReadMessage.upsert({
+     *   create: {
+     *     // ... data to create a UserReadMessage
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UserReadMessage we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends UserReadMessageUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, UserReadMessageUpsertArgs<ExtArgs>>
+    ): Prisma__UserReadMessageClient<$Result.GetResult<Prisma.$UserReadMessagePayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
+
+    /**
+     * Find zero or more UserReadMessages that matches the filter.
+     * @param {UserReadMessageFindRawArgs} args - Select which filters you would like to apply.
+     * @example
+     * const userReadMessage = await prisma.userReadMessage.findRaw({
+     *   filter: { age: { $gt: 25 } } 
+     * })
+    **/
+    findRaw(
+      args?: UserReadMessageFindRawArgs
+    ): Prisma.PrismaPromise<JsonObject>
+
+    /**
+     * Perform aggregation operations on a UserReadMessage.
+     * @param {UserReadMessageAggregateRawArgs} args - Select which aggregations you would like to apply.
+     * @example
+     * const userReadMessage = await prisma.userReadMessage.aggregateRaw({
+     *   pipeline: [
+     *     { $match: { status: "registered" } },
+     *     { $group: { _id: "$country", total: { $sum: 1 } } }
+     *   ]
+     * })
+    **/
+    aggregateRaw(
+      args?: UserReadMessageAggregateRawArgs
+    ): Prisma.PrismaPromise<JsonObject>
+
+    /**
+     * Count the number of UserReadMessages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserReadMessageCountArgs} args - Arguments to filter UserReadMessages to count.
+     * @example
+     * // Count the number of UserReadMessages
+     * const count = await prisma.userReadMessage.count({
+     *   where: {
+     *     // ... the filter for the UserReadMessages we want to count
+     *   }
+     * })
+    **/
+    count<T extends UserReadMessageCountArgs>(
+      args?: Subset<T, UserReadMessageCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UserReadMessageCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UserReadMessage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserReadMessageAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UserReadMessageAggregateArgs>(args: Subset<T, UserReadMessageAggregateArgs>): Prisma.PrismaPromise<GetUserReadMessageAggregateType<T>>
+
+    /**
+     * Group by UserReadMessage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserReadMessageGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UserReadMessageGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UserReadMessageGroupByArgs['orderBy'] }
+        : { orderBy?: UserReadMessageGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UserReadMessageGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserReadMessageGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the UserReadMessage model
+   */
+  readonly fields: UserReadMessageFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UserReadMessage.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UserReadMessageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+
+    StatusMessage<T extends UserReadMessage$StatusMessageArgs<ExtArgs> = {}>(args?: Subset<T, UserReadMessage$StatusMessageArgs<ExtArgs>>): Prisma__StatusMessageClient<$Result.GetResult<Prisma.$StatusMessagePayload<ExtArgs>, T, 'findUniqueOrThrow'> | null, null, ExtArgs>;
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+
+
+  /**
+   * Fields of the UserReadMessage model
+   */ 
+  interface UserReadMessageFieldRefs {
+    readonly id: FieldRef<"UserReadMessage", 'String'>
+    readonly statusMessageId: FieldRef<"UserReadMessage", 'String'>
+    readonly userId: FieldRef<"UserReadMessage", 'String'>
+    readonly name: FieldRef<"UserReadMessage", 'String'>
+  }
+    
+
+  // Custom InputTypes
+
+  /**
+   * UserReadMessage findUnique
+   */
+  export type UserReadMessageFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserReadMessage
+     */
+    select?: UserReadMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserReadMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which UserReadMessage to fetch.
+     */
+    where: UserReadMessageWhereUniqueInput
+  }
+
+
+  /**
+   * UserReadMessage findUniqueOrThrow
+   */
+  export type UserReadMessageFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserReadMessage
+     */
+    select?: UserReadMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserReadMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which UserReadMessage to fetch.
+     */
+    where: UserReadMessageWhereUniqueInput
+  }
+
+
+  /**
+   * UserReadMessage findFirst
+   */
+  export type UserReadMessageFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserReadMessage
+     */
+    select?: UserReadMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserReadMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which UserReadMessage to fetch.
+     */
+    where?: UserReadMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserReadMessages to fetch.
+     */
+    orderBy?: UserReadMessageOrderByWithRelationInput | UserReadMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserReadMessages.
+     */
+    cursor?: UserReadMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserReadMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserReadMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserReadMessages.
+     */
+    distinct?: UserReadMessageScalarFieldEnum | UserReadMessageScalarFieldEnum[]
+  }
+
+
+  /**
+   * UserReadMessage findFirstOrThrow
+   */
+  export type UserReadMessageFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserReadMessage
+     */
+    select?: UserReadMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserReadMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which UserReadMessage to fetch.
+     */
+    where?: UserReadMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserReadMessages to fetch.
+     */
+    orderBy?: UserReadMessageOrderByWithRelationInput | UserReadMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserReadMessages.
+     */
+    cursor?: UserReadMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserReadMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserReadMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserReadMessages.
+     */
+    distinct?: UserReadMessageScalarFieldEnum | UserReadMessageScalarFieldEnum[]
+  }
+
+
+  /**
+   * UserReadMessage findMany
+   */
+  export type UserReadMessageFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserReadMessage
+     */
+    select?: UserReadMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserReadMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which UserReadMessages to fetch.
+     */
+    where?: UserReadMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserReadMessages to fetch.
+     */
+    orderBy?: UserReadMessageOrderByWithRelationInput | UserReadMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UserReadMessages.
+     */
+    cursor?: UserReadMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserReadMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserReadMessages.
+     */
+    skip?: number
+    distinct?: UserReadMessageScalarFieldEnum | UserReadMessageScalarFieldEnum[]
+  }
+
+
+  /**
+   * UserReadMessage create
+   */
+  export type UserReadMessageCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserReadMessage
+     */
+    select?: UserReadMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserReadMessageInclude<ExtArgs> | null
+    /**
+     * The data needed to create a UserReadMessage.
+     */
+    data: XOR<UserReadMessageCreateInput, UserReadMessageUncheckedCreateInput>
+  }
+
+
+  /**
+   * UserReadMessage createMany
+   */
+  export type UserReadMessageCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many UserReadMessages.
+     */
+    data: UserReadMessageCreateManyInput | UserReadMessageCreateManyInput[]
+  }
+
+
+  /**
+   * UserReadMessage update
+   */
+  export type UserReadMessageUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserReadMessage
+     */
+    select?: UserReadMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserReadMessageInclude<ExtArgs> | null
+    /**
+     * The data needed to update a UserReadMessage.
+     */
+    data: XOR<UserReadMessageUpdateInput, UserReadMessageUncheckedUpdateInput>
+    /**
+     * Choose, which UserReadMessage to update.
+     */
+    where: UserReadMessageWhereUniqueInput
+  }
+
+
+  /**
+   * UserReadMessage updateMany
+   */
+  export type UserReadMessageUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update UserReadMessages.
+     */
+    data: XOR<UserReadMessageUpdateManyMutationInput, UserReadMessageUncheckedUpdateManyInput>
+    /**
+     * Filter which UserReadMessages to update
+     */
+    where?: UserReadMessageWhereInput
+  }
+
+
+  /**
+   * UserReadMessage upsert
+   */
+  export type UserReadMessageUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserReadMessage
+     */
+    select?: UserReadMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserReadMessageInclude<ExtArgs> | null
+    /**
+     * The filter to search for the UserReadMessage to update in case it exists.
+     */
+    where: UserReadMessageWhereUniqueInput
+    /**
+     * In case the UserReadMessage found by the `where` argument doesn't exist, create a new UserReadMessage with this data.
+     */
+    create: XOR<UserReadMessageCreateInput, UserReadMessageUncheckedCreateInput>
+    /**
+     * In case the UserReadMessage was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UserReadMessageUpdateInput, UserReadMessageUncheckedUpdateInput>
+  }
+
+
+  /**
+   * UserReadMessage delete
+   */
+  export type UserReadMessageDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserReadMessage
+     */
+    select?: UserReadMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserReadMessageInclude<ExtArgs> | null
+    /**
+     * Filter which UserReadMessage to delete.
+     */
+    where: UserReadMessageWhereUniqueInput
+  }
+
+
+  /**
+   * UserReadMessage deleteMany
+   */
+  export type UserReadMessageDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserReadMessages to delete
+     */
+    where?: UserReadMessageWhereInput
+  }
+
+
+  /**
+   * UserReadMessage findRaw
+   */
+  export type UserReadMessageFindRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The query predicate filter. If unspecified, then all documents in the collection will match the predicate. ${@link https://docs.mongodb.com/manual/reference/operator/query MongoDB Docs}.
+     */
+    filter?: InputJsonValue
+    /**
+     * Additional options to pass to the `find` command ${@link https://docs.mongodb.com/manual/reference/command/find/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+
+  /**
+   * UserReadMessage aggregateRaw
+   */
+  export type UserReadMessageAggregateRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * An array of aggregation stages to process and transform the document stream via the aggregation pipeline. ${@link https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline MongoDB Docs}.
+     */
+    pipeline?: InputJsonValue[]
+    /**
+     * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+
+  /**
+   * UserReadMessage.StatusMessage
+   */
+  export type UserReadMessage$StatusMessageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StatusMessage
+     */
+    select?: StatusMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: StatusMessageInclude<ExtArgs> | null
+    where?: StatusMessageWhereInput
+  }
+
+
+  /**
+   * UserReadMessage without action
+   */
+  export type UserReadMessageDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserReadMessage
+     */
+    select?: UserReadMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserReadMessageInclude<ExtArgs> | null
   }
 
 
@@ -4048,6 +6206,24 @@ export namespace Prisma {
   export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
 
 
+  export const StatusMessageScalarFieldEnum: {
+    id: 'id',
+    messageId: 'messageId'
+  };
+
+  export type StatusMessageScalarFieldEnum = (typeof StatusMessageScalarFieldEnum)[keyof typeof StatusMessageScalarFieldEnum]
+
+
+  export const UserReadMessageScalarFieldEnum: {
+    id: 'id',
+    statusMessageId: 'statusMessageId',
+    userId: 'userId',
+    name: 'name'
+  };
+
+  export type UserReadMessageScalarFieldEnum = (typeof UserReadMessageScalarFieldEnum)[keyof typeof UserReadMessageScalarFieldEnum]
+
+
   export const SenderScalarFieldEnum: {
     id: 'id',
     idUser: 'idUser',
@@ -4168,7 +6344,8 @@ export namespace Prisma {
     chatId?: StringNullableFilter<"Message"> | string | null
     createdAt?: DateTimeFilter<"Message"> | Date | string
     updatedAt?: DateTimeFilter<"Message"> | Date | string
-    sender?: SenderListRelationFilter
+    sender?: XOR<SenderNullableRelationFilter, SenderWhereInput> | null
+    statusMessage?: XOR<StatusMessageNullableRelationFilter, StatusMessageWhereInput> | null
     chat?: XOR<ChatGroupNullableRelationFilter, ChatGroupWhereInput> | null
   }
 
@@ -4178,7 +6355,8 @@ export namespace Prisma {
     chatId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    sender?: SenderOrderByRelationAggregateInput
+    sender?: SenderOrderByWithRelationInput
+    statusMessage?: StatusMessageOrderByWithRelationInput
     chat?: ChatGroupOrderByWithRelationInput
   }
 
@@ -4191,7 +6369,8 @@ export namespace Prisma {
     chatId?: StringNullableFilter<"Message"> | string | null
     createdAt?: DateTimeFilter<"Message"> | Date | string
     updatedAt?: DateTimeFilter<"Message"> | Date | string
-    sender?: SenderListRelationFilter
+    sender?: XOR<SenderNullableRelationFilter, SenderWhereInput> | null
+    statusMessage?: XOR<StatusMessageNullableRelationFilter, StatusMessageWhereInput> | null
     chat?: XOR<ChatGroupNullableRelationFilter, ChatGroupWhereInput> | null
   }, "id">
 
@@ -4215,6 +6394,99 @@ export namespace Prisma {
     chatId?: StringNullableWithAggregatesFilter<"Message"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Message"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Message"> | Date | string
+  }
+
+  export type StatusMessageWhereInput = {
+    AND?: StatusMessageWhereInput | StatusMessageWhereInput[]
+    OR?: StatusMessageWhereInput[]
+    NOT?: StatusMessageWhereInput | StatusMessageWhereInput[]
+    id?: StringFilter<"StatusMessage"> | string
+    messageId?: StringFilter<"StatusMessage"> | string
+    message?: XOR<MessageNullableRelationFilter, MessageWhereInput> | null
+    readBy?: UserReadMessageListRelationFilter
+  }
+
+  export type StatusMessageOrderByWithRelationInput = {
+    id?: SortOrder
+    messageId?: SortOrder
+    message?: MessageOrderByWithRelationInput
+    readBy?: UserReadMessageOrderByRelationAggregateInput
+  }
+
+  export type StatusMessageWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    messageId?: string
+    AND?: StatusMessageWhereInput | StatusMessageWhereInput[]
+    OR?: StatusMessageWhereInput[]
+    NOT?: StatusMessageWhereInput | StatusMessageWhereInput[]
+    message?: XOR<MessageNullableRelationFilter, MessageWhereInput> | null
+    readBy?: UserReadMessageListRelationFilter
+  }, "id" | "messageId">
+
+  export type StatusMessageOrderByWithAggregationInput = {
+    id?: SortOrder
+    messageId?: SortOrder
+    _count?: StatusMessageCountOrderByAggregateInput
+    _max?: StatusMessageMaxOrderByAggregateInput
+    _min?: StatusMessageMinOrderByAggregateInput
+  }
+
+  export type StatusMessageScalarWhereWithAggregatesInput = {
+    AND?: StatusMessageScalarWhereWithAggregatesInput | StatusMessageScalarWhereWithAggregatesInput[]
+    OR?: StatusMessageScalarWhereWithAggregatesInput[]
+    NOT?: StatusMessageScalarWhereWithAggregatesInput | StatusMessageScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"StatusMessage"> | string
+    messageId?: StringWithAggregatesFilter<"StatusMessage"> | string
+  }
+
+  export type UserReadMessageWhereInput = {
+    AND?: UserReadMessageWhereInput | UserReadMessageWhereInput[]
+    OR?: UserReadMessageWhereInput[]
+    NOT?: UserReadMessageWhereInput | UserReadMessageWhereInput[]
+    id?: StringFilter<"UserReadMessage"> | string
+    statusMessageId?: StringNullableFilter<"UserReadMessage"> | string | null
+    userId?: StringFilter<"UserReadMessage"> | string
+    name?: StringFilter<"UserReadMessage"> | string
+    StatusMessage?: XOR<StatusMessageNullableRelationFilter, StatusMessageWhereInput> | null
+  }
+
+  export type UserReadMessageOrderByWithRelationInput = {
+    id?: SortOrder
+    statusMessageId?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
+    StatusMessage?: StatusMessageOrderByWithRelationInput
+  }
+
+  export type UserReadMessageWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: UserReadMessageWhereInput | UserReadMessageWhereInput[]
+    OR?: UserReadMessageWhereInput[]
+    NOT?: UserReadMessageWhereInput | UserReadMessageWhereInput[]
+    statusMessageId?: StringNullableFilter<"UserReadMessage"> | string | null
+    userId?: StringFilter<"UserReadMessage"> | string
+    name?: StringFilter<"UserReadMessage"> | string
+    StatusMessage?: XOR<StatusMessageNullableRelationFilter, StatusMessageWhereInput> | null
+  }, "id">
+
+  export type UserReadMessageOrderByWithAggregationInput = {
+    id?: SortOrder
+    statusMessageId?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
+    _count?: UserReadMessageCountOrderByAggregateInput
+    _max?: UserReadMessageMaxOrderByAggregateInput
+    _min?: UserReadMessageMinOrderByAggregateInput
+  }
+
+  export type UserReadMessageScalarWhereWithAggregatesInput = {
+    AND?: UserReadMessageScalarWhereWithAggregatesInput | UserReadMessageScalarWhereWithAggregatesInput[]
+    OR?: UserReadMessageScalarWhereWithAggregatesInput[]
+    NOT?: UserReadMessageScalarWhereWithAggregatesInput | UserReadMessageScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"UserReadMessage"> | string
+    statusMessageId?: StringNullableWithAggregatesFilter<"UserReadMessage"> | string | null
+    userId?: StringWithAggregatesFilter<"UserReadMessage"> | string
+    name?: StringWithAggregatesFilter<"UserReadMessage"> | string
   }
 
   export type SenderWhereInput = {
@@ -4302,7 +6574,8 @@ export namespace Prisma {
     content: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    sender?: SenderCreateNestedManyWithoutMessageInput
+    sender?: SenderCreateNestedOneWithoutMessageInput
+    statusMessage?: StatusMessageCreateNestedOneWithoutMessageInput
     chat?: ChatGroupCreateNestedOneWithoutMessageInput
   }
 
@@ -4312,14 +6585,16 @@ export namespace Prisma {
     chatId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    sender?: SenderUncheckedCreateNestedManyWithoutMessageInput
+    sender?: SenderUncheckedCreateNestedOneWithoutMessageInput
+    statusMessage?: StatusMessageUncheckedCreateNestedOneWithoutMessageInput
   }
 
   export type MessageUpdateInput = {
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sender?: SenderUpdateManyWithoutMessageNestedInput
+    sender?: SenderUpdateOneWithoutMessageNestedInput
+    statusMessage?: StatusMessageUpdateOneWithoutMessageNestedInput
     chat?: ChatGroupUpdateOneWithoutMessageNestedInput
   }
 
@@ -4328,7 +6603,8 @@ export namespace Prisma {
     chatId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sender?: SenderUncheckedUpdateManyWithoutMessageNestedInput
+    sender?: SenderUncheckedUpdateOneWithoutMessageNestedInput
+    statusMessage?: StatusMessageUncheckedUpdateOneWithoutMessageNestedInput
   }
 
   export type MessageCreateManyInput = {
@@ -4350,6 +6626,85 @@ export namespace Prisma {
     chatId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StatusMessageCreateInput = {
+    id?: string
+    message?: MessageCreateNestedOneWithoutStatusMessageInput
+    readBy?: UserReadMessageCreateNestedManyWithoutStatusMessageInput
+  }
+
+  export type StatusMessageUncheckedCreateInput = {
+    id?: string
+    messageId: string
+    readBy?: UserReadMessageUncheckedCreateNestedManyWithoutStatusMessageInput
+  }
+
+  export type StatusMessageUpdateInput = {
+    message?: MessageUpdateOneWithoutStatusMessageNestedInput
+    readBy?: UserReadMessageUpdateManyWithoutStatusMessageNestedInput
+  }
+
+  export type StatusMessageUncheckedUpdateInput = {
+    messageId?: StringFieldUpdateOperationsInput | string
+    readBy?: UserReadMessageUncheckedUpdateManyWithoutStatusMessageNestedInput
+  }
+
+  export type StatusMessageCreateManyInput = {
+    id?: string
+    messageId: string
+  }
+
+  export type StatusMessageUpdateManyMutationInput = {
+
+  }
+
+  export type StatusMessageUncheckedUpdateManyInput = {
+    messageId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type UserReadMessageCreateInput = {
+    id?: string
+    userId: string
+    name: string
+    StatusMessage?: StatusMessageCreateNestedOneWithoutReadByInput
+  }
+
+  export type UserReadMessageUncheckedCreateInput = {
+    id?: string
+    statusMessageId?: string | null
+    userId: string
+    name: string
+  }
+
+  export type UserReadMessageUpdateInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    StatusMessage?: StatusMessageUpdateOneWithoutReadByNestedInput
+  }
+
+  export type UserReadMessageUncheckedUpdateInput = {
+    statusMessageId?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type UserReadMessageCreateManyInput = {
+    id?: string
+    statusMessageId?: string | null
+    userId: string
+    name: string
+  }
+
+  export type UserReadMessageUpdateManyMutationInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type UserReadMessageUncheckedUpdateManyInput = {
+    statusMessageId?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
   }
 
   export type SenderCreateInput = {
@@ -4478,19 +6833,19 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type SenderListRelationFilter = {
-    every?: SenderWhereInput
-    some?: SenderWhereInput
-    none?: SenderWhereInput
+  export type SenderNullableRelationFilter = {
+    is?: SenderWhereInput | null
+    isNot?: SenderWhereInput | null
+  }
+
+  export type StatusMessageNullableRelationFilter = {
+    is?: StatusMessageWhereInput | null
+    isNot?: StatusMessageWhereInput | null
   }
 
   export type ChatGroupNullableRelationFilter = {
     is?: ChatGroupWhereInput | null
     isNot?: ChatGroupWhereInput | null
-  }
-
-  export type SenderOrderByRelationAggregateInput = {
-    _count?: SortOrder
   }
 
   export type MessageCountOrderByAggregateInput = {
@@ -4553,6 +6908,52 @@ export namespace Prisma {
   export type MessageNullableRelationFilter = {
     is?: MessageWhereInput | null
     isNot?: MessageWhereInput | null
+  }
+
+  export type UserReadMessageListRelationFilter = {
+    every?: UserReadMessageWhereInput
+    some?: UserReadMessageWhereInput
+    none?: UserReadMessageWhereInput
+  }
+
+  export type UserReadMessageOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type StatusMessageCountOrderByAggregateInput = {
+    id?: SortOrder
+    messageId?: SortOrder
+  }
+
+  export type StatusMessageMaxOrderByAggregateInput = {
+    id?: SortOrder
+    messageId?: SortOrder
+  }
+
+  export type StatusMessageMinOrderByAggregateInput = {
+    id?: SortOrder
+    messageId?: SortOrder
+  }
+
+  export type UserReadMessageCountOrderByAggregateInput = {
+    id?: SortOrder
+    statusMessageId?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
+  }
+
+  export type UserReadMessageMaxOrderByAggregateInput = {
+    id?: SortOrder
+    statusMessageId?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
+  }
+
+  export type UserReadMessageMinOrderByAggregateInput = {
+    id?: SortOrder
+    statusMessageId?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
   }
 
   export type SenderCountOrderByAggregateInput = {
@@ -4618,11 +7019,16 @@ export namespace Prisma {
     deleteMany?: MessageScalarWhereInput | MessageScalarWhereInput[]
   }
 
-  export type SenderCreateNestedManyWithoutMessageInput = {
-    create?: XOR<SenderCreateWithoutMessageInput, SenderUncheckedCreateWithoutMessageInput> | SenderCreateWithoutMessageInput[] | SenderUncheckedCreateWithoutMessageInput[]
-    connectOrCreate?: SenderCreateOrConnectWithoutMessageInput | SenderCreateOrConnectWithoutMessageInput[]
-    createMany?: SenderCreateManyMessageInputEnvelope
-    connect?: SenderWhereUniqueInput | SenderWhereUniqueInput[]
+  export type SenderCreateNestedOneWithoutMessageInput = {
+    create?: XOR<SenderCreateWithoutMessageInput, SenderUncheckedCreateWithoutMessageInput>
+    connectOrCreate?: SenderCreateOrConnectWithoutMessageInput
+    connect?: SenderWhereUniqueInput
+  }
+
+  export type StatusMessageCreateNestedOneWithoutMessageInput = {
+    create?: XOR<StatusMessageCreateWithoutMessageInput, StatusMessageUncheckedCreateWithoutMessageInput>
+    connectOrCreate?: StatusMessageCreateOrConnectWithoutMessageInput
+    connect?: StatusMessageWhereUniqueInput
   }
 
   export type ChatGroupCreateNestedOneWithoutMessageInput = {
@@ -4631,11 +7037,16 @@ export namespace Prisma {
     connect?: ChatGroupWhereUniqueInput
   }
 
-  export type SenderUncheckedCreateNestedManyWithoutMessageInput = {
-    create?: XOR<SenderCreateWithoutMessageInput, SenderUncheckedCreateWithoutMessageInput> | SenderCreateWithoutMessageInput[] | SenderUncheckedCreateWithoutMessageInput[]
-    connectOrCreate?: SenderCreateOrConnectWithoutMessageInput | SenderCreateOrConnectWithoutMessageInput[]
-    createMany?: SenderCreateManyMessageInputEnvelope
-    connect?: SenderWhereUniqueInput | SenderWhereUniqueInput[]
+  export type SenderUncheckedCreateNestedOneWithoutMessageInput = {
+    create?: XOR<SenderCreateWithoutMessageInput, SenderUncheckedCreateWithoutMessageInput>
+    connectOrCreate?: SenderCreateOrConnectWithoutMessageInput
+    connect?: SenderWhereUniqueInput
+  }
+
+  export type StatusMessageUncheckedCreateNestedOneWithoutMessageInput = {
+    create?: XOR<StatusMessageCreateWithoutMessageInput, StatusMessageUncheckedCreateWithoutMessageInput>
+    connectOrCreate?: StatusMessageCreateOrConnectWithoutMessageInput
+    connect?: StatusMessageWhereUniqueInput
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -4646,18 +7057,24 @@ export namespace Prisma {
     set?: Date | string
   }
 
-  export type SenderUpdateManyWithoutMessageNestedInput = {
-    create?: XOR<SenderCreateWithoutMessageInput, SenderUncheckedCreateWithoutMessageInput> | SenderCreateWithoutMessageInput[] | SenderUncheckedCreateWithoutMessageInput[]
-    connectOrCreate?: SenderCreateOrConnectWithoutMessageInput | SenderCreateOrConnectWithoutMessageInput[]
-    upsert?: SenderUpsertWithWhereUniqueWithoutMessageInput | SenderUpsertWithWhereUniqueWithoutMessageInput[]
-    createMany?: SenderCreateManyMessageInputEnvelope
-    set?: SenderWhereUniqueInput | SenderWhereUniqueInput[]
-    disconnect?: SenderWhereUniqueInput | SenderWhereUniqueInput[]
-    delete?: SenderWhereUniqueInput | SenderWhereUniqueInput[]
-    connect?: SenderWhereUniqueInput | SenderWhereUniqueInput[]
-    update?: SenderUpdateWithWhereUniqueWithoutMessageInput | SenderUpdateWithWhereUniqueWithoutMessageInput[]
-    updateMany?: SenderUpdateManyWithWhereWithoutMessageInput | SenderUpdateManyWithWhereWithoutMessageInput[]
-    deleteMany?: SenderScalarWhereInput | SenderScalarWhereInput[]
+  export type SenderUpdateOneWithoutMessageNestedInput = {
+    create?: XOR<SenderCreateWithoutMessageInput, SenderUncheckedCreateWithoutMessageInput>
+    connectOrCreate?: SenderCreateOrConnectWithoutMessageInput
+    upsert?: SenderUpsertWithoutMessageInput
+    disconnect?: SenderWhereInput | boolean
+    delete?: SenderWhereInput | boolean
+    connect?: SenderWhereUniqueInput
+    update?: XOR<XOR<SenderUpdateToOneWithWhereWithoutMessageInput, SenderUpdateWithoutMessageInput>, SenderUncheckedUpdateWithoutMessageInput>
+  }
+
+  export type StatusMessageUpdateOneWithoutMessageNestedInput = {
+    create?: XOR<StatusMessageCreateWithoutMessageInput, StatusMessageUncheckedCreateWithoutMessageInput>
+    connectOrCreate?: StatusMessageCreateOrConnectWithoutMessageInput
+    upsert?: StatusMessageUpsertWithoutMessageInput
+    disconnect?: StatusMessageWhereInput | boolean
+    delete?: StatusMessageWhereInput | boolean
+    connect?: StatusMessageWhereUniqueInput
+    update?: XOR<XOR<StatusMessageUpdateToOneWithWhereWithoutMessageInput, StatusMessageUpdateWithoutMessageInput>, StatusMessageUncheckedUpdateWithoutMessageInput>
   }
 
   export type ChatGroupUpdateOneWithoutMessageNestedInput = {
@@ -4675,18 +7092,98 @@ export namespace Prisma {
     unset?: boolean
   }
 
-  export type SenderUncheckedUpdateManyWithoutMessageNestedInput = {
-    create?: XOR<SenderCreateWithoutMessageInput, SenderUncheckedCreateWithoutMessageInput> | SenderCreateWithoutMessageInput[] | SenderUncheckedCreateWithoutMessageInput[]
-    connectOrCreate?: SenderCreateOrConnectWithoutMessageInput | SenderCreateOrConnectWithoutMessageInput[]
-    upsert?: SenderUpsertWithWhereUniqueWithoutMessageInput | SenderUpsertWithWhereUniqueWithoutMessageInput[]
-    createMany?: SenderCreateManyMessageInputEnvelope
-    set?: SenderWhereUniqueInput | SenderWhereUniqueInput[]
-    disconnect?: SenderWhereUniqueInput | SenderWhereUniqueInput[]
-    delete?: SenderWhereUniqueInput | SenderWhereUniqueInput[]
-    connect?: SenderWhereUniqueInput | SenderWhereUniqueInput[]
-    update?: SenderUpdateWithWhereUniqueWithoutMessageInput | SenderUpdateWithWhereUniqueWithoutMessageInput[]
-    updateMany?: SenderUpdateManyWithWhereWithoutMessageInput | SenderUpdateManyWithWhereWithoutMessageInput[]
-    deleteMany?: SenderScalarWhereInput | SenderScalarWhereInput[]
+  export type SenderUncheckedUpdateOneWithoutMessageNestedInput = {
+    create?: XOR<SenderCreateWithoutMessageInput, SenderUncheckedCreateWithoutMessageInput>
+    connectOrCreate?: SenderCreateOrConnectWithoutMessageInput
+    upsert?: SenderUpsertWithoutMessageInput
+    disconnect?: SenderWhereInput | boolean
+    delete?: SenderWhereInput | boolean
+    connect?: SenderWhereUniqueInput
+    update?: XOR<XOR<SenderUpdateToOneWithWhereWithoutMessageInput, SenderUpdateWithoutMessageInput>, SenderUncheckedUpdateWithoutMessageInput>
+  }
+
+  export type StatusMessageUncheckedUpdateOneWithoutMessageNestedInput = {
+    create?: XOR<StatusMessageCreateWithoutMessageInput, StatusMessageUncheckedCreateWithoutMessageInput>
+    connectOrCreate?: StatusMessageCreateOrConnectWithoutMessageInput
+    upsert?: StatusMessageUpsertWithoutMessageInput
+    disconnect?: StatusMessageWhereInput | boolean
+    delete?: StatusMessageWhereInput | boolean
+    connect?: StatusMessageWhereUniqueInput
+    update?: XOR<XOR<StatusMessageUpdateToOneWithWhereWithoutMessageInput, StatusMessageUpdateWithoutMessageInput>, StatusMessageUncheckedUpdateWithoutMessageInput>
+  }
+
+  export type MessageCreateNestedOneWithoutStatusMessageInput = {
+    create?: XOR<MessageCreateWithoutStatusMessageInput, MessageUncheckedCreateWithoutStatusMessageInput>
+    connectOrCreate?: MessageCreateOrConnectWithoutStatusMessageInput
+    connect?: MessageWhereUniqueInput
+  }
+
+  export type UserReadMessageCreateNestedManyWithoutStatusMessageInput = {
+    create?: XOR<UserReadMessageCreateWithoutStatusMessageInput, UserReadMessageUncheckedCreateWithoutStatusMessageInput> | UserReadMessageCreateWithoutStatusMessageInput[] | UserReadMessageUncheckedCreateWithoutStatusMessageInput[]
+    connectOrCreate?: UserReadMessageCreateOrConnectWithoutStatusMessageInput | UserReadMessageCreateOrConnectWithoutStatusMessageInput[]
+    createMany?: UserReadMessageCreateManyStatusMessageInputEnvelope
+    connect?: UserReadMessageWhereUniqueInput | UserReadMessageWhereUniqueInput[]
+  }
+
+  export type UserReadMessageUncheckedCreateNestedManyWithoutStatusMessageInput = {
+    create?: XOR<UserReadMessageCreateWithoutStatusMessageInput, UserReadMessageUncheckedCreateWithoutStatusMessageInput> | UserReadMessageCreateWithoutStatusMessageInput[] | UserReadMessageUncheckedCreateWithoutStatusMessageInput[]
+    connectOrCreate?: UserReadMessageCreateOrConnectWithoutStatusMessageInput | UserReadMessageCreateOrConnectWithoutStatusMessageInput[]
+    createMany?: UserReadMessageCreateManyStatusMessageInputEnvelope
+    connect?: UserReadMessageWhereUniqueInput | UserReadMessageWhereUniqueInput[]
+  }
+
+  export type MessageUpdateOneWithoutStatusMessageNestedInput = {
+    create?: XOR<MessageCreateWithoutStatusMessageInput, MessageUncheckedCreateWithoutStatusMessageInput>
+    connectOrCreate?: MessageCreateOrConnectWithoutStatusMessageInput
+    upsert?: MessageUpsertWithoutStatusMessageInput
+    disconnect?: boolean
+    delete?: MessageWhereInput | boolean
+    connect?: MessageWhereUniqueInput
+    update?: XOR<XOR<MessageUpdateToOneWithWhereWithoutStatusMessageInput, MessageUpdateWithoutStatusMessageInput>, MessageUncheckedUpdateWithoutStatusMessageInput>
+  }
+
+  export type UserReadMessageUpdateManyWithoutStatusMessageNestedInput = {
+    create?: XOR<UserReadMessageCreateWithoutStatusMessageInput, UserReadMessageUncheckedCreateWithoutStatusMessageInput> | UserReadMessageCreateWithoutStatusMessageInput[] | UserReadMessageUncheckedCreateWithoutStatusMessageInput[]
+    connectOrCreate?: UserReadMessageCreateOrConnectWithoutStatusMessageInput | UserReadMessageCreateOrConnectWithoutStatusMessageInput[]
+    upsert?: UserReadMessageUpsertWithWhereUniqueWithoutStatusMessageInput | UserReadMessageUpsertWithWhereUniqueWithoutStatusMessageInput[]
+    createMany?: UserReadMessageCreateManyStatusMessageInputEnvelope
+    set?: UserReadMessageWhereUniqueInput | UserReadMessageWhereUniqueInput[]
+    disconnect?: UserReadMessageWhereUniqueInput | UserReadMessageWhereUniqueInput[]
+    delete?: UserReadMessageWhereUniqueInput | UserReadMessageWhereUniqueInput[]
+    connect?: UserReadMessageWhereUniqueInput | UserReadMessageWhereUniqueInput[]
+    update?: UserReadMessageUpdateWithWhereUniqueWithoutStatusMessageInput | UserReadMessageUpdateWithWhereUniqueWithoutStatusMessageInput[]
+    updateMany?: UserReadMessageUpdateManyWithWhereWithoutStatusMessageInput | UserReadMessageUpdateManyWithWhereWithoutStatusMessageInput[]
+    deleteMany?: UserReadMessageScalarWhereInput | UserReadMessageScalarWhereInput[]
+  }
+
+  export type UserReadMessageUncheckedUpdateManyWithoutStatusMessageNestedInput = {
+    create?: XOR<UserReadMessageCreateWithoutStatusMessageInput, UserReadMessageUncheckedCreateWithoutStatusMessageInput> | UserReadMessageCreateWithoutStatusMessageInput[] | UserReadMessageUncheckedCreateWithoutStatusMessageInput[]
+    connectOrCreate?: UserReadMessageCreateOrConnectWithoutStatusMessageInput | UserReadMessageCreateOrConnectWithoutStatusMessageInput[]
+    upsert?: UserReadMessageUpsertWithWhereUniqueWithoutStatusMessageInput | UserReadMessageUpsertWithWhereUniqueWithoutStatusMessageInput[]
+    createMany?: UserReadMessageCreateManyStatusMessageInputEnvelope
+    set?: UserReadMessageWhereUniqueInput | UserReadMessageWhereUniqueInput[]
+    disconnect?: UserReadMessageWhereUniqueInput | UserReadMessageWhereUniqueInput[]
+    delete?: UserReadMessageWhereUniqueInput | UserReadMessageWhereUniqueInput[]
+    connect?: UserReadMessageWhereUniqueInput | UserReadMessageWhereUniqueInput[]
+    update?: UserReadMessageUpdateWithWhereUniqueWithoutStatusMessageInput | UserReadMessageUpdateWithWhereUniqueWithoutStatusMessageInput[]
+    updateMany?: UserReadMessageUpdateManyWithWhereWithoutStatusMessageInput | UserReadMessageUpdateManyWithWhereWithoutStatusMessageInput[]
+    deleteMany?: UserReadMessageScalarWhereInput | UserReadMessageScalarWhereInput[]
+  }
+
+  export type StatusMessageCreateNestedOneWithoutReadByInput = {
+    create?: XOR<StatusMessageCreateWithoutReadByInput, StatusMessageUncheckedCreateWithoutReadByInput>
+    connectOrCreate?: StatusMessageCreateOrConnectWithoutReadByInput
+    connect?: StatusMessageWhereUniqueInput
+  }
+
+  export type StatusMessageUpdateOneWithoutReadByNestedInput = {
+    create?: XOR<StatusMessageCreateWithoutReadByInput, StatusMessageUncheckedCreateWithoutReadByInput>
+    connectOrCreate?: StatusMessageCreateOrConnectWithoutReadByInput
+    upsert?: StatusMessageUpsertWithoutReadByInput
+    disconnect?: boolean
+    delete?: StatusMessageWhereInput | boolean
+    connect?: StatusMessageWhereUniqueInput
+    update?: XOR<XOR<StatusMessageUpdateToOneWithWhereWithoutReadByInput, StatusMessageUpdateWithoutReadByInput>, StatusMessageUncheckedUpdateWithoutReadByInput>
   }
 
   export type MessageCreateNestedOneWithoutSenderInput = {
@@ -4822,7 +7319,8 @@ export namespace Prisma {
     content: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    sender?: SenderCreateNestedManyWithoutMessageInput
+    sender?: SenderCreateNestedOneWithoutMessageInput
+    statusMessage?: StatusMessageCreateNestedOneWithoutMessageInput
   }
 
   export type MessageUncheckedCreateWithoutChatInput = {
@@ -4830,7 +7328,8 @@ export namespace Prisma {
     content: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    sender?: SenderUncheckedCreateNestedManyWithoutMessageInput
+    sender?: SenderUncheckedCreateNestedOneWithoutMessageInput
+    statusMessage?: StatusMessageUncheckedCreateNestedOneWithoutMessageInput
   }
 
   export type MessageCreateOrConnectWithoutChatInput = {
@@ -4886,8 +7385,19 @@ export namespace Prisma {
     create: XOR<SenderCreateWithoutMessageInput, SenderUncheckedCreateWithoutMessageInput>
   }
 
-  export type SenderCreateManyMessageInputEnvelope = {
-    data: SenderCreateManyMessageInput | SenderCreateManyMessageInput[]
+  export type StatusMessageCreateWithoutMessageInput = {
+    id?: string
+    readBy?: UserReadMessageCreateNestedManyWithoutStatusMessageInput
+  }
+
+  export type StatusMessageUncheckedCreateWithoutMessageInput = {
+    id?: string
+    readBy?: UserReadMessageUncheckedCreateNestedManyWithoutStatusMessageInput
+  }
+
+  export type StatusMessageCreateOrConnectWithoutMessageInput = {
+    where: StatusMessageWhereUniqueInput
+    create: XOR<StatusMessageCreateWithoutMessageInput, StatusMessageUncheckedCreateWithoutMessageInput>
   }
 
   export type ChatGroupCreateWithoutMessageInput = {
@@ -4903,30 +7413,44 @@ export namespace Prisma {
     create: XOR<ChatGroupCreateWithoutMessageInput, ChatGroupUncheckedCreateWithoutMessageInput>
   }
 
-  export type SenderUpsertWithWhereUniqueWithoutMessageInput = {
-    where: SenderWhereUniqueInput
+  export type SenderUpsertWithoutMessageInput = {
     update: XOR<SenderUpdateWithoutMessageInput, SenderUncheckedUpdateWithoutMessageInput>
     create: XOR<SenderCreateWithoutMessageInput, SenderUncheckedCreateWithoutMessageInput>
+    where?: SenderWhereInput
   }
 
-  export type SenderUpdateWithWhereUniqueWithoutMessageInput = {
-    where: SenderWhereUniqueInput
+  export type SenderUpdateToOneWithWhereWithoutMessageInput = {
+    where?: SenderWhereInput
     data: XOR<SenderUpdateWithoutMessageInput, SenderUncheckedUpdateWithoutMessageInput>
   }
 
-  export type SenderUpdateManyWithWhereWithoutMessageInput = {
-    where: SenderScalarWhereInput
-    data: XOR<SenderUpdateManyMutationInput, SenderUncheckedUpdateManyWithoutMessageInput>
+  export type SenderUpdateWithoutMessageInput = {
+    idUser?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
   }
 
-  export type SenderScalarWhereInput = {
-    AND?: SenderScalarWhereInput | SenderScalarWhereInput[]
-    OR?: SenderScalarWhereInput[]
-    NOT?: SenderScalarWhereInput | SenderScalarWhereInput[]
-    id?: StringFilter<"Sender"> | string
-    idUser?: StringFilter<"Sender"> | string
-    name?: StringFilter<"Sender"> | string
-    messageId?: StringNullableFilter<"Sender"> | string | null
+  export type SenderUncheckedUpdateWithoutMessageInput = {
+    idUser?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type StatusMessageUpsertWithoutMessageInput = {
+    update: XOR<StatusMessageUpdateWithoutMessageInput, StatusMessageUncheckedUpdateWithoutMessageInput>
+    create: XOR<StatusMessageCreateWithoutMessageInput, StatusMessageUncheckedCreateWithoutMessageInput>
+    where?: StatusMessageWhereInput
+  }
+
+  export type StatusMessageUpdateToOneWithWhereWithoutMessageInput = {
+    where?: StatusMessageWhereInput
+    data: XOR<StatusMessageUpdateWithoutMessageInput, StatusMessageUncheckedUpdateWithoutMessageInput>
+  }
+
+  export type StatusMessageUpdateWithoutMessageInput = {
+    readBy?: UserReadMessageUpdateManyWithoutStatusMessageNestedInput
+  }
+
+  export type StatusMessageUncheckedUpdateWithoutMessageInput = {
+    readBy?: UserReadMessageUncheckedUpdateManyWithoutStatusMessageNestedInput
   }
 
   export type ChatGroupUpsertWithoutMessageInput = {
@@ -4948,11 +7472,143 @@ export namespace Prisma {
 
   }
 
+  export type MessageCreateWithoutStatusMessageInput = {
+    id?: string
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sender?: SenderCreateNestedOneWithoutMessageInput
+    chat?: ChatGroupCreateNestedOneWithoutMessageInput
+  }
+
+  export type MessageUncheckedCreateWithoutStatusMessageInput = {
+    id?: string
+    content: string
+    chatId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sender?: SenderUncheckedCreateNestedOneWithoutMessageInput
+  }
+
+  export type MessageCreateOrConnectWithoutStatusMessageInput = {
+    where: MessageWhereUniqueInput
+    create: XOR<MessageCreateWithoutStatusMessageInput, MessageUncheckedCreateWithoutStatusMessageInput>
+  }
+
+  export type UserReadMessageCreateWithoutStatusMessageInput = {
+    id?: string
+    userId: string
+    name: string
+  }
+
+  export type UserReadMessageUncheckedCreateWithoutStatusMessageInput = {
+    id?: string
+    userId: string
+    name: string
+  }
+
+  export type UserReadMessageCreateOrConnectWithoutStatusMessageInput = {
+    where: UserReadMessageWhereUniqueInput
+    create: XOR<UserReadMessageCreateWithoutStatusMessageInput, UserReadMessageUncheckedCreateWithoutStatusMessageInput>
+  }
+
+  export type UserReadMessageCreateManyStatusMessageInputEnvelope = {
+    data: UserReadMessageCreateManyStatusMessageInput | UserReadMessageCreateManyStatusMessageInput[]
+  }
+
+  export type MessageUpsertWithoutStatusMessageInput = {
+    update: XOR<MessageUpdateWithoutStatusMessageInput, MessageUncheckedUpdateWithoutStatusMessageInput>
+    create: XOR<MessageCreateWithoutStatusMessageInput, MessageUncheckedCreateWithoutStatusMessageInput>
+    where?: MessageWhereInput
+  }
+
+  export type MessageUpdateToOneWithWhereWithoutStatusMessageInput = {
+    where?: MessageWhereInput
+    data: XOR<MessageUpdateWithoutStatusMessageInput, MessageUncheckedUpdateWithoutStatusMessageInput>
+  }
+
+  export type MessageUpdateWithoutStatusMessageInput = {
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sender?: SenderUpdateOneWithoutMessageNestedInput
+    chat?: ChatGroupUpdateOneWithoutMessageNestedInput
+  }
+
+  export type MessageUncheckedUpdateWithoutStatusMessageInput = {
+    content?: StringFieldUpdateOperationsInput | string
+    chatId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sender?: SenderUncheckedUpdateOneWithoutMessageNestedInput
+  }
+
+  export type UserReadMessageUpsertWithWhereUniqueWithoutStatusMessageInput = {
+    where: UserReadMessageWhereUniqueInput
+    update: XOR<UserReadMessageUpdateWithoutStatusMessageInput, UserReadMessageUncheckedUpdateWithoutStatusMessageInput>
+    create: XOR<UserReadMessageCreateWithoutStatusMessageInput, UserReadMessageUncheckedCreateWithoutStatusMessageInput>
+  }
+
+  export type UserReadMessageUpdateWithWhereUniqueWithoutStatusMessageInput = {
+    where: UserReadMessageWhereUniqueInput
+    data: XOR<UserReadMessageUpdateWithoutStatusMessageInput, UserReadMessageUncheckedUpdateWithoutStatusMessageInput>
+  }
+
+  export type UserReadMessageUpdateManyWithWhereWithoutStatusMessageInput = {
+    where: UserReadMessageScalarWhereInput
+    data: XOR<UserReadMessageUpdateManyMutationInput, UserReadMessageUncheckedUpdateManyWithoutStatusMessageInput>
+  }
+
+  export type UserReadMessageScalarWhereInput = {
+    AND?: UserReadMessageScalarWhereInput | UserReadMessageScalarWhereInput[]
+    OR?: UserReadMessageScalarWhereInput[]
+    NOT?: UserReadMessageScalarWhereInput | UserReadMessageScalarWhereInput[]
+    id?: StringFilter<"UserReadMessage"> | string
+    statusMessageId?: StringNullableFilter<"UserReadMessage"> | string | null
+    userId?: StringFilter<"UserReadMessage"> | string
+    name?: StringFilter<"UserReadMessage"> | string
+  }
+
+  export type StatusMessageCreateWithoutReadByInput = {
+    id?: string
+    message?: MessageCreateNestedOneWithoutStatusMessageInput
+  }
+
+  export type StatusMessageUncheckedCreateWithoutReadByInput = {
+    id?: string
+    messageId: string
+  }
+
+  export type StatusMessageCreateOrConnectWithoutReadByInput = {
+    where: StatusMessageWhereUniqueInput
+    create: XOR<StatusMessageCreateWithoutReadByInput, StatusMessageUncheckedCreateWithoutReadByInput>
+  }
+
+  export type StatusMessageUpsertWithoutReadByInput = {
+    update: XOR<StatusMessageUpdateWithoutReadByInput, StatusMessageUncheckedUpdateWithoutReadByInput>
+    create: XOR<StatusMessageCreateWithoutReadByInput, StatusMessageUncheckedCreateWithoutReadByInput>
+    where?: StatusMessageWhereInput
+  }
+
+  export type StatusMessageUpdateToOneWithWhereWithoutReadByInput = {
+    where?: StatusMessageWhereInput
+    data: XOR<StatusMessageUpdateWithoutReadByInput, StatusMessageUncheckedUpdateWithoutReadByInput>
+  }
+
+  export type StatusMessageUpdateWithoutReadByInput = {
+    message?: MessageUpdateOneWithoutStatusMessageNestedInput
+  }
+
+  export type StatusMessageUncheckedUpdateWithoutReadByInput = {
+    messageId?: StringFieldUpdateOperationsInput | string
+  }
+
   export type MessageCreateWithoutSenderInput = {
     id?: string
     content: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    statusMessage?: StatusMessageCreateNestedOneWithoutMessageInput
     chat?: ChatGroupCreateNestedOneWithoutMessageInput
   }
 
@@ -4962,6 +7618,7 @@ export namespace Prisma {
     chatId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    statusMessage?: StatusMessageUncheckedCreateNestedOneWithoutMessageInput
   }
 
   export type MessageCreateOrConnectWithoutSenderInput = {
@@ -4984,6 +7641,7 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    statusMessage?: StatusMessageUpdateOneWithoutMessageNestedInput
     chat?: ChatGroupUpdateOneWithoutMessageNestedInput
   }
 
@@ -4992,6 +7650,7 @@ export namespace Prisma {
     chatId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    statusMessage?: StatusMessageUncheckedUpdateOneWithoutMessageNestedInput
   }
 
   export type MessageCreateManyChatInput = {
@@ -5005,14 +7664,16 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sender?: SenderUpdateManyWithoutMessageNestedInput
+    sender?: SenderUpdateOneWithoutMessageNestedInput
+    statusMessage?: StatusMessageUpdateOneWithoutMessageNestedInput
   }
 
   export type MessageUncheckedUpdateWithoutChatInput = {
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sender?: SenderUncheckedUpdateManyWithoutMessageNestedInput
+    sender?: SenderUncheckedUpdateOneWithoutMessageNestedInput
+    statusMessage?: StatusMessageUncheckedUpdateOneWithoutMessageNestedInput
   }
 
   export type MessageUncheckedUpdateManyWithoutChatInput = {
@@ -5021,24 +7682,24 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type SenderCreateManyMessageInput = {
+  export type UserReadMessageCreateManyStatusMessageInput = {
     id?: string
-    idUser: string
+    userId: string
     name: string
   }
 
-  export type SenderUpdateWithoutMessageInput = {
-    idUser?: StringFieldUpdateOperationsInput | string
+  export type UserReadMessageUpdateWithoutStatusMessageInput = {
+    userId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
   }
 
-  export type SenderUncheckedUpdateWithoutMessageInput = {
-    idUser?: StringFieldUpdateOperationsInput | string
+  export type UserReadMessageUncheckedUpdateWithoutStatusMessageInput = {
+    userId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
   }
 
-  export type SenderUncheckedUpdateManyWithoutMessageInput = {
-    idUser?: StringFieldUpdateOperationsInput | string
+  export type UserReadMessageUncheckedUpdateManyWithoutStatusMessageInput = {
+    userId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
   }
 
@@ -5052,9 +7713,9 @@ export namespace Prisma {
      */
     export type ChatGroupCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ChatGroupCountOutputTypeDefaultArgs<ExtArgs>
     /**
-     * @deprecated Use MessageCountOutputTypeDefaultArgs instead
+     * @deprecated Use StatusMessageCountOutputTypeDefaultArgs instead
      */
-    export type MessageCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = MessageCountOutputTypeDefaultArgs<ExtArgs>
+    export type StatusMessageCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = StatusMessageCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use ChatGroupDefaultArgs instead
      */
@@ -5063,6 +7724,14 @@ export namespace Prisma {
      * @deprecated Use MessageDefaultArgs instead
      */
     export type MessageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = MessageDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use StatusMessageDefaultArgs instead
+     */
+    export type StatusMessageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = StatusMessageDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use UserReadMessageDefaultArgs instead
+     */
+    export type UserReadMessageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UserReadMessageDefaultArgs<ExtArgs>
     /**
      * @deprecated Use SenderDefaultArgs instead
      */

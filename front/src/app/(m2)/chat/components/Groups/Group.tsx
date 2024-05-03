@@ -5,11 +5,8 @@ import { DataContext } from "../../page"
 import UserController from "@/controllers/UserController"
 import IUser from "@/interfaces/IUser"
 import IGroup from "@/interfaces/IGroup"
-import MessagesController from "@/controllers/MessagesController"
 import RecordChats from "@/classes/RecordChats"
 import { IChatMessage } from "@/interfaces/IChatMessage"
-import { recordChat } from "@/types/recordChat"
-
 
 interface GroupProps {
   group: IGroup
@@ -39,8 +36,7 @@ const Group = ({ group }: GroupProps) => {
 
   async function handleChooseGroup(idGroup: string) {
     if (currentGroup && idGroup === currentGroup!.id) {
-      setDataContext(prevState => ({ ...prevState, currentGroup: undefined, currentUsers: [] }))
-      return
+      return setDataContext(prevState => ({ ...prevState, currentGroup: undefined, currentUsers: [] }))
     }
 
     const newCurrentGroup = groups.find(group => group.id === idGroup)
