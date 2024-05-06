@@ -12,11 +12,11 @@ export default class RecordChats {
   }
 
   /**
-   * Remove algum chat pelo seu id e pode substitui por outro no lugar
+   * Remove algum recordChat pelo seu id e pode substitui por outro no lugar
    * @param idGroup 
    * @param newRecordedChat novo recordChat que ficará no lugar do record retirado
    */
-  spliceChat(idGroup: string, newRecordChat?: recordChat) {
+  spliceRecordChat(idGroup: string, newRecordChat?: recordChat) {
     const chatFindedIndex = this._recordChats.findIndex(message => message && message[idGroup])
     if (newRecordChat) {
       this._recordChats.splice(chatFindedIndex, 1, newRecordChat)
@@ -34,7 +34,7 @@ export default class RecordChats {
     const findedChat = this._recordChats.find(chat => chat[groupId])
     if (findedChat) {
       findedChat[groupId].chats.push(newChatMessage)
-      this.spliceChat(groupId, findedChat)
+      this.spliceRecordChat(groupId, findedChat)
     }
   }
 
@@ -54,8 +54,10 @@ export default class RecordChats {
   /**
    * Retorna o chat atual
    * @param group 
+   * @param returnOnlyChatHistory faz com que retorne apenas o IChatHistoryLoader
+   * @returns retorna IChatHistoryLoader ou recordChat
    */
-  currentChat(group: IGroup , returnOnlyChatHistory: boolean) {
+  currentChat(group: IGroup, returnOnlyChatHistory: boolean) {
     const findedChat = this._recordChats.find(chat => chat[group.id])
     if (findedChat) {
       if (returnOnlyChatHistory) {
@@ -69,6 +71,17 @@ export default class RecordChats {
   currentRecordObjects(chatId: string) {
     const findedChat = this._recordChats.find(chat => chat[chatId])
     return findedChat
+  }
+
+/**
+ * Transforma o ChatMessage em RecordChat
+ * @param group IGroup
+ * @param chats array de IChatMessage
+ * @param loadedOldMessages se o chat ainda não foi renderizado = false, se já foi renderizado = true
+ * @returns recordChat
+ */
+  static transformChatMessageToRecordChat(group: IGroup, chats: IChatMessage[], loadedOldMessages: boolean) {
+    return { [group.id]: { chats, loadedOldMessages } } as recordChat
   }
 
   public get recordChats(): recordChat[] {

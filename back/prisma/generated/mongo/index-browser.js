@@ -125,7 +125,6 @@ exports.Prisma.MessageScalarFieldEnum = {
 };
 
 exports.Prisma.StatusMessageScalarFieldEnum = {
-  id: 'id',
   messageId: 'messageId'
 };
 

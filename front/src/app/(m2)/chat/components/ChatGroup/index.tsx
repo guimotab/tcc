@@ -21,7 +21,7 @@ const ChatGroup = ({ }: ChatGroupProps) => {
   const { currentGroup, groups, currentUsers, recordChats, setDataContext } = useContext(DataContext)
   const currentUser = useCurrentUser()
   const messagesEndRef = useRef<HTMLDivElement | null>(null)
-  const chats = new RecordChats(recordChats)
+  const recordChatClass = new RecordChats(recordChats)
   const [canRender, setCanRender] = useState(true)
   const [chat, setChat] = useState<IChatMessage[]>([])
   const [loadedOldestMessages, setLoadedOldestMessages] = useState(false)
@@ -31,22 +31,34 @@ const ChatGroup = ({ }: ChatGroupProps) => {
     setCanRender(false)
     setLoadedOldestMessages(false)
     setChat([])
-    if (currentGroup && groups && chats) {
+    if (currentGroup && groups && recordChatClass) {
       loadMessages()
     }
   }, [currentGroup])
 
   useEffect(() => {
-    if (messagesEndRef.current) {
-      if (isEndOfPage) {
-        const currentUserIsSender = chat[chat.length - 1].sender.idUser === currentUser.id
-        if (currentUserIsSender) {
-          MessagesController.statusReadMessage(currentUser, chat)
+    if (messagesEndRef.current && isEndOfPage) {
+      const sizeArrayChat = chat.length
+      if (sizeArrayChat) {   
+        const currentUserIsSender = chat[sizeArrayChat - 1].sender.idUser === currentUser.id
+        const lastMessageIsRead = chat[sizeArrayChat - 1].statusMessage.readBy?.find(readBy => readBy.userId === currentUser.id)
+        if (!currentUserIsSender && !lastMessageIsRead) { 
+          readNewMessages() 
         }
         messagesEndRef.current.scrollIntoView({ behavior: 'instant' })
       }
     }
-  }, [chats])
+  }, [recordChatClass])
+
+  async function readNewMessages() {
+    const respMessage = await MessagesController.ReadMessages(currentGroup!, currentUser, recordChatClass, chat)
+    
+    if (respMessage) { 
+      // setDataContext(prevState => ({ ...prevState, recordChats: recordChatClass.recordChats }))
+      setChat(respMessage.chats as IChatMessage[])
+      console.log("🚀 ~ readNewMessages ~ respMessage.chats:", respMessage.chats)
+    }
+  }
 
   function handleScroll(event: React.UIEvent<HTMLUListElement, UIEvent>) {
     const scrollTop = event.currentTarget.scrollTop
@@ -62,7 +74,7 @@ const ChatGroup = ({ }: ChatGroupProps) => {
   }
 
   function loadMessages() {
-    const currentChat = chats.currentChat(currentGroup!, true) as IChatHistoryLoader | undefined
+    const currentChat = recordChatClass.currentChat(currentGroup!, true) as IChatHistoryLoader | undefined
 
     if (!currentChat) {
       setCanRender(true)
@@ -99,10 +111,10 @@ const ChatGroup = ({ }: ChatGroupProps) => {
       const loadedMessages = newRecordChat.currentChat(currentGroup!, true) as IChatHistoryLoader | undefined
 
       if (loadedMessages) {
-        chats.spliceChat(currentGroup!.id, ...newObj)
+        recordChatClass.spliceRecordChat(currentGroup!.id, ...newObj)
         setLoadedOldestMessages(true)
         setChat(loadedMessages.chats)
-        setDataContext(prevState => ({ ...prevState, currentGroup, currentUsers, recordChats: chats.recordChats }))
+        setDataContext(prevState => ({ ...prevState, currentGroup, currentUsers, recordChats: recordChatClass.recordChats }))
       }
     }
     setLoadedOldestMessages(false)

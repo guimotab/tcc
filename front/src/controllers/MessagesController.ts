@@ -1,10 +1,11 @@
+import RecordChats from "@/classes/RecordChats";
 import IMessage from "@/interfaces/Chats/IMessage";
 import ISender from "@/interfaces/Chats/ISender";
 import IStatusMessage from "@/interfaces/Chats/IStatusMessage";
 import { IChatMessage } from "@/interfaces/IChatMessage";
 import IGroup from "@/interfaces/IGroup";
 import IUser from "@/interfaces/IUser";
-import MessageService, { IMessageArrayResponse, IMessageResponse } from "@/service/MessageService";
+import MessageService, { IMessageArrayResponse, IMessageResponse, IStatusMessageResponse } from "@/service/MessageService";
 import { recordChat } from "@/types/recordChat";
 
 export interface responseRecordMessage {
@@ -22,11 +23,41 @@ export default abstract class MessagesController {
   /**
    * Modifica o status das mensagens não lidas para lida
    * @param messages array de IChatMessage
-   * @returns 
+   * @returns array de IChatMessage com as mensagens lidas
    */
-  static async statusReadMessage(currentUser: IUser, messages: IChatMessage[]) {
-    messages.filter(message => message.statusMessage.readBy.find(userRead=> userRead === currentUser))
-    return await this._messageService.statusReadMessage(quantity) as IMessageResponse
+  static async ReadMessages(group: IGroup, currentUser: IUser, recordChat: RecordChats, currentChat: IChatMessage[]) {
+    const messegesDontRead = currentChat.filter(message => message.statusMessage.readBy?.find(userRead => userRead.id !== currentUser.id))
+    console.log("🚀 ~ MessagesController ~ ReadMessages ~ messegesDontRead:", messegesDontRead)
+    const unreadMessages = messegesDontRead.map(message => ({
+      id: message.message.id,
+      messageId: message.message.id,
+      readBy: message.statusMessage.readBy
+    } as IStatusMessage))
+    const respStatusMessage = await this._messageService.readMessages(unreadMessages, currentUser) as IStatusMessageResponse
+
+    if (respStatusMessage.data) {
+      const fakeMessages = [...currentChat]
+      console.log("🚀 ~ MessagesController ~ ReadMessages ~ respStatusMessage.data:", respStatusMessage.data)
+      respStatusMessage.data.statusMessages.forEach(readMessage => {
+        const index = currentChat.findIndex(message => readMessage.messageId === message.statusMessage.messageId)
+        const currentMessages = currentChat[index]
+        const arrayReadByCurrentMessages = currentMessages.statusMessage.readBy
+        console.log("🚀 ~ MessagesController ~ ReadMessages ~ arrayReadByCurrentMessages:", arrayReadByCurrentMessages)
+        console.log("🚀 ~ MessagesController ~ ReadMessages ~ readMessage.readBy:", readMessage.readBy)
+        fakeMessages.splice(index, 1, {
+          ...currentMessages,
+          statusMessage: {
+            messageId: currentMessages.statusMessage.messageId,
+            readBy: arrayReadByCurrentMessages ?
+            [...arrayReadByCurrentMessages, ...readMessage.readBy!]
+            :
+            [...readMessage.readBy!]
+          }
+        })
+      })
+      recordChat.spliceRecordChat(group.id, RecordChats.transformChatMessageToRecordChat(group, fakeMessages, true))
+      return recordChat.currentChat(group, true)
+    }
   }
 
   /**

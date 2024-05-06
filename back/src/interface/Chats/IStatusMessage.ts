@@ -1,5 +1,6 @@
+import IUserReadStatus from "./IUserReadMessage"
+
 export default interface IStatusMessage {
-  id: string
   messageId: string
-  readBy: string[]
+  readBy?: IUserReadStatus[]
 }

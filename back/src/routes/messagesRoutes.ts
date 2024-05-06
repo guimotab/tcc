@@ -6,5 +6,6 @@ messagesRoutes
     //coloca do caminho mais específico pro menos específico
     .get("/messages/some/:chatId/:skip/:take", MessageController.getSomeMessagesByChatId)
     .get("/messages/all/:chatId", MessageController.getAllMessagesByChatId)
+    .put("/messages/readMessage", MessageController.changeReadMessage)
 
 export default messagesRoutes

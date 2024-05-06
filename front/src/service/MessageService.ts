@@ -4,11 +4,20 @@ import HttpService from "./HttpService"
 import { messageResponse } from "@/types/messageResponse"
 import IMessage from "@/interfaces/Chats/IMessage"
 import { responseRecordMessage } from "@/controllers/MessagesController"
+import IStatusMessage from "@/interfaces/Chats/IStatusMessage"
+import IUser from "@/interfaces/IUser"
 
 export interface IMessageResponse {
   resp: messageResponse
   data?: {
     messages: IMessage
+  }
+}
+
+export interface IStatusMessageResponse {
+  resp: messageResponse
+  data?: {
+    statusMessages: IStatusMessage[]
   }
 }
 
@@ -18,13 +27,20 @@ export interface IMessageArrayResponse {
 }
 
 export default class MessageService extends HttpService<IMessage, IMessageResponse> {
-  async statusReadMessage(quantity: number) {
-    const result = await axios.get(`${this.url}/readMessage/${quantity}}`).catch(this.handleError) as IAxiosResponse<IMessageResponse>
-    return result.data
-  }
-
+  
   constructor() {
     super("messages")
+  }
+
+  /**
+   * Modifica o status das mensagens de não lidas para lidas
+   * @param statusMessages mensagens que serão modificadas o seu status
+   * @param user usuário que leu as mensagens
+   * @returns array de statusMessage apenas das mensagens modificadas
+   */
+  async readMessages(statusMessages: IStatusMessage[], user: IUser) {
+    const result = await axios.put(`${this.url}/readMessage`, {statusMessages, user}).catch(this.handleError) as IAxiosResponse<IMessageResponse>
+    return result.data
   }
 
   async getAllByChatId(chatId: string) {

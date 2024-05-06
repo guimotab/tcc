@@ -3252,34 +3252,28 @@ export namespace Prisma {
   }
 
   export type StatusMessageMinAggregateOutputType = {
-    id: string | null
     messageId: string | null
   }
 
   export type StatusMessageMaxAggregateOutputType = {
-    id: string | null
     messageId: string | null
   }
 
   export type StatusMessageCountAggregateOutputType = {
-    id: number
     messageId: number
     _all: number
   }
 
 
   export type StatusMessageMinAggregateInputType = {
-    id?: true
     messageId?: true
   }
 
   export type StatusMessageMaxAggregateInputType = {
-    id?: true
     messageId?: true
   }
 
   export type StatusMessageCountAggregateInputType = {
-    id?: true
     messageId?: true
     _all?: true
   }
@@ -3357,7 +3351,6 @@ export namespace Prisma {
   }
 
   export type StatusMessageGroupByOutputType = {
-    id: string
     messageId: string
     _count: StatusMessageCountAggregateOutputType | null
     _min: StatusMessageMinAggregateOutputType | null
@@ -3379,7 +3372,6 @@ export namespace Prisma {
 
 
   export type StatusMessageSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
     messageId?: boolean
     message?: boolean | StatusMessage$messageArgs<ExtArgs>
     readBy?: boolean | StatusMessage$readByArgs<ExtArgs>
@@ -3387,7 +3379,6 @@ export namespace Prisma {
   }, ExtArgs["result"]["statusMessage"]>
 
   export type StatusMessageSelectScalar = {
-    id?: boolean
     messageId?: boolean
   }
 
@@ -3405,7 +3396,6 @@ export namespace Prisma {
       readBy: Prisma.$UserReadMessagePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
-      id: string
       messageId: string
     }, ExtArgs["result"]["statusMessage"]>
     composites: {}
@@ -3499,8 +3489,8 @@ export namespace Prisma {
      * // Get first 10 StatusMessages
      * const statusMessages = await prisma.statusMessage.findMany({ take: 10 })
      * 
-     * // Only select the `id`
-     * const statusMessageWithIdOnly = await prisma.statusMessage.findMany({ select: { id: true } })
+     * // Only select the `messageId`
+     * const statusMessageWithMessageIdOnly = await prisma.statusMessage.findMany({ select: { messageId: true } })
      * 
     **/
     findMany<T extends StatusMessageFindManyArgs<ExtArgs>>(
@@ -3831,7 +3821,6 @@ export namespace Prisma {
    * Fields of the StatusMessage model
    */ 
   interface StatusMessageFieldRefs {
-    readonly id: FieldRef<"StatusMessage", 'String'>
     readonly messageId: FieldRef<"StatusMessage", 'String'>
   }
     
@@ -6207,7 +6196,6 @@ export namespace Prisma {
 
 
   export const StatusMessageScalarFieldEnum: {
-    id: 'id',
     messageId: 'messageId'
   };
 
@@ -6400,31 +6388,27 @@ export namespace Prisma {
     AND?: StatusMessageWhereInput | StatusMessageWhereInput[]
     OR?: StatusMessageWhereInput[]
     NOT?: StatusMessageWhereInput | StatusMessageWhereInput[]
-    id?: StringFilter<"StatusMessage"> | string
     messageId?: StringFilter<"StatusMessage"> | string
     message?: XOR<MessageNullableRelationFilter, MessageWhereInput> | null
     readBy?: UserReadMessageListRelationFilter
   }
 
   export type StatusMessageOrderByWithRelationInput = {
-    id?: SortOrder
     messageId?: SortOrder
     message?: MessageOrderByWithRelationInput
     readBy?: UserReadMessageOrderByRelationAggregateInput
   }
 
   export type StatusMessageWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
     messageId?: string
     AND?: StatusMessageWhereInput | StatusMessageWhereInput[]
     OR?: StatusMessageWhereInput[]
     NOT?: StatusMessageWhereInput | StatusMessageWhereInput[]
     message?: XOR<MessageNullableRelationFilter, MessageWhereInput> | null
     readBy?: UserReadMessageListRelationFilter
-  }, "id" | "messageId">
+  }, "messageId">
 
   export type StatusMessageOrderByWithAggregationInput = {
-    id?: SortOrder
     messageId?: SortOrder
     _count?: StatusMessageCountOrderByAggregateInput
     _max?: StatusMessageMaxOrderByAggregateInput
@@ -6435,7 +6419,6 @@ export namespace Prisma {
     AND?: StatusMessageScalarWhereWithAggregatesInput | StatusMessageScalarWhereWithAggregatesInput[]
     OR?: StatusMessageScalarWhereWithAggregatesInput[]
     NOT?: StatusMessageScalarWhereWithAggregatesInput | StatusMessageScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"StatusMessage"> | string
     messageId?: StringWithAggregatesFilter<"StatusMessage"> | string
   }
 
@@ -6629,13 +6612,11 @@ export namespace Prisma {
   }
 
   export type StatusMessageCreateInput = {
-    id?: string
     message?: MessageCreateNestedOneWithoutStatusMessageInput
     readBy?: UserReadMessageCreateNestedManyWithoutStatusMessageInput
   }
 
   export type StatusMessageUncheckedCreateInput = {
-    id?: string
     messageId: string
     readBy?: UserReadMessageUncheckedCreateNestedManyWithoutStatusMessageInput
   }
@@ -6646,12 +6627,10 @@ export namespace Prisma {
   }
 
   export type StatusMessageUncheckedUpdateInput = {
-    messageId?: StringFieldUpdateOperationsInput | string
     readBy?: UserReadMessageUncheckedUpdateManyWithoutStatusMessageNestedInput
   }
 
   export type StatusMessageCreateManyInput = {
-    id?: string
     messageId: string
   }
 
@@ -6660,7 +6639,7 @@ export namespace Prisma {
   }
 
   export type StatusMessageUncheckedUpdateManyInput = {
-    messageId?: StringFieldUpdateOperationsInput | string
+
   }
 
   export type UserReadMessageCreateInput = {
@@ -6921,17 +6900,14 @@ export namespace Prisma {
   }
 
   export type StatusMessageCountOrderByAggregateInput = {
-    id?: SortOrder
     messageId?: SortOrder
   }
 
   export type StatusMessageMaxOrderByAggregateInput = {
-    id?: SortOrder
     messageId?: SortOrder
   }
 
   export type StatusMessageMinOrderByAggregateInput = {
-    id?: SortOrder
     messageId?: SortOrder
   }
 
@@ -7386,12 +7362,10 @@ export namespace Prisma {
   }
 
   export type StatusMessageCreateWithoutMessageInput = {
-    id?: string
     readBy?: UserReadMessageCreateNestedManyWithoutStatusMessageInput
   }
 
   export type StatusMessageUncheckedCreateWithoutMessageInput = {
-    id?: string
     readBy?: UserReadMessageUncheckedCreateNestedManyWithoutStatusMessageInput
   }
 
@@ -7570,12 +7544,10 @@ export namespace Prisma {
   }
 
   export type StatusMessageCreateWithoutReadByInput = {
-    id?: string
     message?: MessageCreateNestedOneWithoutStatusMessageInput
   }
 
   export type StatusMessageUncheckedCreateWithoutReadByInput = {
-    id?: string
     messageId: string
   }
 
@@ -7600,7 +7572,7 @@ export namespace Prisma {
   }
 
   export type StatusMessageUncheckedUpdateWithoutReadByInput = {
-    messageId?: StringFieldUpdateOperationsInput | string
+
   }
 
   export type MessageCreateWithoutSenderInput = {

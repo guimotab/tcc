@@ -48,9 +48,9 @@ const Message = ({ message }: ChatMessageProps) => {
                 </HoverCardTrigger>
                 <HoverCardContent>
                   <div className="flex flex-col">
-                    {message.statusMessage.readBy.length !== 0 ?
+                    {message.statusMessage.readBy ?
                       <div className="flex gap-1 items-center">
-                        {message.statusMessage.readBy.map(user => <Label>{user}</Label>)}
+                        {message.statusMessage.readBy.map(user => <Label>{user.name}</Label>)}
                       </div>
                       :
                       <Label>Ninguém leu</Label>

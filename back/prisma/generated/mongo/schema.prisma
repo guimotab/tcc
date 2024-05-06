@@ -16,7 +16,7 @@ model ChatGroup {
 model Message {
   id            String         @id @default(auto()) @map("_id") @db.ObjectId
   content       String
-  sender        Sender? 
+  sender        Sender?
   statusMessage StatusMessage?
   chat          ChatGroup?     @relation(fields: [chatId], references: [id])
   chatId        String?        @db.ObjectId
@@ -25,15 +25,14 @@ model Message {
 }
 
 model StatusMessage {
-  id        String            @id @default(auto()) @map("_id") @db.ObjectId
   message   Message?          @relation(fields: [messageId], references: [id])
-  messageId String            @unique @db.ObjectId
+  messageId String            @id @map("_id") @db.ObjectId 
   readBy    UserReadMessage[]
 }
- 
+
 model UserReadMessage {
   id              String         @id @default(auto()) @map("_id") @db.ObjectId
-  StatusMessage   StatusMessage? @relation(fields: [statusMessageId], references: [id])
+  StatusMessage   StatusMessage? @relation(fields: [statusMessageId], references: [messageId])
   statusMessageId String?        @db.ObjectId
   userId          String
   name            String

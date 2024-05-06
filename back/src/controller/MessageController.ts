@@ -5,6 +5,7 @@ import { Request, Response } from 'express';
 import fixId from "../utils/fixId";
 import ISender from "../interface/Chats/ISender";
 import IStatusMessage from "../interface/Chats/IStatusMessage";
+import IUser from "../interface/IUser";
 
 interface MessageArrayResponse {
   resp: messageResponse
@@ -15,18 +16,53 @@ interface MessageArrayResponse {
   }
 }
 
+interface StatusMessageArrayResponse {
+  resp: messageResponse
+  data?: {
+    statusMessages: IStatusMessage[]
+  }
+}
+
 export default abstract class MessageController {
+  static async changeReadMessage(req: Request, res: Response) {
+    const { statusMessages, user } = req.body as { statusMessages: IStatusMessage[], user: IUser }
+
+    try {
+      const newStatusMessage = await Promise.all(statusMessages.map(async message =>
+        await prismaMongo.statusMessage.update({
+          where: {
+            messageId: message.messageId
+          },
+          data: {
+            readBy: {
+              create: {
+                name: user.name,
+                userId: user.id,
+              }
+            }
+          },
+          include: { readBy: true }
+        })
+      ))
+
+      return res.status(200).json({ resp: "Success", data: { statusMessages: newStatusMessage } } as StatusMessageArrayResponse)
+
+    } catch (err) {
+      console.log(err);
+      return res.json({ resp: "ServerError" } as MessageArrayResponse)
+    }
+  }
 
   static async getAllMessagesByChatId(req: Request, res: Response) {
     const { chatId } = req.params
     const idFixed = fixId(chatId)
     try {
       const messages = await prismaMongo.message.findMany({ where: { chatId: idFixed }, orderBy: { createdAt: "desc" } })
-      return { resp: "Success", data: { messages } } as MessageArrayResponse
+      return res.status(200).json({ resp: "Success", data: { messages } } as MessageArrayResponse)
 
     } catch (err) {
       console.log(err);
-      return { resp: "ServerError" } as MessageArrayResponse
+      return res.json({ resp: "ServerError" } as MessageArrayResponse)
     }
   }
 
@@ -37,19 +73,32 @@ export default abstract class MessageController {
     const takeNumber = Number(take)
 
     try {
-      const messages = await prismaMongo.message.findMany({ where: { chatId: idFixed }, skip: skipNumber, take: takeNumber, orderBy: { createdAt: "desc" } })
+      const messages = await prismaMongo.message.findMany({
+        where: {
+          chatId: idFixed
+        },
+        skip: skipNumber,
+        take: takeNumber,
+        orderBy: {
+          createdAt: "desc"
+        }
+      })
 
       const senders = await Promise.all(messages.map(
         async message => await prismaMongo.sender.findUnique({ where: { messageId: message.id } })
       ).filter(message => message !== undefined)) as ISender[]
 
       const statusMessages = await Promise.all(messages.map(
-        async message => await prismaMongo.statusMessage.findUnique({ where: { messageId: message.id } })
+        async message => await prismaMongo.statusMessage.findUnique({ where: { messageId: message.id }, include: { readBy: true } })
       )) as IStatusMessage[]
+
       return res.status(200).json({ resp: "Success", data: { messages, senders, statusMessages } } as MessageArrayResponse)
+
     } catch (err) {
+
       console.log(err);
       return res.json({ resp: "ServerError" } as MessageArrayResponse)
+
     }
   }
 
