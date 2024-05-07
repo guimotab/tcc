@@ -11,20 +11,10 @@ import { toast } from "sonner"
 import IUserOnGroup from "@/interfaces/IUserOnGroup"
 import IUser from "@/interfaces/IUser"
 import { Socket, io } from "socket.io-client"
-import { messageResponse } from "@/types/messageResponse"
-import IMessage from "@/interfaces/Chats/IMessage"
 import MessagesController from "@/controllers/MessagesController"
 import { recordChat } from "@/types/recordChat"
 import RecordChats from "@/classes/RecordChats"
 import { IChatMessage } from "@/interfaces/IChatMessage"
-
-
-interface MessageArrayResponse {
-  resp: messageResponse
-  data?: {
-    messages: IMessage[]
-  }
-}
 
 interface IDataContext {
   groups: IGroup[] | []
@@ -41,13 +31,13 @@ const Chat = () => {
   const currentUser = useCurrentUser()
   const [canRender, setCanRender] = useState(false)
   const [dataContext, setDataContext] = useState({} as IDataContext)
+  const [isAtEndOfChat, setIsAtEndOfChat] = useState(true)
   const socket = io("http://localhost:4000/chat")
 
   useEffect(() => {
     load()
     return () => { socket.off("message") }
   }, [])
-
 
   async function load() {
     const respGroup = await GroupController.getAllByUserId(currentUser.id)
@@ -60,27 +50,23 @@ const Chat = () => {
       setCanRender(true)
 
       const recordChats = await MessagesController.tranformAllChatsToRecord(groups, 0, 3)
-
+      const recordChatsClass = new RecordChats(recordChats)
       setDataContext({ groups, userOnGroups, currentGroup, currentUsers, recordChats, setDataContext, socket })
-      handleSockets(groups, recordChats)
+      handleSockets(groups, recordChatsClass)
     } else {
       const errorResponse = new ResolveResponseErrors(respGroup.resp)
       createToast(errorResponse)
     }
   }
 
-  function handleSockets(groups: IGroup[], recordChats: recordChat[]) {
+  function handleSockets(groups: IGroup[], recordChatsClass: RecordChats) {
     socket.emit("join-chat", groups)
-    socket.on("message", ({ message, sender, chatId, statusMessage }: IChatMessage) => listenerNewMessage({ message, sender, chatId, statusMessage }, recordChats))
-  }
+    socket.on("message", ({ message, sender, chatId, statusMessage }: IChatMessage) => listenerNewMessage({ message, sender, chatId, statusMessage }, recordChatsClass))
+  } 
 
-  function listenerNewMessage({ message, sender, chatId, statusMessage }: IChatMessage, recordChats: recordChat[]) {
-    let chats = new RecordChats(recordChats)
-    if (dataContext.recordChats) {
-      chats = new RecordChats(dataContext.recordChats)
-    }
-    chats.addRecordChat(chatId, { message, sender, chatId, statusMessage })
-    setDataContext(prevState => ({ ...prevState, recordChats: chats.recordChats }))
+  function listenerNewMessage({ message, sender, chatId, statusMessage }: IChatMessage, recordChatsClass: RecordChats) {
+    recordChatsClass.addRecordChat(chatId, { message, sender, chatId, statusMessage })
+    setDataContext(prevState => ({ ...prevState, recordChats: recordChatsClass.recordChats }))
   }
 
   function createToast(errorResponse: ResolveResponseErrors) {
@@ -103,7 +89,7 @@ const Chat = () => {
           {canRender &&
             <>
               <Groups />
-              <ChatGroup />
+              {dataContext.currentGroup && <ChatGroup />}
             </>
           }
         </Suspense>

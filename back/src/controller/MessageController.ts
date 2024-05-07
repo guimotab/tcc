@@ -28,8 +28,26 @@ export default abstract class MessageController {
     const { statusMessages, user } = req.body as { statusMessages: IStatusMessage[], user: IUser }
 
     try {
-      const newStatusMessage = await Promise.all(statusMessages.map(async message =>
-        await prismaMongo.statusMessage.update({
+      const newStatusMessage = await Promise.all(statusMessages.map(async message => {
+
+        const findMessage = await prismaMongo.statusMessage.findMany({
+          where: {
+            readBy: {
+              some: {
+                statusMessageId: message.messageId
+              }
+            }
+          },
+          include: {
+            readBy: true
+          }
+        })
+
+        if (findMessage.length === 1) {
+          return findMessage[0]
+        }
+
+        const newStatusMessage = await prismaMongo.statusMessage.update({
           where: {
             messageId: message.messageId
           },
@@ -43,7 +61,8 @@ export default abstract class MessageController {
           },
           include: { readBy: true }
         })
-      ))
+        return newStatusMessage
+      }))
 
       return res.status(200).json({ resp: "Success", data: { statusMessages: newStatusMessage } } as StatusMessageArrayResponse)
 
@@ -89,7 +108,14 @@ export default abstract class MessageController {
       ).filter(message => message !== undefined)) as ISender[]
 
       const statusMessages = await Promise.all(messages.map(
-        async message => await prismaMongo.statusMessage.findUnique({ where: { messageId: message.id }, include: { readBy: true } })
+        async message => {
+          const respStatusMessage = await prismaMongo.statusMessage.findUnique({ where: { messageId: message.id }, include: { readBy: true } })
+          if (respStatusMessage && respStatusMessage.readBy.length === 0) {
+            const { messageId, readBy } = respStatusMessage
+            return { messageId }
+          }
+          return respStatusMessage
+        }
       )) as IStatusMessage[]
 
       return res.status(200).json({ resp: "Success", data: { messages, senders, statusMessages } } as MessageArrayResponse)

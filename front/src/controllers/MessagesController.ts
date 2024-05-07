@@ -22,12 +22,29 @@ export default abstract class MessagesController {
 
   /**
    * Modifica o status das mensagens não lidas para lida
-   * @param messages array de IChatMessage
+   * @param group IGroup
+   * @param currentUser usuário atual
+   * @param recordChat RecordChats
+   * @param currentChat array de IChatMessage
    * @returns array de IChatMessage com as mensagens lidas
    */
   static async ReadMessages(group: IGroup, currentUser: IUser, recordChat: RecordChats, currentChat: IChatMessage[]) {
-    const messegesDontRead = currentChat.filter(message => message.statusMessage.readBy?.find(userRead => userRead.id !== currentUser.id))
-    console.log("🚀 ~ MessagesController ~ ReadMessages ~ messegesDontRead:", messegesDontRead)
+    const messegesDontRead = currentChat.filter(message => {
+
+      const messageSendByCurrentUser = message.sender.idUser === currentUser.id
+      if (messageSendByCurrentUser) {
+        return false
+      }
+ 
+      const readByExist = message.statusMessage.readBy
+      const wasReadByCurrentUser = readByExist && readByExist.find(readBy => readBy.userId === currentUser.id)
+
+      if (!readByExist || !wasReadByCurrentUser) {
+        return true
+      }
+      
+    })
+
     const unreadMessages = messegesDontRead.map(message => ({
       id: message.message.id,
       messageId: message.message.id,
@@ -36,27 +53,28 @@ export default abstract class MessagesController {
     const respStatusMessage = await this._messageService.readMessages(unreadMessages, currentUser) as IStatusMessageResponse
 
     if (respStatusMessage.data) {
+
       const fakeMessages = [...currentChat]
-      console.log("🚀 ~ MessagesController ~ ReadMessages ~ respStatusMessage.data:", respStatusMessage.data)
+
       respStatusMessage.data.statusMessages.forEach(readMessage => {
         const index = currentChat.findIndex(message => readMessage.messageId === message.statusMessage.messageId)
         const currentMessages = currentChat[index]
         const arrayReadByCurrentMessages = currentMessages.statusMessage.readBy
-        console.log("🚀 ~ MessagesController ~ ReadMessages ~ arrayReadByCurrentMessages:", arrayReadByCurrentMessages)
-        console.log("🚀 ~ MessagesController ~ ReadMessages ~ readMessage.readBy:", readMessage.readBy)
         fakeMessages.splice(index, 1, {
           ...currentMessages,
           statusMessage: {
             messageId: currentMessages.statusMessage.messageId,
             readBy: arrayReadByCurrentMessages ?
-            [...arrayReadByCurrentMessages, ...readMessage.readBy!]
-            :
-            [...readMessage.readBy!]
+              [...arrayReadByCurrentMessages, ...readMessage.readBy!]
+              :
+              [...readMessage.readBy!]
           }
         })
       })
+
       recordChat.spliceRecordChat(group.id, RecordChats.transformChatMessageToRecordChat(group, fakeMessages, true))
-      return recordChat.currentChat(group, true)
+      return recordChat.currentChatHistory(group)
+
     }
   }
 

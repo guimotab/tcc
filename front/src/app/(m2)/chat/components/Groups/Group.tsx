@@ -7,6 +7,7 @@ import IUser from "@/interfaces/IUser"
 import IGroup from "@/interfaces/IGroup"
 import RecordChats from "@/classes/RecordChats"
 import { IChatMessage } from "@/interfaces/IChatMessage"
+import useCurrentUser from "../../../../../../states/hooks/useCurrentUser"
 
 interface GroupProps {
   group: IGroup
@@ -14,23 +15,51 @@ interface GroupProps {
 
 const Group = ({ group }: GroupProps) => {
   const { currentGroup, groups, setDataContext, recordChats } = useContext(DataContext)
-  const chats = new RecordChats(recordChats)
+  const currentUser = useCurrentUser()
+  const recordChatClass = new RecordChats(recordChats)
   const [lastMessage, setLastMessage] = useState<IChatMessage>()
+  const [lastMessageWasRead, setLastMessageWasRead] = useState(true)
 
   useEffect(() => {
     loadMessages()
     handleLastMessage()
-  }, [chats])
+    if (lastMessage && currentGroup) {
+      checkReadLastMessage() 
+    }
+  }, [recordChatClass]) 
+  
+ 
+  useEffect(() => {
+    if (lastMessage && currentGroup) {
+      checkReadLastMessage()
+    }
+  }, [currentGroup])
 
   function loadMessages() {
-    const chatMessage = chats.returnLastChatMessage(group)
+    const chatMessage = recordChatClass.returnLastChatMessage(group)
     if (chatMessage) {
       setLastMessage(chatMessage)
     }
   }
 
+  function checkReadLastMessage() {
+    const lastMessageIsFromCurrentUser = lastMessage!.sender.idUser === currentUser.id
+    const isAtCurrentChat = currentGroup!.id === lastMessage!.chatId
+    if (lastMessageIsFromCurrentUser || isAtCurrentChat) {
+      return setLastMessageWasRead(true)
+    }
+
+    const arrayReadByExist = lastMessage!.statusMessage.readBy
+    const foundRead = arrayReadByExist && arrayReadByExist.find(user => user.userId === currentUser.id)
+    if (foundRead) {
+      return setLastMessageWasRead(true)
+    }
+
+    setLastMessageWasRead(false)
+  }
+
   function handleLastMessage() {
-    const lastMessage = chats.returnLastChatMessage(group)
+    const lastMessage = recordChatClass.returnLastChatMessage(group)
     setLastMessage(lastMessage)
   }
 
@@ -77,9 +106,18 @@ const Group = ({ group }: GroupProps) => {
           </Avatar>
           <div className="w-full">
             <p className="font-medium text-sm w-full">{group.name}</p>
-            {lastMessage &&
+
+            {lastMessage && lastMessageWasRead &&
               <p className="text-sm truncate text-slate-500 w-full"> {lastMessage.sender.name}: {lastMessage.message.content} </p>
             }
+
+            {lastMessage && !lastMessageWasRead &&
+              <div className="flex items-center gap-1">
+                <div className="h-1.5 w-1.5 bg-green-600 rounded-full" />
+                <p className="text-sm truncate text-green-600 w-full font-medium"> {lastMessage.sender.name}: {lastMessage.message.content} </p>
+              </div>
+            }
+
           </div>
         </div>
         <p className="text-xs">5 min atrás</p>

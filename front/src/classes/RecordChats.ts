@@ -13,11 +13,11 @@ export default class RecordChats {
 
   /**
    * Remove algum recordChat pelo seu id e pode substitui por outro no lugar
-   * @param idGroup 
+   * @param groupId groupId
    * @param newRecordedChat novo recordChat que ficará no lugar do record retirado
    */
-  spliceRecordChat(idGroup: string, newRecordChat?: recordChat) {
-    const chatFindedIndex = this._recordChats.findIndex(message => message && message[idGroup])
+  spliceRecordChat(groupId: string, newRecordChat?: recordChat) {
+    const chatFindedIndex = this._recordChats.findIndex(message => message && message[groupId])
     if (newRecordChat) {
       this._recordChats.splice(chatFindedIndex, 1, newRecordChat)
     } else {
@@ -27,14 +27,54 @@ export default class RecordChats {
 
   /**
    * Adiciona um recordChat ao chat relacionado
-   * @param chatId 
+   * @param groupId groupId
    * @param transformChatMessage Chat Message que será transformado em RecordChat
    */
   addRecordChat(groupId: string, newChatMessage: IChatMessage) {
     const findedChat = this._recordChats.find(chat => chat[groupId])
     if (findedChat) {
+      // Faz um splice no recordChat existente, substituindo pelo novo
       findedChat[groupId].chats.push(newChatMessage)
       this.spliceRecordChat(groupId, findedChat)
+
+    } else if (!findedChat && this._recordChats.length !== 0) {
+      // adiciona primeiro recordChat no array existente
+      this.createFirstRecordChat(groupId, newChatMessage, false)
+
+    } else {
+      // cria primeiro recordChat junto com o array
+      this.createFirstRecordChat(groupId, newChatMessage, true)
+
+    }
+  }
+
+  /**
+   * Cria primeiro recordChat
+   * @param groupId groupId
+   * @param transformChatMessage Chat Message que será transformado em RecordChat
+   * @param createRecordChatArray caso true, cria um recordChat[], caso false, realiza um push no primeiro recordMessage para recordChat[] existente
+   */
+  private createFirstRecordChat(groupId: string, firstChatMessage: IChatMessage, createRecordChatArray: boolean) {
+    if (createRecordChatArray) {
+      
+      this._recordChats = [{
+        [groupId]: {
+          loadedOldMessages: true,
+          chats: [firstChatMessage]
+        }
+      }] as recordChat[]
+
+    } else {
+      
+      this._recordChats.push(
+        {
+          [groupId]: {
+            loadedOldMessages: true,
+            chats: [firstChatMessage]
+          }
+        } as recordChat
+      )
+
     }
   }
 
@@ -57,29 +97,29 @@ export default class RecordChats {
    * @param returnOnlyChatHistory faz com que retorne apenas o IChatHistoryLoader
    * @returns retorna IChatHistoryLoader ou recordChat
    */
-  currentChat(group: IGroup, returnOnlyChatHistory: boolean) {
+  currentChatHistory(group: IGroup) {
     const findedChat = this._recordChats.find(chat => chat[group.id])
     if (findedChat) {
-      if (returnOnlyChatHistory) {
-        return findedChat[group.id] as IChatHistoryLoader
-      } else {
-        return findedChat as recordChat
-      }
+      return findedChat[group.id] as IChatHistoryLoader
     }
   }
 
-  currentRecordObjects(chatId: string) {
-    const findedChat = this._recordChats.find(chat => chat[chatId])
-    return findedChat
+  /**
+   * Retorna o RecordChat atual
+   * @param chatId string
+   */
+  currentRecordChat(group: IGroup) {
+    const findedChat = this._recordChats.find(chat => chat[group.id])
+    return findedChat as recordChat
   }
 
-/**
- * Transforma o ChatMessage em RecordChat
- * @param group IGroup
- * @param chats array de IChatMessage
- * @param loadedOldMessages se o chat ainda não foi renderizado = false, se já foi renderizado = true
- * @returns recordChat
- */
+  /**
+   * Transforma o ChatMessage em RecordChat
+   * @param group IGroup
+   * @param chats array de IChatMessage
+   * @param loadedOldMessages se o chat ainda não foi renderizado = false, se já foi renderizado = true
+   * @returns recordChat
+   */
   static transformChatMessageToRecordChat(group: IGroup, chats: IChatMessage[], loadedOldMessages: boolean) {
     return { [group.id]: { chats, loadedOldMessages } } as recordChat
   }

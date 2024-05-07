@@ -10,14 +10,12 @@ import { setTimeout } from "timers"
 import LoadingMessage from "../LoadingMessages"
 import RecordChats from "@/classes/RecordChats"
 import { IChatMessage } from "@/interfaces/IChatMessage"
-import { IChatHistoryLoader } from "@/interfaces/IChatHistoryLoader"
 import useCurrentUser from "../../../../../../states/hooks/useCurrentUser"
 
 interface ChatGroupProps {
 }
 
 const ChatGroup = ({ }: ChatGroupProps) => {
-
   const { currentGroup, groups, currentUsers, recordChats, setDataContext } = useContext(DataContext)
   const currentUser = useCurrentUser()
   const messagesEndRef = useRef<HTMLDivElement | null>(null)
@@ -25,70 +23,49 @@ const ChatGroup = ({ }: ChatGroupProps) => {
   const [canRender, setCanRender] = useState(true)
   const [chat, setChat] = useState<IChatMessage[]>([])
   const [loadedOldestMessages, setLoadedOldestMessages] = useState(false)
-  const [isEndOfPage, setIsEndOfPage] = useState(true)
+  const [isAtEndOfChat, setIsAtEndOfChat] = useState(true)
 
   useEffect(() => {
-    setCanRender(false)
-    setLoadedOldestMessages(false)
-    setChat([])
     if (currentGroup && groups && recordChatClass) {
+      setLoadedOldestMessages(true)
+      setCanRender(true)
       loadMessages()
     }
   }, [currentGroup])
 
   useEffect(() => {
-    if (messagesEndRef.current && isEndOfPage) {
-      const sizeArrayChat = chat.length
-      if (sizeArrayChat) {   
-        const currentUserIsSender = chat[sizeArrayChat - 1].sender.idUser === currentUser.id
-        const lastMessageIsRead = chat[sizeArrayChat - 1].statusMessage.readBy?.find(readBy => readBy.userId === currentUser.id)
-        if (!currentUserIsSender && !lastMessageIsRead) { 
-          readNewMessages() 
-        }
-        messagesEndRef.current.scrollIntoView({ behavior: 'instant' })
+    if (messagesEndRef.current && isAtEndOfChat) {
+      const lastMessageIsRead = checkLastMessageWasRead()
+      if (!lastMessageIsRead) {
+        readNewMessages() 
       }
+      messagesEndRef.current.scrollIntoView({ behavior: 'instant' })
     }
+    addNewMessage()
   }, [recordChatClass])
 
-  async function readNewMessages() {
-    const respMessage = await MessagesController.ReadMessages(currentGroup!, currentUser, recordChatClass, chat)
-    
-    if (respMessage) { 
-      // setDataContext(prevState => ({ ...prevState, recordChats: recordChatClass.recordChats }))
-      setChat(respMessage.chats as IChatMessage[])
-      console.log("🚀 ~ readNewMessages ~ respMessage.chats:", respMessage.chats)
-    }
-  }
+  async function loadMessages() {
+    const currentChat = recordChatClass.currentChatHistory(currentGroup!)
 
-  function handleScroll(event: React.UIEvent<HTMLUListElement, UIEvent>) {
-    const scrollTop = event.currentTarget.scrollTop
-    const clientHeight = event.currentTarget.clientHeight
-    const scrollHeight = event.currentTarget.scrollHeight
-
-    const isAtBottom = (scrollTop + clientHeight) >= (scrollHeight - 100);
-
-    if (isAtBottom) {
-      return setIsEndOfPage(true)
-    }
-    setIsEndOfPage(false)
-  }
-
-  function loadMessages() {
-    const currentChat = recordChatClass.currentChat(currentGroup!, true) as IChatHistoryLoader | undefined
-
+    // se não há mensagens no chat
     if (!currentChat) {
+      setLoadedOldestMessages(false)
       setCanRender(true)
       return setChat([])
     }
 
+    // se as mensagens antigas já foram carregadas ou não
     if (!currentChat.loadedOldMessages) {
-      setChat(currentChat.chats)
-      loadOldMessages(currentChat.chats)
-      setLoadedOldestMessages(true)
+      const newCurrentChat = await loadOldMessages(currentChat.chats)
+      if (newCurrentChat) {
+        setChat(newCurrentChat)
+        setDataContext(prevState => ({ ...prevState, currentGroup, currentUsers, recordChats: recordChatClass.recordChats }))
+      }
     } else {
       setChat(currentChat.chats)
     }
-    setCanRender(true)
+    setLoadedOldestMessages(false)
+
   }
 
   async function loadOldMessages(chatMessage: IChatMessage[]) {
@@ -108,19 +85,58 @@ const ChatGroup = ({ }: ChatGroupProps) => {
         }
       }] as recordChat[]
       const newRecordChat = new RecordChats(newObj)
-      const loadedMessages = newRecordChat.currentChat(currentGroup!, true) as IChatHistoryLoader | undefined
+      const loadedMessages = newRecordChat.currentChatHistory(currentGroup!)
 
       if (loadedMessages) {
         recordChatClass.spliceRecordChat(currentGroup!.id, ...newObj)
-        setLoadedOldestMessages(true)
-        setChat(loadedMessages.chats)
-        setDataContext(prevState => ({ ...prevState, currentGroup, currentUsers, recordChats: recordChatClass.recordChats }))
+        return loadedMessages.chats
       }
     }
-    setLoadedOldestMessages(false)
   }
 
-  return currentGroup && (
+  function addNewMessage() {
+    const currentChat = recordChatClass.currentChatHistory(currentGroup!)
+    if (currentChat) {
+      setChat(currentChat.chats)
+    }
+  }
+
+  async function readNewMessages() {
+    const respMessage = await MessagesController.ReadMessages(currentGroup!, currentUser, recordChatClass, chat)
+
+    if (respMessage) { 
+      setDataContext(prevState => ({ ...prevState, recordChats: recordChatClass.recordChats }))
+      setChat(respMessage.chats)
+      return respMessage.chats
+    }
+  }
+
+  function checkLastMessageWasRead() {
+    const sizeArrayChat = chat.length
+    if (sizeArrayChat) {
+      const currentUserIsSender = chat[sizeArrayChat - 1].sender.idUser === currentUser.id
+      const lastMessageIsRead = chat[sizeArrayChat - 1].statusMessage.readBy?.find(readBy => readBy.userId === currentUser.id)
+      if (!currentUserIsSender && !lastMessageIsRead) {
+        return false
+      }
+    }
+    return true
+  }
+
+  function handleScroll(event: React.UIEvent<HTMLUListElement, UIEvent>) {
+    const scrollTop = event.currentTarget.scrollTop
+    const clientHeight = event.currentTarget.clientHeight
+    const scrollHeight = event.currentTarget.scrollHeight
+
+    const isAtBottom = (scrollTop + clientHeight) >= (scrollHeight - 100);
+
+    if (isAtBottom) {
+      return setIsAtEndOfChat(true)
+    }
+    setIsAtEndOfChat(false)
+  }
+
+  return (
     <div className="flex flex-col w-full ">
 
       <HeaderGroup />

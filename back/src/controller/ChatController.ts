@@ -30,7 +30,7 @@ interface ISendMessageParams {
 
 export default abstract class ChatController {
 
-  static async sendMessage({ content, sender, chatId }: ISendMessageParams) {
+  static async sendMessage({ content, sender: userSender, chatId }: ISendMessageParams) {
     const idFixed = fixId(chatId)
     try {
       const message = await prismaMongo.message.create({
@@ -41,8 +41,8 @@ export default abstract class ChatController {
           },
           sender: {
             create: {
-              idUser: sender.id,
-              name: sender.name
+              idUser: userSender.id,
+              name: userSender.name
             }
           },
           statusMessage: {
@@ -57,8 +57,9 @@ export default abstract class ChatController {
       if (!message) {
         return { resp: "MessageNotFound" } as MessageResponse
       }
+      const { statusMessage, sender, ...onlyMessage } = message
 
-      return { resp: "Success", data: { message, sender: message.sender, statusMessage: message.statusMessage } } as MessageResponse
+      return { resp: "Success", data: { message: onlyMessage, sender, statusMessage } } as MessageResponse
     } catch (err) {
       console.log(err);
       return { resp: "ServerError" } as MessageResponse
