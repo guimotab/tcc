@@ -125,7 +125,7 @@ export default class RecordChats {
   }
 
   public get recordChats(): recordChat[] {
-    return this._recordChats;
+    return [...this._recordChats]
   }
 
   public set recordChats(value: recordChat[]) {

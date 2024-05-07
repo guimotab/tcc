@@ -14,7 +14,7 @@ interface GroupProps {
 }
 
 const Group = ({ group }: GroupProps) => {
-  const { currentGroup, groups, setDataContext, recordChats } = useContext(DataContext)
+  const { currentGroup, groups, setDataContext, recordChats, isAtEndOfChat } = useContext(DataContext)
   const currentUser = useCurrentUser()
   const recordChatClass = new RecordChats(recordChats)
   const [lastMessage, setLastMessage] = useState<IChatMessage>()
@@ -45,7 +45,7 @@ const Group = ({ group }: GroupProps) => {
   function checkReadLastMessage() {
     const lastMessageIsFromCurrentUser = lastMessage!.sender.idUser === currentUser.id
     const isAtCurrentChat = currentGroup!.id === lastMessage!.chatId
-    if (lastMessageIsFromCurrentUser || isAtCurrentChat) {
+    if (lastMessageIsFromCurrentUser || (isAtCurrentChat && isAtEndOfChat)) {
       return setLastMessageWasRead(true)
     }
 

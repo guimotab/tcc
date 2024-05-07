@@ -22,8 +22,9 @@ interface IDataContext {
   currentUsers: IUser[] | []
   currentGroup: IGroup | undefined
   recordChats: recordChat[]
-  setDataContext: Dispatch<SetStateAction<IDataContext>>
   socket: Socket
+  isAtEndOfChat: boolean
+  setDataContext: Dispatch<SetStateAction<IDataContext>>
 }
 
 export const DataContext = createContext<IDataContext>({} as IDataContext);
@@ -51,7 +52,17 @@ const Chat = () => {
 
       const recordChats = await MessagesController.tranformAllChatsToRecord(groups, 0, 3)
       const recordChatsClass = new RecordChats(recordChats)
-      setDataContext({ groups, userOnGroups, currentGroup, currentUsers, recordChats, setDataContext, socket })
+      
+      setDataContext({
+        groups,
+        userOnGroups,
+        currentGroup,
+        currentUsers,
+        recordChats,
+        socket,
+        isAtEndOfChat,
+        setDataContext
+      })
       handleSockets(groups, recordChatsClass)
     } else {
       const errorResponse = new ResolveResponseErrors(respGroup.resp)
@@ -62,11 +73,12 @@ const Chat = () => {
   function handleSockets(groups: IGroup[], recordChatsClass: RecordChats) {
     socket.emit("join-chat", groups)
     socket.on("message", ({ message, sender, chatId, statusMessage }: IChatMessage) => listenerNewMessage({ message, sender, chatId, statusMessage }, recordChatsClass))
-  } 
+  }
 
   function listenerNewMessage({ message, sender, chatId, statusMessage }: IChatMessage, recordChatsClass: RecordChats) {
     recordChatsClass.addRecordChat(chatId, { message, sender, chatId, statusMessage })
-    setDataContext(prevState => ({ ...prevState, recordChats: recordChatsClass.recordChats }))
+    const newRecordChat = [...recordChatsClass.recordChats]
+    setDataContext(prevState => ({ ...prevState, recordChats: newRecordChat }))
   }
 
   function createToast(errorResponse: ResolveResponseErrors) {
