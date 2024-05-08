@@ -37,7 +37,10 @@ const Chat = () => {
 
   useEffect(() => {
     load()
-    return () => { socket.off("message") }
+    return () => {
+      socket.off("message")
+      socket.disconnect()
+    }
   }, [])
 
   async function load() {
@@ -52,7 +55,7 @@ const Chat = () => {
 
       const recordChats = await MessagesController.tranformAllChatsToRecord(groups, 0, 3)
       const recordChatsClass = new RecordChats(recordChats)
-      
+
       setDataContext({
         groups,
         userOnGroups,

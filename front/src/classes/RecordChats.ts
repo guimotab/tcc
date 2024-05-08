@@ -33,15 +33,18 @@ export default class RecordChats {
   addRecordChat(groupId: string, newChatMessage: IChatMessage) {
     const findedChat = this._recordChats.find(chat => chat[groupId])
     if (findedChat) {
+      console.log("1");
       // Faz um splice no recordChat existente, substituindo pelo novo
       findedChat[groupId].chats.push(newChatMessage)
       this.spliceRecordChat(groupId, findedChat)
 
     } else if (!findedChat && this._recordChats.length !== 0) {
+      console.log("2");
       // adiciona primeiro recordChat no array existente
       this.createFirstRecordChat(groupId, newChatMessage, false)
 
     } else {
+      console.log("3");
       // cria primeiro recordChat junto com o array
       this.createFirstRecordChat(groupId, newChatMessage, true)
 
@@ -56,7 +59,7 @@ export default class RecordChats {
    */
   private createFirstRecordChat(groupId: string, firstChatMessage: IChatMessage, createRecordChatArray: boolean) {
     if (createRecordChatArray) {
-      
+
       this._recordChats = [{
         [groupId]: {
           loadedOldMessages: true,
@@ -65,7 +68,7 @@ export default class RecordChats {
       }] as recordChat[]
 
     } else {
-      
+
       this._recordChats.push(
         {
           [groupId]: {

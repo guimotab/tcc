@@ -25,12 +25,12 @@ const ChatGroup = ({ }: ChatGroupProps) => {
   const [loadedOldestMessages, setLoadedOldestMessages] = useState(false)
 
   useEffect(() => {
+    setChat([])
     if (currentGroup && groups && recordChatClass) {
       setLoadedOldestMessages(true)
       setCanRender(true)
       loadMessages()
     }
-
   }, [currentGroup])
 
   useEffect(() => {
@@ -39,7 +39,7 @@ const ChatGroup = ({ }: ChatGroupProps) => {
   }, [recordChats])
 
   useEffect(() => {
-    handleScrollToEndPage()
+    handleScrollToEndPage(false)
   }, [chat])
 
 
@@ -68,7 +68,12 @@ const ChatGroup = ({ }: ChatGroupProps) => {
     handleScrollToEndPage()
   }
 
-  function handleScrollToEndPage() {
+  function handleScrollToEndPage(verifyIfIsAtEndOfChat: boolean = true) {
+    //verifyIfIsAtEndOfChat: verirfica ou não se está no fim do chat para poder realizar o scroll
+    if (messagesEndRef.current && !verifyIfIsAtEndOfChat) {
+      return messagesEndRef.current.scrollIntoView({ behavior: 'instant' })
+    }
+
     if (messagesEndRef.current && isAtEndOfChat) {
       const lastMessageIsRead = checkLastMessageWasRead()
       if (!lastMessageIsRead) {

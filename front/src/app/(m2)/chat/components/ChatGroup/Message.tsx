@@ -50,7 +50,7 @@ const Message = ({ message }: ChatMessageProps) => {
                   <div className="flex flex-col">
                     {message.statusMessage.readBy ?
                       <div className="flex gap-1 items-center">
-                        {message.statusMessage.readBy.map(user => <Label>{user.name}</Label>)}
+                        {message.statusMessage.readBy.map(user => <Label key={user.id}>{user.name}</Label>)}
                       </div>
                       :
                       <Label>Ninguém leu</Label>
