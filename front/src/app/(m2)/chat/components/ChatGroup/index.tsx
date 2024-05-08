@@ -92,7 +92,7 @@ const ChatGroup = ({ }: ChatGroupProps) => {
 
   async function loadMoreMessages(chatMessage: IChatMessage[]) {
     await new Promise((resolve) => setTimeout(resolve, 1000))
-    const recordedChat = await MessagesController.transformOneChatToRecord(currentGroup!, 3, 30)
+    const recordedChat = await MessagesController.transformOneChatToRecord(currentGroup!, chatMessage.length, 30)
 
     if (recordedChat) {
       // se possui mais mensagens
@@ -113,9 +113,6 @@ const ChatGroup = ({ }: ChatGroupProps) => {
       recordChatClass.spliceRecordChat(currentGroup!.id, ...newObj)
       return newChats
 
-    } else {
-      //se não possui mais mensagens
-      return chatMessage
     }
   }
 
