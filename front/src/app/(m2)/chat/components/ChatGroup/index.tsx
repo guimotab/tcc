@@ -71,9 +71,9 @@ const ChatGroup = ({ }: ChatGroupProps) => {
     const newCurrentChat = await loadMoreMessages(currentChat.chats)
     if (newCurrentChat) {
       setChat(newCurrentChat)
-      setDataContext(prevState => ({ ...prevState, currentGroup, currentUsers, recordChats: recordChatClass.recordChats }))
       handleReadUnreadMessages(newCurrentChat)
       handleScrollToEndPage()
+      setDataContext(prevState => ({ ...prevState, currentGroup, currentUsers, recordChats: recordChatClass.recordChats }))
     }
     setIsLoadingOldestMessages(false)
   }
@@ -100,7 +100,7 @@ const ChatGroup = ({ }: ChatGroupProps) => {
     const recordedChat = await MessagesController.transformOneChatToRecord(currentGroup!, chatMessage.length, 30)
 
     if (recordedChat) {
-      // se possui mais mensagens
+      // se possui mais mensagens, junta as atuais com as antigas e muda o hasMoreMessagesToLoad para false
       const oldestChatMessage = recordedChat[currentGroup!.id].chats
 
       const newChats = [
@@ -117,6 +117,18 @@ const ChatGroup = ({ }: ChatGroupProps) => {
 
       recordChatClass.spliceRecordChat(currentGroup!.id, ...newObj)
       return newChats
+
+    } else {
+      //se não possui mensagens, apenas muda o hasMoreMessagesToLoad para false
+      const currentChatHistoryLoader = recordChatClass.currentChatHistory(currentGroup!)
+
+      if (currentChatHistoryLoader) {
+        const { chats } = currentChatHistoryLoader
+        const newRecordChat = { [currentGroup!.id]: { chats, hasMoreMessagesToLoad: false } }
+        recordChatClass.spliceRecordChat(currentGroup!.id, newRecordChat)
+        setDataContext(prevState => ({ ...prevState, currentGroup, currentUsers, recordChats: recordChatClass.recordChats }))
+      }
+
     }
   }
 
@@ -128,7 +140,7 @@ const ChatGroup = ({ }: ChatGroupProps) => {
     }
   }
 
-  async function readNewMessages(chats: IChatMessage[]  ) {
+  async function readNewMessages(chats: IChatMessage[]) {
     const respMessage = await MessagesController.ReadMessages(currentGroup!, currentUser, recordChatClass, chats)
 
     if (respMessage) {
@@ -164,12 +176,12 @@ const ChatGroup = ({ }: ChatGroupProps) => {
   }
 
   return (
-    <div className="flex flex-col w-full ">
+    <div className="flex flex-col w-full  min-w-[30rem]">
 
       <HeaderGroup />
 
       {canRender &&
-        <div className="flex flex-col items-center justify-end h-full bg-slate-100 px-6 pb-10 ">
+        <div className="flex flex-col items-center justify-end h-full bg-slate-100 px-6 pb-10">
           <div className="flex flex-col items-center max-w-[70rem] w-full">
             <div className="flex  w-full px-1 scrollbar">
               <ul onScroll={handleScroll}
