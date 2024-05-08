@@ -11,6 +11,7 @@ import LoadingMessage from "../LoadingMessages"
 import RecordChats from "@/classes/RecordChats"
 import { IChatMessage } from "@/interfaces/IChatMessage"
 import useCurrentUser from "../../../../../../states/hooks/useCurrentUser"
+import { IChatHistoryLoader } from "@/interfaces/IChatHistoryLoader"
 
 interface ChatGroupProps {
 }
@@ -22,14 +23,18 @@ const ChatGroup = ({ }: ChatGroupProps) => {
   const recordChatClass = new RecordChats(recordChats)
   const [canRender, setCanRender] = useState(true)
   const [chat, setChat] = useState<IChatMessage[]>([])
-  const [loadedOldestMessages, setLoadedOldestMessages] = useState(false)
+  const [isLoadingOldestMessages, setIsLoadingOldestMessages] = useState(true)
 
   useEffect(() => {
     setChat([])
     if (currentGroup && groups && recordChatClass) {
-      setLoadedOldestMessages(true)
       setCanRender(true)
-      loadMessages()
+      const currentChat = constructMessages()
+      if (currentChat && currentChat.hasMoreMessagesToLoad) {
+        //entra se não tiver as mensagens não foram carregadas ainda
+        setIsLoadingOldestMessages(true)
+        hasMoreMessagesToLoad(currentChat)
+      }
     }
   }, [currentGroup])
 
@@ -42,29 +47,31 @@ const ChatGroup = ({ }: ChatGroupProps) => {
     handleScrollToEndPage(false)
   }, [chat])
 
-
-  async function loadMessages() {
+  function constructMessages() {
     const currentChat = recordChatClass.currentChatHistory(currentGroup!)
 
     // se não há mensagens no chat
     if (!currentChat) {
-      setLoadedOldestMessages(false)
+      setIsLoadingOldestMessages(false)
       setCanRender(true)
       return setChat([])
     }
 
-    // se as mensagens antigas já foram carregadas ou não
-    if (!currentChat.loadedOldMessages) {
-      const newCurrentChat = await loadOldMessages(currentChat.chats)
-      if (newCurrentChat) {
-        setChat(newCurrentChat)
-        setDataContext(prevState => ({ ...prevState, currentGroup, currentUsers, recordChats: recordChatClass.recordChats }))
-      }
-    } else {
-      setChat(currentChat.chats)
-    }
-    setLoadedOldestMessages(false)
+    setChat(currentChat.chats)
+    setIsLoadingOldestMessages(false)
+    handleScrollToEndPage()
+    return currentChat
+  }
 
+
+  async function hasMoreMessagesToLoad(currentChat: IChatHistoryLoader) {
+    // se as mensagens antigas já foram carregadas ou não
+    const newCurrentChat = await loadMoreMessages(currentChat.chats)
+    if (newCurrentChat) {
+      setChat(newCurrentChat)
+      setDataContext(prevState => ({ ...prevState, currentGroup, currentUsers, recordChats: recordChatClass.recordChats }))
+    }
+    setIsLoadingOldestMessages(false)
     handleScrollToEndPage()
   }
 
@@ -83,29 +90,32 @@ const ChatGroup = ({ }: ChatGroupProps) => {
     }
   }
 
-  async function loadOldMessages(chatMessage: IChatMessage[]) {
+  async function loadMoreMessages(chatMessage: IChatMessage[]) {
     await new Promise((resolve) => setTimeout(resolve, 1000))
     const recordedChat = await MessagesController.transformOneChatToRecord(currentGroup!, 3, 30)
 
     if (recordedChat) {
+      // se possui mais mensagens
       const oldestChatMessage = recordedChat[currentGroup!.id].chats
+
+      const newChats = [
+        ...oldestChatMessage,
+        ...chatMessage,
+      ]
 
       const newObj = [{
         [currentGroup!.id]: {
-          chats: [
-            ...oldestChatMessage,
-            ...chatMessage,
-          ],
-          loadedOldMessages: true
+          chats: newChats,
+          hasMoreMessagesToLoad: false
         }
       }] as recordChat[]
-      const newRecordChat = new RecordChats(newObj)
-      const loadedMessages = newRecordChat.currentChatHistory(currentGroup!)
 
-      if (loadedMessages) {
-        recordChatClass.spliceRecordChat(currentGroup!.id, ...newObj)
-        return loadedMessages.chats
-      }
+      recordChatClass.spliceRecordChat(currentGroup!.id, ...newObj)
+      return newChats
+
+    } else {
+      //se não possui mais mensagens
+      return chatMessage
     }
   }
 
@@ -163,7 +173,7 @@ const ChatGroup = ({ }: ChatGroupProps) => {
             <div className="flex  w-full px-1 scrollbar">
               <ul onScroll={handleScroll}
                 className="flex flex-col w-full gap-6 max-h-[calc(100vh-(72px+84px))] overflow-auto px-5 pt-10 ">
-                {loadedOldestMessages && <LoadingMessage />}
+                {isLoadingOldestMessages && <LoadingMessage />}
                 {chat.map(message =>
                   <Message key={message.message.id} message={message} />
                 )}

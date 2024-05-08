@@ -13,6 +13,7 @@ interface MessageArrayResponse {
     messages: IMessage[]
     senders: ISender[]
     statusMessages: IStatusMessage[]
+    hasMoreMessagesToLoad: boolean
   }
 }
 
@@ -118,7 +119,13 @@ export default abstract class MessageController {
         }
       )) as IStatusMessage[]
 
-      return res.status(200).json({ resp: "Success", data: { messages, senders, statusMessages } } as MessageArrayResponse)
+      const findMoreMessages = await prismaMongo.message.findMany({ where: { chatId: idFixed }, skip: skipNumber + takeNumber, take: 1})
+      let hasMoreMessagesToLoad = false
+      if (findMoreMessages.length !== 0) {
+        hasMoreMessagesToLoad = true
+      }
+
+      return res.status(200).json({ resp: "Success", data: { messages, senders, statusMessages, hasMoreMessagesToLoad } } as MessageArrayResponse)
 
     } catch (err) {
 

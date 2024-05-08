@@ -12,6 +12,7 @@ export interface responseRecordMessage {
   messages: IMessage[]
   senders: ISender[]
   statusMessages: IStatusMessage[]
+  hasMoreMessagesToLoad: boolean
 }
 
 export default abstract class MessagesController {
@@ -35,14 +36,14 @@ export default abstract class MessagesController {
       if (messageSendByCurrentUser) {
         return false
       }
- 
+
       const readByExist = message.statusMessage.readBy
       const wasReadByCurrentUser = readByExist && readByExist.find(readBy => readBy.userId === currentUser.id)
 
       if (!readByExist || !wasReadByCurrentUser) {
         return true
       }
-      
+
     })
 
     const unreadMessages = messegesDontRead.map(message => ({
@@ -97,7 +98,7 @@ export default abstract class MessagesController {
   }
 
   /**
-   * Função que retorna um array de recordMessage, facilitando a gravação das mensagens para se fazer busca depois
+   * Busca mensagens de todos os grupos no servidor e transforma em recordChat[]
    * @param groups Array de IGroup
    * @param skip Posição de início na busca no banco
    * @param take Quantidade de elementos que serão trazidos do banco
@@ -111,7 +112,7 @@ export default abstract class MessagesController {
 
       if (dataMessages && dataMessages.messages.length !== 0) {
 
-        const chatMessage = this.converterToRecordChat(group, dataMessages) as recordChat
+        const chatMessage = this.converterToRecordChat(group, dataMessages, dataMessages.hasMoreMessagesToLoad) as recordChat
         if (chatMessage) {
           return chatMessage
         }
@@ -122,13 +123,20 @@ export default abstract class MessagesController {
     return filteredMessages
   }
 
+  /**
+   * Busca mensagens do grupo atual no servidor e transforma em recordChat
+   * @param group IGroup
+   * @param skip quantidade de mensagens que serão ignoradas na requisição
+   * @param take quantidade de mensagens que serão pegas na requisição
+   * @returns retorna mensagens no formato recordChat
+   */
   static async transformOneChatToRecord(group: IGroup, skip: number, take: number) {
     const messageResp = await MessagesController.getSomeByGroupId(group, skip, take)
     const dataMessages = messageResp.data
 
     if (dataMessages && dataMessages.messages.length !== 0) {
-
-      const chatMessage = this.converterToRecordChat(group, dataMessages) as recordChat
+      
+      const chatMessage = this.converterToRecordChat(group, dataMessages, dataMessages.hasMoreMessagesToLoad) as recordChat
       if (chatMessage) {
         return chatMessage
       }
@@ -140,7 +148,7 @@ export default abstract class MessagesController {
    * @param group grupo atual
    * @param allMessages objeto que contenha o array de messages e senders
    */
-  private static converterToRecordChat(group: IGroup, allMessages: responseRecordMessage) {
+  private static converterToRecordChat(group: IGroup, allMessages: responseRecordMessage, hasMoreMessagesToLoad: boolean) {
     if (allMessages) {
 
       const contentMessage = allMessages.messages.map(dataMessage => {
@@ -151,7 +159,7 @@ export default abstract class MessagesController {
 
       })
 
-      const recordMessage = { [group.id]: { chats: contentMessage.reverse(), loadedOldMessages: false } } as recordChat
+      const recordMessage = { [group.id]: { chats: contentMessage.reverse(), hasMoreMessagesToLoad } } as recordChat
       return recordMessage
     }
   }

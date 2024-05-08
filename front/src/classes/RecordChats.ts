@@ -62,7 +62,7 @@ export default class RecordChats {
 
       this._recordChats = [{
         [groupId]: {
-          loadedOldMessages: true,
+          hasMoreMessagesToLoad: true,
           chats: [firstChatMessage]
         }
       }] as recordChat[]
@@ -72,7 +72,7 @@ export default class RecordChats {
       this._recordChats.push(
         {
           [groupId]: {
-            loadedOldMessages: true,
+            hasMoreMessagesToLoad: true,
             chats: [firstChatMessage]
           }
         } as recordChat
@@ -124,7 +124,7 @@ export default class RecordChats {
    * @returns recordChat
    */
   static transformChatMessageToRecordChat(group: IGroup, chats: IChatMessage[], loadedOldMessages: boolean) {
-    return { [group.id]: { chats, loadedOldMessages } } as recordChat
+    return { [group.id]: { chats, hasMoreMessagesToLoad: loadedOldMessages } } as recordChat
   }
 
   public get recordChats(): recordChat[] {

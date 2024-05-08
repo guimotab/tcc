@@ -37,11 +37,17 @@ const Chat = () => {
 
   useEffect(() => {
     load()
-    return () => {
-      socket.off("message")
-      socket.disconnect()
-    }
   }, [])
+
+  useEffect(() => {
+    if (dataContext.groups && dataContext.recordChats) {
+      handleSockets(dataContext.groups, dataContext.recordChats)
+      return () => {
+        socket.off("message")
+        socket.disconnect()
+      }
+    }
+  }, [dataContext])
 
   async function load() {
     const respGroup = await GroupController.getAllByUserId(currentUser.id)
@@ -54,7 +60,6 @@ const Chat = () => {
       setCanRender(true)
 
       const recordChats = await MessagesController.tranformAllChatsToRecord(groups, 0, 3)
-      const recordChatsClass = new RecordChats(recordChats)
 
       setDataContext({
         groups,
@@ -66,19 +71,19 @@ const Chat = () => {
         isAtEndOfChat,
         setDataContext
       })
-      handleSockets(groups, recordChatsClass)
     } else {
       const errorResponse = new ResolveResponseErrors(respGroup.resp)
       createToast(errorResponse)
     }
   }
 
-  function handleSockets(groups: IGroup[], recordChatsClass: RecordChats) {
+  function handleSockets(groups: IGroup[], recordChats: recordChat[]) {
     socket.emit("join-chat", groups)
-    socket.on("message", ({ message, sender, chatId, statusMessage }: IChatMessage) => listenerNewMessage({ message, sender, chatId, statusMessage }, recordChatsClass))
+    socket.on("message", ({ message, sender, chatId, statusMessage }: IChatMessage) => listenerNewMessage({ message, sender, chatId, statusMessage }, recordChats))
   }
 
-  function listenerNewMessage({ message, sender, chatId, statusMessage }: IChatMessage, recordChatsClass: RecordChats) {
+  function listenerNewMessage({ message, sender, chatId, statusMessage }: IChatMessage, recordChats: recordChat[]) {
+    const recordChatsClass = new RecordChats(recordChats)
     recordChatsClass.addRecordChat(chatId, { message, sender, chatId, statusMessage })
     const newRecordChat = [...recordChatsClass.recordChats]
     setDataContext(prevState => ({ ...prevState, recordChats: newRecordChat }))
