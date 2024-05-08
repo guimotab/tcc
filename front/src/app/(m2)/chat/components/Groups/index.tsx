@@ -4,12 +4,11 @@ import { useContext } from "react"
 import { DataContext } from "../../page"
 import Group from "./Group"
 
-
 interface GroupsProps {
 }
 
 const Groups = ({ }: GroupsProps) => {
-  const { groups, socket } = useContext(DataContext)
+  const { groups } = useContext(DataContext)
 
   return groups && (
     <div className="flex w-fit shadow-sm">

@@ -45,6 +45,7 @@ export default abstract class MessageController {
         })
 
         if (findMessage.length === 1) {
+          //mensagem já lida
           return findMessage[0]
         }
 
@@ -119,7 +120,7 @@ export default abstract class MessageController {
         }
       )) as IStatusMessage[]
 
-      const findMoreMessages = await prismaMongo.message.findMany({ where: { chatId: idFixed }, skip: skipNumber + takeNumber, take: 1})
+      const findMoreMessages = await prismaMongo.message.findMany({ where: { chatId: idFixed }, skip: skipNumber + takeNumber, take: 1 })
       let hasMoreMessagesToLoad = false
       if (findMoreMessages.length !== 0) {
         hasMoreMessagesToLoad = true

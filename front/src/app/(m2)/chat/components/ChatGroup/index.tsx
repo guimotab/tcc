@@ -44,7 +44,7 @@ const ChatGroup = ({ }: ChatGroupProps) => {
   }, [recordChats])
 
   useEffect(() => {
-    handleScrollToEndPage(false)
+    handleScrollToEndPage(true)
   }, [chat])
 
   function constructMessages() {
@@ -59,7 +59,9 @@ const ChatGroup = ({ }: ChatGroupProps) => {
 
     setChat(currentChat.chats)
     setIsLoadingOldestMessages(false)
+
     handleScrollToEndPage()
+    handleReadUnreadMessages(currentChat.chats)
     return currentChat
   }
 
@@ -70,23 +72,26 @@ const ChatGroup = ({ }: ChatGroupProps) => {
     if (newCurrentChat) {
       setChat(newCurrentChat)
       setDataContext(prevState => ({ ...prevState, currentGroup, currentUsers, recordChats: recordChatClass.recordChats }))
+      handleReadUnreadMessages(newCurrentChat)
+      handleScrollToEndPage()
     }
     setIsLoadingOldestMessages(false)
-    handleScrollToEndPage()
   }
 
-  function handleScrollToEndPage(verifyIfIsAtEndOfChat: boolean = true) {
-    //verifyIfIsAtEndOfChat: verirfica ou não se está no fim do chat para poder realizar o scroll
-    if (messagesEndRef.current && !verifyIfIsAtEndOfChat) {
-      return messagesEndRef.current.scrollIntoView({ behavior: 'instant' })
-    }
-
-    if (messagesEndRef.current && isAtEndOfChat) {
-      const lastMessageIsRead = checkLastMessageWasRead()
-      if (!lastMessageIsRead) {
-        readNewMessages()
+  function handleScrollToEndPage(scrollOnlyIfIsAtEndOfChat: boolean = false) {
+    if (messagesEndRef.current) {
+      //scrollOnlyIfIsAtEndOfChat: scroll apenas se está no fim da página
+      if (scrollOnlyIfIsAtEndOfChat && isAtEndOfChat) {
+        return messagesEndRef.current.scrollIntoView({ behavior: 'instant' })
       }
       messagesEndRef.current.scrollIntoView({ behavior: 'instant' })
+    }
+  }
+
+  function handleReadUnreadMessages(chats: IChatMessage[]) {
+    const lastMessageIsRead = checkLastMessageWasRead(chats)
+    if (!lastMessageIsRead) {
+      readNewMessages(chats)
     }
   }
 
@@ -112,7 +117,6 @@ const ChatGroup = ({ }: ChatGroupProps) => {
 
       recordChatClass.spliceRecordChat(currentGroup!.id, ...newObj)
       return newChats
-
     }
   }
 
@@ -124,8 +128,8 @@ const ChatGroup = ({ }: ChatGroupProps) => {
     }
   }
 
-  async function readNewMessages() {
-    const respMessage = await MessagesController.ReadMessages(currentGroup!, currentUser, recordChatClass, chat)
+  async function readNewMessages(chats: IChatMessage[]  ) {
+    const respMessage = await MessagesController.ReadMessages(currentGroup!, currentUser, recordChatClass, chats)
 
     if (respMessage) {
       setDataContext(prevState => ({ ...prevState, recordChats: recordChatClass.recordChats }))
@@ -134,11 +138,11 @@ const ChatGroup = ({ }: ChatGroupProps) => {
     }
   }
 
-  function checkLastMessageWasRead() {
-    const sizeArrayChat = chat.length
+  function checkLastMessageWasRead(chats: IChatMessage[]) {
+    const sizeArrayChat = chats.length
     if (sizeArrayChat) {
-      const currentUserIsSender = chat[sizeArrayChat - 1].sender.idUser === currentUser.id
-      const lastMessageIsRead = chat[sizeArrayChat - 1].statusMessage.readBy?.find(readBy => readBy.userId === currentUser.id)
+      const currentUserIsSender = chats[sizeArrayChat - 1].sender.idUser === currentUser.id
+      const lastMessageIsRead = chats[sizeArrayChat - 1].statusMessage.readBy?.find(readBy => readBy.userId === currentUser.id)
       if (!currentUserIsSender && !lastMessageIsRead) {
         return false
       }

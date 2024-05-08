@@ -39,24 +39,21 @@ export default abstract class MessagesController {
 
       const readByExist = message.statusMessage.readBy
       const wasReadByCurrentUser = readByExist && readByExist.find(readBy => readBy.userId === currentUser.id)
-
-      if (!readByExist || !wasReadByCurrentUser) {
+      if (!wasReadByCurrentUser) {
         return true
       }
-
     })
-
     const unreadMessages = messegesDontRead.map(message => ({
       id: message.message.id,
       messageId: message.message.id,
       readBy: message.statusMessage.readBy
     } as IStatusMessage))
+
     const respStatusMessage = await this._messageService.readMessages(unreadMessages, currentUser) as IStatusMessageResponse
 
     if (respStatusMessage.data) {
 
       const fakeMessages = [...currentChat]
-
       respStatusMessage.data.statusMessages.forEach(readMessage => {
         const index = currentChat.findIndex(message => readMessage.messageId === message.statusMessage.messageId)
         const currentMessages = currentChat[index]
@@ -75,7 +72,6 @@ export default abstract class MessagesController {
 
       recordChat.spliceRecordChat(group.id, RecordChats.transformChatMessageToRecordChat(group, fakeMessages, true))
       return recordChat.currentChatHistory(group)
-
     }
   }
 
@@ -135,7 +131,7 @@ export default abstract class MessagesController {
     const dataMessages = messageResp.data
 
     if (dataMessages && dataMessages.messages.length !== 0) {
-      
+
       const chatMessage = this.converterToRecordChat(group, dataMessages, dataMessages.hasMoreMessagesToLoad) as recordChat
       if (chatMessage) {
         return chatMessage

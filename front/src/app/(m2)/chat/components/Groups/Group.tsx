@@ -21,24 +21,30 @@ const Group = ({ group }: GroupProps) => {
   const [lastMessageWasRead, setLastMessageWasRead] = useState(true)
 
   useEffect(() => {
-    loadMessages()
-    handleLastMessage()
+    //executa no início e quando chega uma mensagem nova
+    loadLastMessage()
     if (lastMessage && currentGroup) {
-      checkReadLastMessage() 
+      checkReadLastMessage()
     }
-  }, [recordChatClass]) 
-  
- 
+  }, [recordChatClass])
+
+
   useEffect(() => {
+    //executa quando muda de grupo
     if (lastMessage && currentGroup) {
       checkReadLastMessage()
     }
   }, [currentGroup])
 
-  function loadMessages() {
+  function loadLastMessage() {
     const chatMessage = recordChatClass.returnLastChatMessage(group)
     if (chatMessage) {
       setLastMessage(chatMessage)
+    const lastMessageWasSendByCurrentUser = chatMessage.sender.idUser === currentUser.id
+    const foundRead = chatMessage.statusMessage.readBy?.find(user => user.userId === currentUser.id)
+      if (!foundRead && !lastMessageWasSendByCurrentUser) {
+        setLastMessageWasRead(false)
+      }
     }
   }
 
@@ -56,11 +62,6 @@ const Group = ({ group }: GroupProps) => {
     }
 
     setLastMessageWasRead(false)
-  }
-
-  function handleLastMessage() {
-    const lastMessage = recordChatClass.returnLastChatMessage(group)
-    setLastMessage(lastMessage)
   }
 
   async function handleChooseGroup(idGroup: string) {
