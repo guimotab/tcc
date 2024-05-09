@@ -101,7 +101,7 @@ const Chat = () => {
   }
 
   return (
-    <main className="flex h-full">
+    <main className="flex h-full overflow-y-hidden">
       <Aside page="chat"></Aside>
 
       <DataContext.Provider value={dataContext}>

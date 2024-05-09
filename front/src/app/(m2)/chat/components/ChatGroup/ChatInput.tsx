@@ -1,10 +1,13 @@
 "use client"
-import { ChangeEvent, useContext, useEffect, useRef, useState } from "react"
+import { ChangeEvent, Dispatch, RefObject, SetStateAction, useContext, useEffect, useRef, useState } from "react"
 import { IoSendSharp } from "react-icons/io5"
 import { DataContext } from "../../page"
 import useCurrentUser from "../../../../../../states/hooks/useCurrentUser"
 
-const ChatInput = () => {
+interface ChatInputProps {
+}
+
+const ChatInput = ({  }: ChatInputProps) => {
   const currentUser = useCurrentUser()
   const { currentGroup, socket } = useContext(DataContext)
   const [fieldChat, setFieldChat] = useState("")
@@ -25,11 +28,11 @@ const ChatInput = () => {
 
   function handleKeyBoard(event: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (event.key === "Enter" && event.shiftKey) {
-
-      setFieldChat(value => value + "\n")
+      setFieldChat(value => value)
     } else if (event.key === "Enter") {
       event.preventDefault();
       handleSendMessage()
+      event.currentTarget.style.height = 'auto'
     }
   }
   function handleSendMessage() {
@@ -49,7 +52,7 @@ const ChatInput = () => {
   };
 
   return (
-    <div className="flex max-h-[13rem] bg-white border-slate-300  w-full rounded-lg">
+    <div className="flex max-h-[13rem] bg-white border-slate-300 w-full rounded-lg">
       <div className="flex max-h-[13rem] overflow-y-auto rounded-lg w-full ">
         <textarea
           id="textarea-chat"
@@ -58,6 +61,7 @@ const ChatInput = () => {
           ref={inputChat}
           onKeyDown={handleKeyBoard}
           onChange={handleTypeMessage}
+          maxLength={500}
           rows={1}
           placeholder="Digite sua mensagem..."
           className="resize-none text-lg w-full border-none outline-none rounded-lg px-3 py-2 overflow-hidden" />

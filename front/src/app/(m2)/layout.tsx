@@ -10,16 +10,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <Toaster />
-
-      <body suppressHydrationWarning className="h-screen">
+    <body className="h-screen">
+      <VerifySession redirectErrorNoToken="/">
+        <Toaster />
         <Suspense fallback={<p>teste...</p>}>
-          <VerifySession redirectErrorNoToken="/">
-            {children}
-          </VerifySession>
+          {children}
         </Suspense>
-      </body>
-    </html>
+      </VerifySession>
+    </body>
   );
 }

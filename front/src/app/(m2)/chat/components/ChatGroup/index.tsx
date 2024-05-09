@@ -23,7 +23,7 @@ const ChatGroup = ({ }: ChatGroupProps) => {
   const recordChatClass = new RecordChats(recordChats)
   const [canRender, setCanRender] = useState(true)
   const [chat, setChat] = useState<IChatMessage[]>([])
-  const [isLoadingOldestMessages, setIsLoadingOldestMessages] = useState(true)
+  const [isLoadingOldestMessages, setIsLoadingOldestMessages] = useState(false)
 
   useEffect(() => {
     setChat([])
@@ -40,6 +40,7 @@ const ChatGroup = ({ }: ChatGroupProps) => {
 
   useEffect(() => {
     handleScrollToEndPage()
+    handleReadUnreadMessages(chat)
     addNewMessage()
   }, [recordChats])
 
@@ -64,7 +65,6 @@ const ChatGroup = ({ }: ChatGroupProps) => {
     handleReadUnreadMessages(currentChat.chats)
     return currentChat
   }
-
 
   async function hasMoreMessagesToLoad(currentChat: IChatHistoryLoader) {
     // se as mensagens antigas já foram carregadas ou não
@@ -181,22 +181,23 @@ const ChatGroup = ({ }: ChatGroupProps) => {
       <HeaderGroup />
 
       {canRender &&
-        <div className="flex flex-col items-center justify-end h-full bg-slate-100 px-6 pb-10">
-          <div className="flex flex-col items-center max-w-[70rem] w-full">
-            <div className="flex  w-full px-1 scrollbar">
+        <div className="flex justify-center w-full bg-slate-100 px-6 pb-10">
+          <div className="flex flex-col justify-end max-w-[70rem] scrollbar h-[calc(100vh-(72px+40px))]  w-full">
+
               <ul onScroll={handleScroll}
-                className="flex flex-col w-full gap-6 max-h-[calc(100vh-(72px+84px))] overflow-auto px-5 pt-10 ">
+                className={`flex flex-col w-full max-h-[calc(100vh-(72px))] gap-6 overflow-y-auto overflow-x-hidden px-5 pt-6`}>
                 {isLoadingOldestMessages && <LoadingMessage />}
                 {chat.map(message =>
                   <Message key={message.message.id} message={message} />
                 )}
                 <div ref={messagesEndRef} />
               </ul>
-            </div>
+
             <ChatInput />
 
           </div>
         </div>
+
       }
     </div>
 
