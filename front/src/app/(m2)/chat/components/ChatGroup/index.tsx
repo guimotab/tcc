@@ -1,11 +1,10 @@
 "use client"
-import { MutableRefObject, useContext, useEffect, useRef, useState } from "react"
+import { useContext, useEffect, useLayoutEffect, useRef, useState } from "react"
 import { DataContext } from "../../page"
 import MessagesController from "@/controllers/MessagesController"
 import ChatInput from "./ChatInput"
 import Message from "./Message"
 import HeaderGroup from "./HeaderGroup"
-import { recordChat } from "@/types/recordChat"
 import { setTimeout } from "timers"
 import LoadingMessage from "../LoadingMessages"
 import RecordChats from "@/classes/RecordChats"
@@ -17,36 +16,38 @@ interface ChatGroupProps {
 }
 
 const ChatGroup = ({ }: ChatGroupProps) => {
-  const { currentGroup, groups, currentUsers, recordChats, setDataContext, isAtEndOfChat } = useContext(DataContext)
+  const { currentGroup, groups, recordChats, setDataContext, isAtEndOfChat } = useContext(DataContext)
   const currentUser = useCurrentUser()
-  const messagesEndRef = useRef<HTMLDivElement | null>(null)
+  const scrollChatRef = useRef<HTMLUListElement | null>(null)
   const recordChatClass = new RecordChats(recordChats)
   const [canRender, setCanRender] = useState(true)
-  const [chat, setChat] = useState<IChatMessage[]>([])
+  const [messages, setMessages] = useState<IChatMessage[]>([])
   const [isLoadingOldestMessages, setIsLoadingOldestMessages] = useState(false)
 
   useEffect(() => {
-    setChat([])
+    setMessages([])
     if (currentGroup && groups && recordChatClass) {
       setCanRender(true)
       const currentChat = constructMessages()
       if (currentChat && currentChat.hasMoreMessagesToLoad) {
         //entra se não tiver as mensagens não foram carregadas ainda
         setIsLoadingOldestMessages(true)
-        loadMoreMessages(currentChat, 20, true, 1000)
+        loadMoreMessages(currentChat, 10, true, 1000)
       }
+      
     }
+    handleScrollToEndPage()
   }, [currentGroup])
 
   useEffect(() => {
-    handleScrollToEndPage(true)
-    readUnreadMessages(chat)
+    // handleScrollToEndPage(true)
+    readUnreadMessages(messages)
     addNewMessageToChat()
   }, [recordChats])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     handleScrollToEndPage(true)
-  }, [chat])
+  }, [messages])
 
   function constructMessages() {
     const currentChat = recordChatClass.currentChatHistory(currentGroup!)
@@ -55,10 +56,10 @@ const ChatGroup = ({ }: ChatGroupProps) => {
     if (!currentChat) {
       setIsLoadingOldestMessages(false)
       setCanRender(true)
-      return setChat([])
+      return setMessages([])
     }
 
-    setChat(currentChat.chats)
+    setMessages(currentChat.chats)
     setIsLoadingOldestMessages(false)
 
     handleScrollToEndPage()
@@ -78,17 +79,16 @@ const ChatGroup = ({ }: ChatGroupProps) => {
     if (currentChatHistory.hasMoreMessagesToLoad) {
       const newCurrentChat = await handleLoadMoreMessages(currentChatHistory.chats, quantity, timeResolve)
       if (newCurrentChat) {
-        setChat(newCurrentChat)
+        setMessages(newCurrentChat)
         readUnreadMessages(newCurrentChat)
         if (scrollToEndPage) {
           handleScrollToEndPage()
         }
-        setDataContext(prevState => ({ ...prevState, currentGroup, currentUsers, recordChats: recordChatClass.recordChats }))
       }
+      setDataContext(prevState => ({ ...prevState, recordChats: recordChatClass.recordChats }))
     }
     setIsLoadingOldestMessages(false)
   }
-
 
   /**
    * Lida com o carregamento das mensagens
@@ -117,9 +117,7 @@ const ChatGroup = ({ }: ChatGroupProps) => {
         const { chats } = currentChatHistoryLoader
         const newRecordChat = { [currentGroup!.id]: { chats, hasMoreMessagesToLoad: false } }
         recordChatClass.spliceRecordChat(currentGroup!.id, newRecordChat)
-        setDataContext(prevState => ({ ...prevState, currentGroup, currentUsers, recordChats: recordChatClass.recordChats }))
       }
-
     }
   }
 
@@ -131,13 +129,14 @@ const ChatGroup = ({ }: ChatGroupProps) => {
   }
 
   function handleScrollToEndPage(scrollOnlyIfIsAtEndOfChat: boolean = false) {
-    if (messagesEndRef.current) {
-      //scrollOnlyIfIsAtEndOfChat: scroll apenas se está no fim da página
+    if (scrollChatRef.current) {
+      //scrollOnlyIfIsAtEndOfChat: scroll apenas se está no fim da página 
       if (scrollOnlyIfIsAtEndOfChat && isAtEndOfChat) {
-        console.log("🚀 ~ handleScrollToEndPage ~ isAtEndOfChat:", isAtEndOfChat)
-        return messagesEndRef.current.scrollIntoView({ behavior: 'instant' })
+        return scrollChatRef.current.scrollTop = scrollChatRef.current.scrollHeight
+      } 
+      if (!scrollOnlyIfIsAtEndOfChat) {
+        return scrollChatRef.current.scrollTop = scrollChatRef.current.scrollHeight
       }
-      messagesEndRef.current.scrollIntoView({ behavior: 'instant' })
     }
   }
 
@@ -145,7 +144,7 @@ const ChatGroup = ({ }: ChatGroupProps) => {
     //adiciona mensagem nova após terem sido lidas
     const currentChat = recordChatClass.currentChatHistory(currentGroup!)
     if (currentChat) {
-      setChat(currentChat.chats)
+      setMessages(currentChat.chats)
     }
   }
 
@@ -153,8 +152,7 @@ const ChatGroup = ({ }: ChatGroupProps) => {
     const respMessage = await MessagesController.ReadMessages(currentGroup!, currentUser, recordChatClass, chats)
 
     if (respMessage) {
-      setDataContext(prevState => ({ ...prevState, recordChats: recordChatClass.recordChats }))
-      setChat(respMessage.chats)
+      setMessages(respMessage.chats)
       return respMessage.chats
     }
   }
@@ -187,9 +185,9 @@ const ChatGroup = ({ }: ChatGroupProps) => {
     if (isAtTop) {
       const currentChat = recordChatClass.currentChatHistory(currentGroup!)
 
-      if (currentChat && currentChat?.hasMoreMessagesToLoad) {
+      if (currentChat?.hasMoreMessagesToLoad) {
         setIsLoadingOldestMessages(true)
-        loadMoreMessages(currentChat, 20, false)
+        loadMoreMessages(currentChat, 10, false)
       }
     }
     setDataContext(prev => ({ ...prev, isAtEndOfChat: false }))
@@ -205,12 +203,12 @@ const ChatGroup = ({ }: ChatGroupProps) => {
           <div className="flex flex-col justify-end max-w-[70rem] scrollbar h-[calc(100vh-(72px+40px))]  w-full">
 
             <ul onScroll={handleScroll}
-              className={`flex flex-col w-full max-h-[calc(100vh-(72px))] gap-6 overflow-y-auto overflow-x-hidden px-5 pt-6`}>
+              ref={scrollChatRef}
+              className={`flex flex-col w-full max-h-[calc(100vh-(72px))] gap-6 overflow-y-auto overflow-x-hidden px-5 py-7`}>
               {isLoadingOldestMessages && <LoadingMessage />}
-              {chat.map(message =>
+              {messages.map(message =>
                 <Message key={message.message.id} message={message} />
               )}
-              <div ref={messagesEndRef} />
             </ul>
 
             <ChatInput />
