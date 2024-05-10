@@ -32,7 +32,7 @@ const ChatGroup = ({ }: ChatGroupProps) => {
       if (currentChat && currentChat.hasMoreMessagesToLoad) {
         //entra se não tiver as mensagens não foram carregadas ainda
         setIsLoadingOldestMessages(true)
-        loadMoreMessages(currentChat, 10, 1000)
+        loadMoreMessages(currentChat, 20, 1000)
       }
     }
     handleScrollEndPage()
@@ -79,7 +79,6 @@ const ChatGroup = ({ }: ChatGroupProps) => {
         setMessages(newCurrentChat)
         readUnreadMessages(newCurrentChat)
       }
-      setIsLoadingOldestMessages(false)
       setDataContext(prevState => ({ ...prevState, recordChats: recordChatClass.recordChats }))
     }
     setIsLoadingOldestMessages(false)
@@ -205,7 +204,7 @@ const ChatGroup = ({ }: ChatGroupProps) => {
 
       if (currentChat?.hasMoreMessagesToLoad && !isLoadingOldestMessages) {
         setIsLoadingOldestMessages(true)
-        keepScrollAfterRequest(() => loadMoreMessages(currentChat, 10, 1000))
+        keepScrollAfterRequest(() => loadMoreMessages(currentChat, 20, 1000))
       }
     }
     setDataContext(prev => ({ ...prev, isAtEndOfChat: false }))
