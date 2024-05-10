@@ -2,12 +2,11 @@ import RecordChats from "@/classes/RecordChats";
 import IMessage from "@/interfaces/Chats/IMessage";
 import ISender from "@/interfaces/Chats/ISender";
 import IStatusMessage from "@/interfaces/Chats/IStatusMessage";
-import { IChatHistoryLoader } from "@/interfaces/IChatHistoryLoader";
+import { IRecordChat } from "@/interfaces/IRecordChat";
 import { IChatMessage } from "@/interfaces/IChatMessage";
 import IGroup from "@/interfaces/IGroup";
 import IUser from "@/interfaces/IUser";
 import MessageService, { IMessageArrayResponse, IMessageResponse, IStatusMessageResponse } from "@/service/MessageService";
-import { recordChat } from "@/types/recordChat";
 
 export interface responseRecordMessage {
   messages: IMessage[]
@@ -72,7 +71,7 @@ export default abstract class MessagesController {
       })
 
       recordChat.spliceRecordChat(group.id, RecordChats.transformChatMessageToRecordChat(group, fakeMessages, true))
-      return recordChat.currentChatHistory(group)
+      return recordChat.currentRecordChat(group)
     }
   }
 
@@ -95,7 +94,7 @@ export default abstract class MessagesController {
   }
 
   /**
-   * Busca mensagens de todos os grupos no servidor e transforma em recordChat[]
+   * Busca mensagens de todos os grupos no servidor e transforma em IRecordChat[]
    * @param groups Array de IGroup
    * @param skip Posição de início na busca no banco
    * @param take Quantidade de elementos que serão trazidos do banco
@@ -109,23 +108,23 @@ export default abstract class MessagesController {
 
       if (dataMessages && dataMessages.messages.length !== 0) {
 
-        const chatMessage = this.converterToRecordChat(group, dataMessages, dataMessages.hasMoreMessagesToLoad) as recordChat
+        const chatMessage = this.converterToRecordChat(group, dataMessages, dataMessages.hasMoreMessagesToLoad) as IRecordChat
         if (chatMessage) {
           return chatMessage
         }
       }
     }))
 
-    const filteredMessages = chatMessage.filter(message => message !== undefined) as recordChat[]
+    const filteredMessages = chatMessage.filter(message => message !== undefined) as IRecordChat[]
     return filteredMessages
   }
 
   /**
-   * Busca mensagens antigas no servidor e transforma em recordChat
+   * Busca mensagens antigas no servidor e transforma em IRecordChat
    * @param group IGroup
    * @param skip quantidade de mensagens que serão ignoradas na requisição
    * @param take quantidade de mensagens que serão pegas na requisição
-   * @returns retorna mensagens no formato recordChat
+   * @returns retorna mensagens no formato IRecordChat
    */
   static async loadOldestMessages(group: IGroup, skip: number, take: number) {
     const messageResp = await MessagesController.getSomeByGroupId(group, skip, take)
@@ -133,9 +132,9 @@ export default abstract class MessagesController {
 
     if (dataMessages && dataMessages.messages.length !== 0) {
 
-      const chatMessage = this.converterToRecordChat(group, dataMessages, dataMessages.hasMoreMessagesToLoad) as recordChat
+      const chatMessage = this.converterToRecordChat(group, dataMessages, dataMessages.hasMoreMessagesToLoad) as IRecordChat
       if (chatMessage) {
-        return chatMessage[group.id]
+        return chatMessage
       }
     }
   }
@@ -156,20 +155,20 @@ export default abstract class MessagesController {
 
       })
 
-      const recordMessage = { [group.id]: { chats: contentMessage.reverse(), hasMoreMessagesToLoad } } as recordChat
+      const recordMessage = { groupId: group.id, chats: contentMessage.reverse(), hasMoreMessagesToLoad } as IRecordChat
       return recordMessage
     }
   }
 
-/**
- * Concatena o chat antigo com o chat atual
- * @param group IGroup
- * @param oldestChat parte do chat mais antiga (que ficará para cima no chat)
- * @param currentChat parte do chat atual (que ficará para baixo no chat)
- * @param recordChat RecordChats para gravar o chat atualizado
- * @returns chat concatenado
- */
-  static concatOldestChatWithCurrent(group: IGroup, oldestChat: IChatHistoryLoader, currentChat: IChatMessage[], recordChat: RecordChats) {
+  /**
+   * Concatena o chat antigo com o chat atual
+   * @param group IGroup
+   * @param oldestChat parte do chat mais antiga (que ficará para cima no chat)
+   * @param currentChat parte do chat atual (que ficará para baixo no chat)
+   * @param recordChat RecordChats para gravar o chat atualizado
+   * @returns chat concatenado
+   */
+  static concatOldestChatWithCurrent(group: IGroup, oldestChat: IRecordChat, currentChat: IChatMessage[], recordChat: RecordChats) {
     const oldestChatMessage = oldestChat.chats
 
     const concatedChat = [
@@ -178,11 +177,10 @@ export default abstract class MessagesController {
     ]
 
     const newObj = [{
-      [group.id]: {
-        chats: concatedChat,
-        hasMoreMessagesToLoad: oldestChat.hasMoreMessagesToLoad
-      }
-    }] as recordChat[]
+      groupId: group.id,
+      chats: concatedChat,
+      hasMoreMessagesToLoad: oldestChat.hasMoreMessagesToLoad
+    }] as IRecordChat[]
 
     recordChat.spliceRecordChat(group.id, ...newObj)
     return concatedChat

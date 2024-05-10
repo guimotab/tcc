@@ -2,7 +2,6 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Label } from "@/components/ui/label"
 import { useContext } from "react"
-import { Socket } from "socket.io-client"
 import { DataContext } from "../../page"
 import { formAcronym } from "@/utils/formAcronym"
 

@@ -12,16 +12,16 @@ import IUserOnGroup from "@/interfaces/IUserOnGroup"
 import IUser from "@/interfaces/IUser"
 import { Socket, io } from "socket.io-client"
 import MessagesController from "@/controllers/MessagesController"
-import { recordChat } from "@/types/recordChat"
 import RecordChats from "@/classes/RecordChats"
 import { IChatMessage } from "@/interfaces/IChatMessage"
+import { IRecordChat } from "@/interfaces/IRecordChat"
 
 interface IDataContext {
   groups: IGroup[] | []
   userOnGroups: IUserOnGroup[] | []
   currentUsers: IUser[] | []
   currentGroup: IGroup | undefined
-  recordChats: recordChat[]
+  recordChats: IRecordChat[]
   socket: Socket
   isAtEndOfChat: boolean
   setDataContext: Dispatch<SetStateAction<IDataContext>>
@@ -77,12 +77,12 @@ const Chat = () => {
     }
   }
 
-  function handleSockets(groups: IGroup[], recordChats: recordChat[]) {
+  function handleSockets(groups: IGroup[], recordChats: IRecordChat[]) {
     socket.emit("join-chat", groups)
     socket.on("message", ({ message, sender, chatId, statusMessage }: IChatMessage) => listenerNewMessage({ message, sender, chatId, statusMessage }, recordChats))
   }
 
-  function listenerNewMessage({ message, sender, chatId, statusMessage }: IChatMessage, recordChats: recordChat[]) {
+  function listenerNewMessage({ message, sender, chatId, statusMessage }: IChatMessage, recordChats: IRecordChat[]) {
     const recordChatsClass = new RecordChats(recordChats)
     recordChatsClass.addRecordChat(chatId, { message, sender, chatId, statusMessage })
     const newRecordChat = [...recordChatsClass.recordChats]

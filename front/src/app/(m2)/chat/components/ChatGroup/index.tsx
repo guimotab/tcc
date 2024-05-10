@@ -10,7 +10,7 @@ import LoadingMessage from "../LoadingMessages"
 import RecordChats from "@/classes/RecordChats"
 import { IChatMessage } from "@/interfaces/IChatMessage"
 import useCurrentUser from "../../../../../../states/hooks/useCurrentUser"
-import { IChatHistoryLoader } from "@/interfaces/IChatHistoryLoader"
+import { IRecordChat } from "@/interfaces/IRecordChat"
 
 interface ChatGroupProps {
 }
@@ -34,7 +34,7 @@ const ChatGroup = ({ }: ChatGroupProps) => {
         setIsLoadingOldestMessages(true)
         loadMoreMessages(currentChat, 10, true, 1000)
       }
-      
+
     }
     handleScrollToEndPage()
   }, [currentGroup])
@@ -50,7 +50,7 @@ const ChatGroup = ({ }: ChatGroupProps) => {
   }, [messages])
 
   function constructMessages() {
-    const currentChat = recordChatClass.currentChatHistory(currentGroup!)
+    const currentChat = recordChatClass.currentRecordChat(currentGroup!)
 
     // se não há mensagens no chat
     if (!currentChat) {
@@ -74,7 +74,7 @@ const ChatGroup = ({ }: ChatGroupProps) => {
    * @param scrollToEndPage scrolla para o final da página
    * @param timeResolve tempo mínimo para carregar as mensagens
    */
-  async function loadMoreMessages(currentChatHistory: IChatHistoryLoader, quantity: number, scrollToEndPage: boolean, timeResolve: number = 0) {
+  async function loadMoreMessages(currentChatHistory: IRecordChat, quantity: number, scrollToEndPage: boolean, timeResolve: number = 0) {
     // se as mensagens antigas já foram carregadas ou não
     if (currentChatHistory.hasMoreMessagesToLoad) {
       const newCurrentChat = await handleLoadMoreMessages(currentChatHistory.chats, quantity, timeResolve)
@@ -111,11 +111,11 @@ const ChatGroup = ({ }: ChatGroupProps) => {
 
     } else {
       //se não possui mensagens, apenas muda o hasMoreMessagesToLoad para false
-      const currentChatHistoryLoader = recordChatClass.currentChatHistory(currentGroup!)
+      const currentChatHistoryLoader = recordChatClass.currentRecordChat(currentGroup!)
 
       if (currentChatHistoryLoader) {
         const { chats } = currentChatHistoryLoader
-        const newRecordChat = { [currentGroup!.id]: { chats, hasMoreMessagesToLoad: false } }
+        const newRecordChat = { groupId: currentGroup!.id, chats, hasMoreMessagesToLoad: false } as IRecordChat
         recordChatClass.spliceRecordChat(currentGroup!.id, newRecordChat)
       }
     }
@@ -133,7 +133,7 @@ const ChatGroup = ({ }: ChatGroupProps) => {
       //scrollOnlyIfIsAtEndOfChat: scroll apenas se está no fim da página 
       if (scrollOnlyIfIsAtEndOfChat && isAtEndOfChat) {
         return scrollChatRef.current.scrollTop = scrollChatRef.current.scrollHeight
-      } 
+      }
       if (!scrollOnlyIfIsAtEndOfChat) {
         return scrollChatRef.current.scrollTop = scrollChatRef.current.scrollHeight
       }
@@ -142,7 +142,7 @@ const ChatGroup = ({ }: ChatGroupProps) => {
 
   function addNewMessageToChat() {
     //adiciona mensagem nova após terem sido lidas
-    const currentChat = recordChatClass.currentChatHistory(currentGroup!)
+    const currentChat = recordChatClass.currentRecordChat(currentGroup!)
     if (currentChat) {
       setMessages(currentChat.chats)
     }
@@ -183,7 +183,7 @@ const ChatGroup = ({ }: ChatGroupProps) => {
     const isAtTop = (scrollTop + clientHeight) <= (880);
 
     if (isAtTop) {
-      const currentChat = recordChatClass.currentChatHistory(currentGroup!)
+      const currentChat = recordChatClass.currentRecordChat(currentGroup!)
 
       if (currentChat?.hasMoreMessagesToLoad) {
         setIsLoadingOldestMessages(true)

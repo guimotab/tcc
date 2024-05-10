@@ -5,9 +5,12 @@ import dayjs from 'dayjs'
 import { formAcronym } from "@/utils/formAcronym"
 import { Label } from "@/components/ui/label"
 import { IChatMessage } from "@/interfaces/IChatMessage"
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
-import { IoCheckmarkDone } from "react-icons/io5";
 import React from "react"
+import MessagesRoot from "./Messages/MessagesRoot"
+import MessagesAvatar from "./Messages/MessagesAvatar"
+import MessagesBody from "./Messages/MessagesBody"
+import MessagesHeader from "./Messages/MessagesHeader"
+import MessagesContent from "./Messages/MessagesContent"
 
 interface ChatMessageProps {
   message: IChatMessage
@@ -34,63 +37,47 @@ const Message = ({ message }: ChatMessageProps) => {
 
   return (
     message.sender.idUser === currentUser.id ?
-      <li className="flex w-full gap-2 justify-end">
-        <div className="flex flex-col gap-1">
-          
-          <div className="flex items-center gap-2.5 self-end">
-            <Label className=" text-xs font-medium text-gray-500">{handleDate(message.message.createdAt)}</Label>
+      <MessagesRoot className="justify-end">
+        <MessagesBody>
+          <MessagesHeader className="self-end">
+            <Label className="text-xs font-medium text-gray-500">{handleDate(message.message.createdAt)}</Label>
             <Label className="text-end font-medium text-gray-700 text-sm">{message.sender.name}</Label>
-          </div>
+          </MessagesHeader>
 
-          <div className="relative flex bg-blue-700 h-full max-w-[25rem] w-fit rounded-l-lg rounded-b-lg px-4 py-1.5 self-end">
-            <p className="text-white mr-3.5 break-words max-w-[22rem]">
-              {message.message.content.split('\n').map((line, index) => (
-                <React.Fragment key={index}>
-                  {line}
-                  {index < message.message.content.split('\n').length - 1 && <br />}
-                </React.Fragment>
-              ))}
-            </p>
-            <div className="absolute bottom-1.5 right-1.5">
-              <IoCheckmarkDone className="text-white" />
-            </div>
-          </div>
+          <MessagesContent side="right">
+            {message.message.content.split('\n').map((line, index) => (
+              <React.Fragment key={`${message.message.id}-${index}`}>
+                {line}
+                {index < message.message.content.split('\n').length - 1 && <br />}
+              </React.Fragment>
+            ))}
+          </MessagesContent>
+        </MessagesBody>
 
-        </div>
-        <div className="self-end">
-          <Avatar className="h-fit">
-            <div className="flex items-center justify-center w-9 h-9 bg-slate-300 rounded-full">
-              <AvatarFallback className="bg-slate-300">{formAcronym(message.sender.name)}</AvatarFallback>
-            </div>
-          </Avatar>
-        </div>
-      </li>
+        <MessagesAvatar avatarFallBack={formAcronym(message.sender.name)} />
+
+      </MessagesRoot>
       :
-      <li className="flex w-full gap-2">
-        <div className="self-end">
-          <Avatar className="h-fit">
-            <div className="flex items-center justify-center w-9 h-9 bg-slate-300 rounded-full">
-              <AvatarFallback className="bg-slate-300">{formAcronym(message.sender.name)}</AvatarFallback>
-            </div>
-          </Avatar>
-        </div>
-        <div className="flex flex-col h-full gap-1">
-          <div className="flex items-center gap-4">
+      <MessagesRoot>
+        <MessagesAvatar avatarFallBack={formAcronym(message.sender.name)} />
+
+        <MessagesBody>
+          <MessagesHeader>
             <Label className="font-medium text-gray-700 text-sm">{message.sender.name}</Label>
             <Label className=" text-xs font-medium text-gray-500">{handleDate(message.message.createdAt)}</Label>
-          </div>
-          <div className="text-wrap bg-white h-full max-w-[25rem] w-fit rounded-e-lg rounded-b-lg px-4 py-1.5">
-            <p className="break-words max-w-[22rem]">
-              {message.message.content.split('\n').map((line, index) => (
-                <React.Fragment key={index}>
-                  {line}
-                  {index < message.message.content.split('\n').length - 1 && <br />}
-                </React.Fragment>
-              ))}
-            </p>
-          </div>
-        </div>
-      </li>
+          </MessagesHeader>
+
+          <MessagesContent side="left">
+            {message.message.content.split('\n').map((line, index) => (
+              <React.Fragment key={index}>
+                {line}
+                {index < message.message.content.split('\n').length - 1 && <br />}
+              </React.Fragment>
+            ))}
+          </MessagesContent>
+        </MessagesBody>
+      </MessagesRoot>
+
   )
 }
 

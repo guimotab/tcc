@@ -1,13 +1,12 @@
-import { IChatHistoryLoader } from "@/interfaces/IChatHistoryLoader";
+import { IRecordChat } from "@/interfaces/IRecordChat";
 import { IChatMessage } from "@/interfaces/IChatMessage";
 import IGroup from "@/interfaces/IGroup";
-import { recordChat } from "@/types/recordChat";
 
 export default class RecordChats {
 
-  private _recordChats: recordChat[];
+  private _recordChats: IRecordChat[];
 
-  constructor(chats: recordChat[]) {
+  constructor(chats: IRecordChat[]) {
     this._recordChats = chats
   }
 
@@ -16,8 +15,8 @@ export default class RecordChats {
    * @param groupId groupId
    * @param newRecordedChat novo recordChat que ficará no lugar do record retirado
    */
-  spliceRecordChat(groupId: string, newRecordChat?: recordChat) {
-    const chatFindedIndex = this._recordChats.findIndex(message => message && message[groupId])
+  spliceRecordChat(groupId: string, newRecordChat?: IRecordChat) {
+    const chatFindedIndex = this._recordChats.findIndex(message => message && (message.groupId === groupId))
     if (newRecordChat) {
       this._recordChats.splice(chatFindedIndex, 1, newRecordChat)
     } else {
@@ -31,10 +30,10 @@ export default class RecordChats {
    * @param transformChatMessage Chat Message que será transformado em RecordChat
    */
   addRecordChat(groupId: string, newChatMessage: IChatMessage) {
-    const findedChat = this._recordChats.find(chat => chat[groupId])
+    const findedChat = this._recordChats.find(chat => chat.groupId === groupId)
     if (findedChat) {
       // Faz um splice no recordChat existente, substituindo pelo novo
-      findedChat[groupId].chats.push(newChatMessage)
+      findedChat.chats.push(newChatMessage)
       this.spliceRecordChat(groupId, findedChat)
 
     } else if (!findedChat && this._recordChats.length !== 0) {
@@ -44,7 +43,6 @@ export default class RecordChats {
     } else {
       // cria primeiro recordChat junto com o array
       this.createFirstRecordChat(groupId, newChatMessage, true)
-
     }
   }
 
@@ -56,24 +54,21 @@ export default class RecordChats {
    */
   private createFirstRecordChat(groupId: string, firstChatMessage: IChatMessage, createRecordChatArray: boolean) {
     if (createRecordChatArray) {
-      
+
       this._recordChats = [{
-        [groupId]: {
-          hasMoreMessagesToLoad: false,
-          chats: [firstChatMessage]
-        }
-      }] as recordChat[]
-      
+        groupId,
+        hasMoreMessagesToLoad: false,
+        chats: [firstChatMessage]
+      }] as IRecordChat[]
+
     } else {
       this._recordChats.push(
         {
-          [groupId]: {
-            hasMoreMessagesToLoad: false,
-            chats: [firstChatMessage]
-          }
-        } as recordChat
+          groupId,
+          hasMoreMessagesToLoad: false,
+          chats: [firstChatMessage]
+        } as IRecordChat
       )
-
     }
   }
 
@@ -82,24 +77,10 @@ export default class RecordChats {
    * @param group 
    */
   returnLastChatMessage(group: IGroup) {
-    const findedChat = this._recordChats.find(chat => chat[group.id])
+    const findedChat = this._recordChats.find(chat => chat.groupId === group.id)
     if (findedChat) {
-      const chat = findedChat[group.id]
-      const chatMessage = chat.chats[chat.chats.length - 1]
+      const chatMessage = findedChat.chats[findedChat.chats.length - 1]
       return chatMessage
-    }
-  }
-
-  /**
-   * Retorna o chat atual
-   * @param group 
-   * @param returnOnlyChatHistory faz com que retorne apenas o IChatHistoryLoader
-   * @returns retorna IChatHistoryLoader ou recordChat
-   */
-  currentChatHistory(group: IGroup) {
-    const findedChat = this._recordChats.find(chat => chat[group.id])
-    if (findedChat) {
-      return findedChat[group.id] as IChatHistoryLoader
     }
   }
 
@@ -108,8 +89,10 @@ export default class RecordChats {
    * @param chatId string
    */
   currentRecordChat(group: IGroup) {
-    const findedChat = this._recordChats.find(chat => chat[group.id])
-    return findedChat as recordChat
+    const findedChat = this._recordChats.find(chat => chat.groupId === group.id)
+    if (findedChat) {
+      return findedChat
+    }
   }
 
   /**
@@ -120,14 +103,14 @@ export default class RecordChats {
    * @returns recordChat
    */
   static transformChatMessageToRecordChat(group: IGroup, chats: IChatMessage[], hasMoreMessagesToLoad: boolean) {
-    return { [group.id]: { chats, hasMoreMessagesToLoad } } as recordChat
+    return { groupId: group.id, chats, hasMoreMessagesToLoad } as IRecordChat
   }
 
-  public get recordChats(): recordChat[] {
+  public get recordChats(): IRecordChat[] {
     return [...this._recordChats]
   }
 
-  public set recordChats(value: recordChat[]) {
+  public set recordChats(value: IRecordChat[]) {
     this._recordChats = value;
   }
 }
