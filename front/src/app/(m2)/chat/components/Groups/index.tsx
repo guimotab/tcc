@@ -5,32 +5,38 @@ import { DataContext } from "../../page"
 import Group from "./Group"
 import RecordChats from "@/classes/RecordChats"
 import IGroup from "@/interfaces/IGroup"
+import dayjs from "dayjs"
 
 interface GroupsProps {
 }
 
 const Groups = ({ }: GroupsProps) => {
-  const { groups, currentGroup, recordChats } = useContext(DataContext)
+  const { groups, recordChats } = useContext(DataContext)
   const recordChatsClass = new RecordChats(recordChats)
-  // const [groupsOrdenedByTime, setGroupsOrdenedByTime] = useState<IGroup[]>(orderGroupsByLastChat())
+  const [groupsOrdenedByTime, setGroupsOrdenedByTime] = useState<IGroup[]>()
 
-  // useEffect(() => {
-  //   setGroupsOrdenedByTime()
-  // }, [recordChats, groups])
+  useEffect(() => {
+    setGroupsOrdenedByTime(orderGroupsByLastChat())
+  }, [recordChats, groups])
 
-  // function orderGroupsByLastChat() {
-  //   if (currentGroup) {
-  //     const lastChatMessage = recordChatsClass.returnLastChatMessage(currentGroup)
-  //     recordChats.sort((chatA, chatB)=> chatA)
-  //     lastChatMessage?.message.createdAt
-  //     recordChats.
-  //       groups?.sort((a, b) => a.createdAt.getMilliseconds() - b.createdAt.getMilliseconds())
-  //   }
-  // }
+  function orderGroupsByLastChat() {
+    if (groups) {
+      const timeOfGroups = groups.map(group => {
+        const lastChatMessage = recordChatsClass.returnLastChatMessage(group)
+        const millisecodsMessage = dayjs(lastChatMessage?.message.createdAt).valueOf()
+        return {
+          group,
+          millisecondsTimeMessage: millisecodsMessage
+        }
+      })
+      const timeOfGroupsSorted = timeOfGroups.sort((chatA, chatB) => chatA.millisecondsTimeMessage - chatB.millisecondsTimeMessage).reverse()
+      return timeOfGroupsSorted.map(group => group.group)
+    }
+  }
 
-  return groups && (
+  return groupsOrdenedByTime && (
     <div className="flex min-w-[16rem] max-w-[25rem] w-full shadow-sm">
-      <div className="  w-full">
+      <div className="w-full">
 
         <div className="px-4 py-6">
           <h1 className="font-semibold">Meus Grupos</h1>
@@ -39,10 +45,10 @@ const Groups = ({ }: GroupsProps) => {
         <Separator className="bg-slate-100" />
 
         <div className="flex flex-col ">
-          {groups.map((group, index) =>
+          {groupsOrdenedByTime.map((group, index) =>
             <div key={group.id}>
               <Group group={group} />
-              {groups.length - 1 !== index && <Separator className="bg-slate-100" />}
+              {groupsOrdenedByTime.length - 1 !== index && <Separator className="bg-slate-100" />}
             </div>
           )}
         </div>

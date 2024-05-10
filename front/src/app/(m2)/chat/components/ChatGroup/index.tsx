@@ -3,7 +3,7 @@ import { useContext, useEffect, useLayoutEffect, useRef, useState } from "react"
 import { DataContext } from "../../page"
 import MessagesController from "@/controllers/MessagesController"
 import ChatInput from "./ChatInput"
-import Message from "./Message"
+import Message from "./Messages"
 import HeaderGroup from "./HeaderGroup"
 import { setTimeout } from "timers"
 import LoadingMessage from "../LoadingMessages"
@@ -40,7 +40,7 @@ const ChatGroup = ({ }: ChatGroupProps) => {
   }, [currentGroup])
 
   useEffect(() => {
-    // handleScrollToEndPage(true)
+    handleScrollToEndPage(true)
     readUnreadMessages(messages)
     addNewMessageToChat()
   }, [recordChats])
@@ -141,7 +141,7 @@ const ChatGroup = ({ }: ChatGroupProps) => {
   }
 
   function addNewMessageToChat() {
-    //adiciona mensagem nova após terem sido lidas
+    //adiciona mensagem novas mensagens ao chat
     const currentChat = recordChatClass.currentRecordChat(currentGroup!)
     if (currentChat) {
       setMessages(currentChat.chats)
@@ -201,7 +201,6 @@ const ChatGroup = ({ }: ChatGroupProps) => {
       {canRender &&
         <div className="flex justify-center w-full bg-slate-100 px-6 pb-10">
           <div className="flex flex-col justify-end max-w-[70rem] scrollbar h-[calc(100vh-(72px+40px))]  w-full">
-
             <ul onScroll={handleScroll}
               ref={scrollChatRef}
               className={`flex flex-col w-full max-h-[calc(100vh-(72px))] gap-6 overflow-y-auto overflow-x-hidden px-5 py-7`}>

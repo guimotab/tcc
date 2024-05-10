@@ -1,16 +1,16 @@
 "use client"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import useCurrentUser from "../../../../../../states/hooks/useCurrentUser"
+import useCurrentUser from "../../../../../../../states/hooks/useCurrentUser"
 import dayjs from 'dayjs'
 import { formAcronym } from "@/utils/formAcronym"
 import { Label } from "@/components/ui/label"
 import { IChatMessage } from "@/interfaces/IChatMessage"
 import React from "react"
-import MessagesRoot from "./Messages/MessagesRoot"
-import MessagesAvatar from "./Messages/MessagesAvatar"
-import MessagesBody from "./Messages/MessagesBody"
-import MessagesHeader from "./Messages/MessagesHeader"
-import MessagesContent from "./Messages/MessagesContent"
+import MessagesRoot from "./MessagesRoot"
+import MessagesAvatar from "./MessagesAvatar"
+import MessagesBody from "./MessagesBody"
+import MessagesHeader from "./MessagesHeader"
+import MessagesContent from "./MessagesContent"
 
 interface ChatMessageProps {
   message: IChatMessage

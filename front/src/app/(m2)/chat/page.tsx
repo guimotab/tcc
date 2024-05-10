@@ -17,7 +17,7 @@ import { IChatMessage } from "@/interfaces/IChatMessage"
 import { IRecordChat } from "@/interfaces/IRecordChat"
 
 interface IDataContext {
-  groups: IGroup[] | []
+  groups: IGroup[] | undefined
   userOnGroups: IUserOnGroup[] | []
   currentUsers: IUser[] | []
   currentGroup: IGroup | undefined
