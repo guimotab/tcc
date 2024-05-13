@@ -6,4 +6,4 @@ emailRoutes
     //coloca do caminho mais específico pro menos específico
     .post("/email", EmailController.inviteToGroup) 
 
-export default emailRoutes
+export default emailRoutes 

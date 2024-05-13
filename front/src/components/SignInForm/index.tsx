@@ -7,7 +7,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../ui
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "../ui/form"
 import { Input } from "../ui/input"
 import AuthController from "@/controllers/AuthController"
-import ResolveResponseErrors from "@/utils/resolveResponseErrors"
+import ResolveResponses from "@/utils/resolveResponseErrors"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { HTMLInputTypeAttribute, ChangeEvent } from "react"
 import { toast } from "sonner"
@@ -59,7 +59,7 @@ const SignInForm = ({ loginPage, navigationTo }: SignInProps) => {
 
       const resp = await AuthController.signUp(name, email, password)
       if (resp.resp !== "Success") {
-        const errorResponse = new ResolveResponseErrors(resp.resp)
+        const errorResponse = new ResolveResponses(resp.resp)
         return createToast(errorResponse)
       }
       setCurrentUser(resp.data!.user)
@@ -71,8 +71,8 @@ const SignInForm = ({ loginPage, navigationTo }: SignInProps) => {
     }
   }
 
-  function createToast(resolveResponse: ResolveResponseErrors) {
-    const [title, description] = resolveResponse.resolveError()
+  function createToast(resolveResponse: ResolveResponses) {
+    const [title, description] = resolveResponse.resolveResponse()
     toast(title, {
       description: description,
       action: {

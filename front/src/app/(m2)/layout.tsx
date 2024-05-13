@@ -1,6 +1,6 @@
 "use client"
+import { Toaster } from "@/components/ui/toaster";
 import "../globals.css";
-import { Toaster } from "@/components/ui/sonner";
 import VerifySession from "@/providers/VerifySession";
 import { Suspense } from "react";
 

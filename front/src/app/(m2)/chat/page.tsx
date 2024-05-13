@@ -6,7 +6,7 @@ import useCurrentUser from "../../../../states/hooks/useCurrentUser"
 import { Dispatch, SetStateAction, Suspense, createContext, useEffect, useState } from "react"
 import IGroup from "@/interfaces/IGroup"
 import GroupController from "@/controllers/GroupController"
-import ResolveResponseErrors from "@/utils/resolveResponseErrors"
+import ResolveResponses from "@/utils/resolveResponseErrors"
 import { toast } from "sonner"
 import IUserOnGroup from "@/interfaces/IUserOnGroup"
 import IUser from "@/interfaces/IUser"
@@ -72,7 +72,7 @@ const Chat = () => {
         setDataContext
       })
     } else {
-      const errorResponse = new ResolveResponseErrors(respGroup.resp)
+      const errorResponse = new ResolveResponses(respGroup.resp)
       createToast(errorResponse)
     }
   }
@@ -89,8 +89,8 @@ const Chat = () => {
     setDataContext(prevState => ({ ...prevState, recordChats: newRecordChat }))
   }
 
-  function createToast(errorResponse: ResolveResponseErrors) {
-    const [title, description] = errorResponse.resolveError()
+  function createToast(errorResponse: ResolveResponses) {
+    const [title, description] = errorResponse.resolveResponse()
     toast(title, {
       description: description,
       action: {

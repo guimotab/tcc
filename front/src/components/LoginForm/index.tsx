@@ -10,7 +10,7 @@ import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { HTMLInputTypeAttribute } from "react";
-import ResolveResponseErrors from "@/utils/resolveResponseErrors";
+import ResolveResponses from "@/utils/resolveResponseErrors";
 import { toast } from "sonner";
 import AuthController from "@/controllers/AuthController";
 import { useUpdateCurrentUser } from "../../../states/hooks/useUpdateCurrentUser";
@@ -53,7 +53,7 @@ export default function LoginForm({ signInPage, navigationTo }: LoginProps) {
     const resp = await AuthController.login(email, password)
 
     if (!resp.data) {
-      const errorResponse = new ResolveResponseErrors(resp.resp)
+      const errorResponse = new ResolveResponses(resp.resp)
       createToast(errorResponse)
       return
     }
@@ -62,8 +62,8 @@ export default function LoginForm({ signInPage, navigationTo }: LoginProps) {
     router.replace(navigationTo)
   }
 
-  function createToast(errorResponse: ResolveResponseErrors) {
-    const [title, description] = errorResponse.resolveError()
+  function createToast(errorResponse: ResolveResponses) {
+    const [title, description] = errorResponse.resolveResponse()
     toast(title, {
       description: description,
       action: {
