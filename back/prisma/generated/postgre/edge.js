@@ -157,7 +157,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\90178\\Desktop\\MeuComputador\\tcc-ifro\\back\\prisma\\generated\\postgre",
+      "value": "D:\\Guilherme\\Lógica\\Meus-programas\\tcc\\back\\prisma\\generated\\postgre",
       "fromEnvVar": null
     },
     "config": {

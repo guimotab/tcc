@@ -62,13 +62,13 @@ const Group = ({ group }: GroupProps) => {
   }
 
   function checkReadLastMessage() {
-    const lastMessageIsFromCurrentUser = lastMessage!.sender.idUser === currentUser.id
-    const isAtCurrentChat = currentGroup!.id === lastMessage!.chatId
+    const lastMessageIsFromCurrentUser = lastMessage?.sender.idUser === currentUser.id
+    const isAtCurrentChat = currentGroup!.id === lastMessage?.chatId
     if (lastMessageIsFromCurrentUser || (isAtCurrentChat && isAtEndOfChat)) {
       return setLastMessageWasRead(true)
     }
 
-    const arrayReadByExist = lastMessage!.statusMessage.readBy
+    const arrayReadByExist = lastMessage?.statusMessage.readBy
     const foundRead = arrayReadByExist && arrayReadByExist.find(user => user.userId === currentUser.id)
     if (foundRead) {
       return setLastMessageWasRead(true)
