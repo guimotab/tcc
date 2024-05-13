@@ -20,14 +20,12 @@ const ChatGroup = ({ }: ChatGroupProps) => {
   const currentUser = useCurrentUser()
   const scrollChatRef = useRef<HTMLUListElement | null>(null)
   const recordChatClass = new RecordChats(recordChats)
-  const [canRender, setCanRender] = useState(true)
   const [messages, setMessages] = useState<IChatMessage[]>([])
   const [isLoadingOldestMessages, setIsLoadingOldestMessages] = useState(false)
 
   useEffect(() => {
     setMessages([])
     if (currentGroup && groups && recordChatClass) {
-      setCanRender(true)
       const currentChat = constructMessages()
       if (currentChat && currentChat.hasMoreMessagesToLoad) {
         //entra se não tiver as mensagens não foram carregadas ainda
@@ -36,10 +34,6 @@ const ChatGroup = ({ }: ChatGroupProps) => {
       }
     }
     handleScrollEndPage()
-
-    return () => {
-      setIsLoadingOldestMessages(false)
-    }
   }, [currentGroup])
 
   useEffect(() => {
@@ -47,7 +41,7 @@ const ChatGroup = ({ }: ChatGroupProps) => {
     readUnreadMessages(messages)
     addNewMessageToChat()
     findCurrentMessages()
-  }, [recordChats]) 
+  }, [recordChats])
 
   useLayoutEffect(() => {
     handleScrollEndPage(true)
@@ -69,7 +63,6 @@ const ChatGroup = ({ }: ChatGroupProps) => {
     // se não há mensagens no chat
     if (!currentChat) {
       setIsLoadingOldestMessages(false)
-      setCanRender(true)
       return setMessages([])
     }
 
@@ -183,7 +176,6 @@ const ChatGroup = ({ }: ChatGroupProps) => {
     const respMessage = await MessagesController.ReadMessages(currentGroup!, currentUser, recordChatClass, chats)
 
     if (respMessage) {
-      // setMessages(respMessage.chats)
       setDataContext(prevState => ({ ...prevState, recordChats: recordChatClass.recordChats }))
       return respMessage.chats
     }
@@ -230,24 +222,22 @@ const ChatGroup = ({ }: ChatGroupProps) => {
 
       <HeaderGroup />
 
-      {canRender &&
-        <div className="flex justify-center w-full bg-slate-100 px-6 pb-10">
-          <div className="flex flex-col justify-end max-w-[70rem] scrollbar h-[calc(100vh-(72px+40px))]  w-full">
-            <ul onScroll={handleScroll}
-              ref={scrollChatRef}
-              className={`flex flex-col w-full max-h-[calc(100vh-(72px))] gap-6 overflow-y-auto overflow-x-hidden px-5 py-7`}>
-              {isLoadingOldestMessages && <LoadingMessage />}
-              {messages.map(message =>
-                <Message key={message.message.id} message={message} />
-              )}
-            </ul>
+      <div className="flex justify-center w-full bg-slate-100 px-6 pb-10">
+        <div className="flex flex-col justify-end max-w-[70rem] scrollbar h-[calc(100vh-(72px+40px))]  w-full">
+          <ul onScroll={handleScroll}
+            ref={scrollChatRef}
+            className={`flex flex-col w-full max-h-[calc(100vh-(72px))] gap-6 overflow-y-auto overflow-x-hidden px-5 py-7`}>
+            {isLoadingOldestMessages && <LoadingMessage />}
+            {messages.map(message =>
+              <Message key={message.message.id} message={message} />
+            )}
+          </ul>
 
-            <ChatInput />
+          <ChatInput />
 
-          </div>
         </div>
-
-      }
+      </div>
+      
     </div>
 
   )
