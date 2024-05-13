@@ -36,17 +36,32 @@ const ChatGroup = ({ }: ChatGroupProps) => {
       }
     }
     handleScrollEndPage()
+
+    return () => {
+      setIsLoadingOldestMessages(false)
+    }
   }, [currentGroup])
 
   useEffect(() => {
     handleScrollEndPage(true)
     readUnreadMessages(messages)
     addNewMessageToChat()
-  }, [recordChats])
+    findCurrentMessages()
+  }, [recordChats]) 
 
   useLayoutEffect(() => {
     handleScrollEndPage(true)
   }, [messages])
+
+  function findCurrentMessages() {
+    const currentRecordChat = recordChatClass.currentRecordChat(currentGroup!)
+    if (currentRecordChat && currentGroup && (currentGroup.id === currentRecordChat.groupId)) {
+      if (isLoadingOldestMessages) {
+        setIsLoadingOldestMessages(false)
+      }
+      setMessages(currentRecordChat.chats)
+    }
+  }
 
   function constructMessages() {
     const currentChat = recordChatClass.currentRecordChat(currentGroup!)
@@ -75,13 +90,12 @@ const ChatGroup = ({ }: ChatGroupProps) => {
     // se as mensagens antigas já foram carregadas ou não
     if (currentChatHistory.hasMoreMessagesToLoad) {
       const newCurrentChat = await handleLoadMoreMessages(currentChatHistory.chats, quantity, timeResolve)
-      if (newCurrentChat) {
-        setMessages(newCurrentChat)
+      if (newCurrentChat && currentGroup?.id === currentChatHistory.groupId) {
+        // setMessages(newCurrentChat)
         readUnreadMessages(newCurrentChat)
       }
       setDataContext(prevState => ({ ...prevState, recordChats: recordChatClass.recordChats }))
     }
-    setIsLoadingOldestMessages(false)
   }
 
   /**
@@ -169,7 +183,8 @@ const ChatGroup = ({ }: ChatGroupProps) => {
     const respMessage = await MessagesController.ReadMessages(currentGroup!, currentUser, recordChatClass, chats)
 
     if (respMessage) {
-      setMessages(respMessage.chats)
+      // setMessages(respMessage.chats)
+      setDataContext(prevState => ({ ...prevState, recordChats: recordChatClass.recordChats }))
       return respMessage.chats
     }
   }
