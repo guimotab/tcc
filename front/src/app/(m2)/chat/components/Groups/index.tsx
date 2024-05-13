@@ -6,6 +6,7 @@ import Group from "./Group"
 import RecordChats from "@/classes/RecordChats"
 import IGroup from "@/interfaces/IGroup"
 import dayjs from "dayjs"
+import { Label } from "@/components/ui/label"
 
 interface GroupsProps {
 }
@@ -34,10 +35,9 @@ const Groups = ({ }: GroupsProps) => {
     }
   }
 
-  return groupsOrdenedByTime && (
+  return groups?.length !== 0 && groupsOrdenedByTime && (
     <div className="flex min-w-[16rem] max-w-[25rem] w-full shadow-sm">
       <div className="w-full">
-
         <div className="px-4 py-6">
           <h1 className="font-semibold">Meus Grupos</h1>
         </div>
@@ -53,7 +53,7 @@ const Groups = ({ }: GroupsProps) => {
           )}
         </div>
       </div>
-    </div>
+    </div >
   )
 }
 

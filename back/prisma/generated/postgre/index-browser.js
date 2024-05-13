@@ -152,7 +152,7 @@ exports.Prisma.InvitesScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.FormScalarFieldEnum = {
+exports.Prisma.ActivitiesScalarFieldEnum = {
   id: 'id',
   goal: 'goal',
   groupId: 'groupId',
@@ -176,7 +176,7 @@ exports.Prisma.ModelName = {
   UserOnGroup: 'UserOnGroup',
   Group: 'Group',
   Invites: 'Invites',
-  Form: 'Form'
+  Activities: 'Activities'
 };
 
 /**

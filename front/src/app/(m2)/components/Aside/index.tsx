@@ -17,7 +17,7 @@ import { redirect, useRouter } from "next/navigation"
 import useCurrentUser from "../../../../../states/hooks/useCurrentUser"
 
 interface AsideProps {
-  page: "home" | "chat" | "createGroup" | "createMeet" | 'myGroups' | 'project'
+  page: "home" | "chat" | "createGroup" | "activities" | 'myGroups' | 'project'
 }
 
 const Aside = ({ page }: AsideProps) => {
@@ -44,8 +44,8 @@ const Aside = ({ page }: AsideProps) => {
       redirect: "/chat"
     }, {
       icon: FaSquarePlus,
-      active: page === "createMeet",
-      redirect: "/create-meet"
+      active: page === "activities",
+      redirect: "/activities"
     }, {
       icon: FaGithub,
       active: page === "project",

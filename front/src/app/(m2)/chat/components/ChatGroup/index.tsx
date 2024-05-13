@@ -11,6 +11,7 @@ import RecordChats from "@/classes/RecordChats"
 import { IChatMessage } from "@/interfaces/IChatMessage"
 import useCurrentUser from "../../../../../../states/hooks/useCurrentUser"
 import { IRecordChat } from "@/interfaces/IRecordChat"
+import { Label } from "@/components/ui/label"
 
 interface ChatGroupProps {
 }
@@ -237,7 +238,7 @@ const ChatGroup = ({ }: ChatGroupProps) => {
 
         </div>
       </div>
-      
+
     </div>
 
   )

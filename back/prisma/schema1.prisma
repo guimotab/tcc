@@ -34,7 +34,7 @@ model Group {
   id          String        @id @default(uuid())
   name        String
   description String
-  form        Form[]
+  activities  Activities[]
   users       UserOnGroup[]
   invites     Invites[]
   createdAt   DateTime      @default(now())
@@ -50,7 +50,7 @@ model Invites {
   updatedAt DateTime @updatedAt
 }
 
-model Form {
+model Activities {
   id        String   @id @default(uuid())
   goal      String
   group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)

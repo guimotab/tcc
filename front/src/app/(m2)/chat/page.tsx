@@ -15,6 +15,7 @@ import MessagesController from "@/controllers/MessagesController"
 import RecordChats from "@/classes/RecordChats"
 import { IChatMessage } from "@/interfaces/IChatMessage"
 import { IRecordChat } from "@/interfaces/IRecordChat"
+import NoGroups from "./components/NoGroups"
 
 interface IDataContext {
   groups: IGroup[] | undefined
@@ -90,7 +91,7 @@ const Chat = () => {
   }
 
   function createToast(errorResponse: ResolveResponses) {
-    const [title, description] = errorResponse.resolveResponse()
+    const {title, description} = errorResponse.resolveResponse()
     toast(title, {
       description: description,
       action: {
@@ -107,10 +108,13 @@ const Chat = () => {
       <DataContext.Provider value={dataContext}>
         <Suspense fallback={<p>Carregando...</p>}>
           {canRender &&
+          dataContext.groups?.length !==0?
             <>
               <Groups />
               {dataContext.currentGroup && <ChatGroup />}
             </>
+            :
+            <NoGroups />
           }
         </Suspense>
       </DataContext.Provider>

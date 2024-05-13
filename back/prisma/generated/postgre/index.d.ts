@@ -34,10 +34,10 @@ export type Group = $Result.DefaultSelection<Prisma.$GroupPayload>
  */
 export type Invites = $Result.DefaultSelection<Prisma.$InvitesPayload>
 /**
- * Model Form
+ * Model Activities
  * 
  */
-export type Form = $Result.DefaultSelection<Prisma.$FormPayload>
+export type Activities = $Result.DefaultSelection<Prisma.$ActivitiesPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -202,14 +202,14 @@ export class PrismaClient<
   get invites(): Prisma.InvitesDelegate<ExtArgs>;
 
   /**
-   * `prisma.form`: Exposes CRUD operations for the **Form** model.
+   * `prisma.activities`: Exposes CRUD operations for the **Activities** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Forms
-    * const forms = await prisma.form.findMany()
+    * // Fetch zero or more Activities
+    * const activities = await prisma.activities.findMany()
     * ```
     */
-  get form(): Prisma.FormDelegate<ExtArgs>;
+  get activities(): Prisma.ActivitiesDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -684,7 +684,7 @@ export namespace Prisma {
     UserOnGroup: 'UserOnGroup',
     Group: 'Group',
     Invites: 'Invites',
-    Form: 'Form'
+    Activities: 'Activities'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -701,7 +701,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     meta: {
-      modelProps: 'user' | 'userOnGroup' | 'group' | 'invites' | 'form'
+      modelProps: 'user' | 'userOnGroup' | 'group' | 'invites' | 'activities'
       txIsolationLevel: Prisma.TransactionIsolationLevel
     },
     model: {
@@ -969,69 +969,69 @@ export namespace Prisma {
           }
         }
       }
-      Form: {
-        payload: Prisma.$FormPayload<ExtArgs>
-        fields: Prisma.FormFieldRefs
+      Activities: {
+        payload: Prisma.$ActivitiesPayload<ExtArgs>
+        fields: Prisma.ActivitiesFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.FormFindUniqueArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$FormPayload> | null
+            args: Prisma.ActivitiesFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$ActivitiesPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.FormFindUniqueOrThrowArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$FormPayload>
+            args: Prisma.ActivitiesFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$ActivitiesPayload>
           }
           findFirst: {
-            args: Prisma.FormFindFirstArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$FormPayload> | null
+            args: Prisma.ActivitiesFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$ActivitiesPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.FormFindFirstOrThrowArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$FormPayload>
+            args: Prisma.ActivitiesFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$ActivitiesPayload>
           }
           findMany: {
-            args: Prisma.FormFindManyArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$FormPayload>[]
+            args: Prisma.ActivitiesFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$ActivitiesPayload>[]
           }
           create: {
-            args: Prisma.FormCreateArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$FormPayload>
+            args: Prisma.ActivitiesCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$ActivitiesPayload>
           }
           createMany: {
-            args: Prisma.FormCreateManyArgs<ExtArgs>,
+            args: Prisma.ActivitiesCreateManyArgs<ExtArgs>,
             result: Prisma.BatchPayload
           }
           delete: {
-            args: Prisma.FormDeleteArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$FormPayload>
+            args: Prisma.ActivitiesDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$ActivitiesPayload>
           }
           update: {
-            args: Prisma.FormUpdateArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$FormPayload>
+            args: Prisma.ActivitiesUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$ActivitiesPayload>
           }
           deleteMany: {
-            args: Prisma.FormDeleteManyArgs<ExtArgs>,
+            args: Prisma.ActivitiesDeleteManyArgs<ExtArgs>,
             result: Prisma.BatchPayload
           }
           updateMany: {
-            args: Prisma.FormUpdateManyArgs<ExtArgs>,
+            args: Prisma.ActivitiesUpdateManyArgs<ExtArgs>,
             result: Prisma.BatchPayload
           }
           upsert: {
-            args: Prisma.FormUpsertArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$FormPayload>
+            args: Prisma.ActivitiesUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$ActivitiesPayload>
           }
           aggregate: {
-            args: Prisma.FormAggregateArgs<ExtArgs>,
-            result: $Utils.Optional<AggregateForm>
+            args: Prisma.ActivitiesAggregateArgs<ExtArgs>,
+            result: $Utils.Optional<AggregateActivities>
           }
           groupBy: {
-            args: Prisma.FormGroupByArgs<ExtArgs>,
-            result: $Utils.Optional<FormGroupByOutputType>[]
+            args: Prisma.ActivitiesGroupByArgs<ExtArgs>,
+            result: $Utils.Optional<ActivitiesGroupByOutputType>[]
           }
           count: {
-            args: Prisma.FormCountArgs<ExtArgs>,
-            result: $Utils.Optional<FormCountAggregateOutputType> | number
+            args: Prisma.ActivitiesCountArgs<ExtArgs>,
+            result: $Utils.Optional<ActivitiesCountAggregateOutputType> | number
           }
         }
       }
@@ -1228,13 +1228,13 @@ export namespace Prisma {
    */
 
   export type GroupCountOutputType = {
-    form: number
+    activities: number
     users: number
     invites: number
   }
 
   export type GroupCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    form?: boolean | GroupCountOutputTypeCountFormArgs
+    activities?: boolean | GroupCountOutputTypeCountActivitiesArgs
     users?: boolean | GroupCountOutputTypeCountUsersArgs
     invites?: boolean | GroupCountOutputTypeCountInvitesArgs
   }
@@ -1255,8 +1255,8 @@ export namespace Prisma {
   /**
    * GroupCountOutputType without action
    */
-  export type GroupCountOutputTypeCountFormArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: FormWhereInput
+  export type GroupCountOutputTypeCountActivitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ActivitiesWhereInput
   }
 
 
@@ -3320,7 +3320,7 @@ export namespace Prisma {
     description?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    form?: boolean | Group$formArgs<ExtArgs>
+    activities?: boolean | Group$activitiesArgs<ExtArgs>
     users?: boolean | Group$usersArgs<ExtArgs>
     invites?: boolean | Group$invitesArgs<ExtArgs>
     _count?: boolean | GroupCountOutputTypeDefaultArgs<ExtArgs>
@@ -3335,7 +3335,7 @@ export namespace Prisma {
   }
 
   export type GroupInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    form?: boolean | Group$formArgs<ExtArgs>
+    activities?: boolean | Group$activitiesArgs<ExtArgs>
     users?: boolean | Group$usersArgs<ExtArgs>
     invites?: boolean | Group$invitesArgs<ExtArgs>
     _count?: boolean | GroupCountOutputTypeDefaultArgs<ExtArgs>
@@ -3345,7 +3345,7 @@ export namespace Prisma {
   export type $GroupPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Group"
     objects: {
-      form: Prisma.$FormPayload<ExtArgs>[]
+      activities: Prisma.$ActivitiesPayload<ExtArgs>[]
       users: Prisma.$UserOnGroupPayload<ExtArgs>[]
       invites: Prisma.$InvitesPayload<ExtArgs>[]
     }
@@ -3720,7 +3720,7 @@ export namespace Prisma {
   export interface Prisma__GroupClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
 
-    form<T extends Group$formArgs<ExtArgs> = {}>(args?: Subset<T, Group$formArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormPayload<ExtArgs>, T, 'findMany'> | Null>;
+    activities<T extends Group$activitiesArgs<ExtArgs> = {}>(args?: Subset<T, Group$activitiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivitiesPayload<ExtArgs>, T, 'findMany'> | Null>;
 
     users<T extends Group$usersArgs<ExtArgs> = {}>(args?: Subset<T, Group$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserOnGroupPayload<ExtArgs>, T, 'findMany'> | Null>;
 
@@ -4071,23 +4071,23 @@ export namespace Prisma {
 
 
   /**
-   * Group.form
+   * Group.activities
    */
-  export type Group$formArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Group$activitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Form
+     * Select specific fields to fetch from the Activities
      */
-    select?: FormSelect<ExtArgs> | null
+    select?: ActivitiesSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: FormInclude<ExtArgs> | null
-    where?: FormWhereInput
-    orderBy?: FormOrderByWithRelationInput | FormOrderByWithRelationInput[]
-    cursor?: FormWhereUniqueInput
+    include?: ActivitiesInclude<ExtArgs> | null
+    where?: ActivitiesWhereInput
+    orderBy?: ActivitiesOrderByWithRelationInput | ActivitiesOrderByWithRelationInput[]
+    cursor?: ActivitiesWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: FormScalarFieldEnum | FormScalarFieldEnum[]
+    distinct?: ActivitiesScalarFieldEnum | ActivitiesScalarFieldEnum[]
   }
 
 
@@ -5068,16 +5068,16 @@ export namespace Prisma {
 
 
   /**
-   * Model Form
+   * Model Activities
    */
 
-  export type AggregateForm = {
-    _count: FormCountAggregateOutputType | null
-    _min: FormMinAggregateOutputType | null
-    _max: FormMaxAggregateOutputType | null
+  export type AggregateActivities = {
+    _count: ActivitiesCountAggregateOutputType | null
+    _min: ActivitiesMinAggregateOutputType | null
+    _max: ActivitiesMaxAggregateOutputType | null
   }
 
-  export type FormMinAggregateOutputType = {
+  export type ActivitiesMinAggregateOutputType = {
     id: string | null
     goal: string | null
     groupId: string | null
@@ -5085,7 +5085,7 @@ export namespace Prisma {
     updatedAt: Date | null
   }
 
-  export type FormMaxAggregateOutputType = {
+  export type ActivitiesMaxAggregateOutputType = {
     id: string | null
     goal: string | null
     groupId: string | null
@@ -5093,7 +5093,7 @@ export namespace Prisma {
     updatedAt: Date | null
   }
 
-  export type FormCountAggregateOutputType = {
+  export type ActivitiesCountAggregateOutputType = {
     id: number
     goal: number
     groupId: number
@@ -5103,7 +5103,7 @@ export namespace Prisma {
   }
 
 
-  export type FormMinAggregateInputType = {
+  export type ActivitiesMinAggregateInputType = {
     id?: true
     goal?: true
     groupId?: true
@@ -5111,7 +5111,7 @@ export namespace Prisma {
     updatedAt?: true
   }
 
-  export type FormMaxAggregateInputType = {
+  export type ActivitiesMaxAggregateInputType = {
     id?: true
     goal?: true
     groupId?: true
@@ -5119,7 +5119,7 @@ export namespace Prisma {
     updatedAt?: true
   }
 
-  export type FormCountAggregateInputType = {
+  export type ActivitiesCountAggregateInputType = {
     id?: true
     goal?: true
     groupId?: true
@@ -5128,113 +5128,113 @@ export namespace Prisma {
     _all?: true
   }
 
-  export type FormAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ActivitiesAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Form to aggregate.
+     * Filter which Activities to aggregate.
      */
-    where?: FormWhereInput
+    where?: ActivitiesWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Forms to fetch.
+     * Determine the order of Activities to fetch.
      */
-    orderBy?: FormOrderByWithRelationInput | FormOrderByWithRelationInput[]
+    orderBy?: ActivitiesOrderByWithRelationInput | ActivitiesOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: FormWhereUniqueInput
+    cursor?: ActivitiesWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Forms from the position of the cursor.
+     * Take `±n` Activities from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Forms.
+     * Skip the first `n` Activities.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned Forms
+     * Count returned Activities
     **/
-    _count?: true | FormCountAggregateInputType
+    _count?: true | ActivitiesCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: FormMinAggregateInputType
+    _min?: ActivitiesMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: FormMaxAggregateInputType
+    _max?: ActivitiesMaxAggregateInputType
   }
 
-  export type GetFormAggregateType<T extends FormAggregateArgs> = {
-        [P in keyof T & keyof AggregateForm]: P extends '_count' | 'count'
+  export type GetActivitiesAggregateType<T extends ActivitiesAggregateArgs> = {
+        [P in keyof T & keyof AggregateActivities]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateForm[P]>
-      : GetScalarType<T[P], AggregateForm[P]>
+        : GetScalarType<T[P], AggregateActivities[P]>
+      : GetScalarType<T[P], AggregateActivities[P]>
   }
 
 
 
 
-  export type FormGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: FormWhereInput
-    orderBy?: FormOrderByWithAggregationInput | FormOrderByWithAggregationInput[]
-    by: FormScalarFieldEnum[] | FormScalarFieldEnum
-    having?: FormScalarWhereWithAggregatesInput
+  export type ActivitiesGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ActivitiesWhereInput
+    orderBy?: ActivitiesOrderByWithAggregationInput | ActivitiesOrderByWithAggregationInput[]
+    by: ActivitiesScalarFieldEnum[] | ActivitiesScalarFieldEnum
+    having?: ActivitiesScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: FormCountAggregateInputType | true
-    _min?: FormMinAggregateInputType
-    _max?: FormMaxAggregateInputType
+    _count?: ActivitiesCountAggregateInputType | true
+    _min?: ActivitiesMinAggregateInputType
+    _max?: ActivitiesMaxAggregateInputType
   }
 
-  export type FormGroupByOutputType = {
+  export type ActivitiesGroupByOutputType = {
     id: string
     goal: string
     groupId: string
     createdAt: Date
     updatedAt: Date
-    _count: FormCountAggregateOutputType | null
-    _min: FormMinAggregateOutputType | null
-    _max: FormMaxAggregateOutputType | null
+    _count: ActivitiesCountAggregateOutputType | null
+    _min: ActivitiesMinAggregateOutputType | null
+    _max: ActivitiesMaxAggregateOutputType | null
   }
 
-  type GetFormGroupByPayload<T extends FormGroupByArgs> = Prisma.PrismaPromise<
+  type GetActivitiesGroupByPayload<T extends ActivitiesGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<FormGroupByOutputType, T['by']> &
+      PickEnumerable<ActivitiesGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof FormGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof ActivitiesGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], FormGroupByOutputType[P]>
-            : GetScalarType<T[P], FormGroupByOutputType[P]>
+              : GetScalarType<T[P], ActivitiesGroupByOutputType[P]>
+            : GetScalarType<T[P], ActivitiesGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type FormSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type ActivitiesSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     goal?: boolean
     groupId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     group?: boolean | GroupDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["form"]>
+  }, ExtArgs["result"]["activities"]>
 
-  export type FormSelectScalar = {
+  export type ActivitiesSelectScalar = {
     id?: boolean
     goal?: boolean
     groupId?: boolean
@@ -5242,13 +5242,13 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type FormInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ActivitiesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     group?: boolean | GroupDefaultArgs<ExtArgs>
   }
 
 
-  export type $FormPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Form"
+  export type $ActivitiesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Activities"
     objects: {
       group: Prisma.$GroupPayload<ExtArgs>
     }
@@ -5258,160 +5258,160 @@ export namespace Prisma {
       groupId: string
       createdAt: Date
       updatedAt: Date
-    }, ExtArgs["result"]["form"]>
+    }, ExtArgs["result"]["activities"]>
     composites: {}
   }
 
 
-  type FormGetPayload<S extends boolean | null | undefined | FormDefaultArgs> = $Result.GetResult<Prisma.$FormPayload, S>
+  type ActivitiesGetPayload<S extends boolean | null | undefined | ActivitiesDefaultArgs> = $Result.GetResult<Prisma.$ActivitiesPayload, S>
 
-  type FormCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<FormFindManyArgs, 'select' | 'include' | 'distinct'> & {
-      select?: FormCountAggregateInputType | true
+  type ActivitiesCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ActivitiesFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ActivitiesCountAggregateInputType | true
     }
 
-  export interface FormDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Form'], meta: { name: 'Form' } }
+  export interface ActivitiesDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Activities'], meta: { name: 'Activities' } }
     /**
-     * Find zero or one Form that matches the filter.
-     * @param {FormFindUniqueArgs} args - Arguments to find a Form
+     * Find zero or one Activities that matches the filter.
+     * @param {ActivitiesFindUniqueArgs} args - Arguments to find a Activities
      * @example
-     * // Get one Form
-     * const form = await prisma.form.findUnique({
+     * // Get one Activities
+     * const activities = await prisma.activities.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findUnique<T extends FormFindUniqueArgs<ExtArgs>>(
-      args: SelectSubset<T, FormFindUniqueArgs<ExtArgs>>
-    ): Prisma__FormClient<$Result.GetResult<Prisma.$FormPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
+    findUnique<T extends ActivitiesFindUniqueArgs<ExtArgs>>(
+      args: SelectSubset<T, ActivitiesFindUniqueArgs<ExtArgs>>
+    ): Prisma__ActivitiesClient<$Result.GetResult<Prisma.$ActivitiesPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
 
     /**
-     * Find one Form that matches the filter or throw an error  with `error.code='P2025'` 
+     * Find one Activities that matches the filter or throw an error  with `error.code='P2025'` 
      *     if no matches were found.
-     * @param {FormFindUniqueOrThrowArgs} args - Arguments to find a Form
+     * @param {ActivitiesFindUniqueOrThrowArgs} args - Arguments to find a Activities
      * @example
-     * // Get one Form
-     * const form = await prisma.form.findUniqueOrThrow({
+     * // Get one Activities
+     * const activities = await prisma.activities.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findUniqueOrThrow<T extends FormFindUniqueOrThrowArgs<ExtArgs>>(
-      args?: SelectSubset<T, FormFindUniqueOrThrowArgs<ExtArgs>>
-    ): Prisma__FormClient<$Result.GetResult<Prisma.$FormPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
+    findUniqueOrThrow<T extends ActivitiesFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, ActivitiesFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__ActivitiesClient<$Result.GetResult<Prisma.$ActivitiesPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
 
     /**
-     * Find the first Form that matches the filter.
+     * Find the first Activities that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {FormFindFirstArgs} args - Arguments to find a Form
+     * @param {ActivitiesFindFirstArgs} args - Arguments to find a Activities
      * @example
-     * // Get one Form
-     * const form = await prisma.form.findFirst({
+     * // Get one Activities
+     * const activities = await prisma.activities.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findFirst<T extends FormFindFirstArgs<ExtArgs>>(
-      args?: SelectSubset<T, FormFindFirstArgs<ExtArgs>>
-    ): Prisma__FormClient<$Result.GetResult<Prisma.$FormPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
+    findFirst<T extends ActivitiesFindFirstArgs<ExtArgs>>(
+      args?: SelectSubset<T, ActivitiesFindFirstArgs<ExtArgs>>
+    ): Prisma__ActivitiesClient<$Result.GetResult<Prisma.$ActivitiesPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
 
     /**
-     * Find the first Form that matches the filter or
+     * Find the first Activities that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {FormFindFirstOrThrowArgs} args - Arguments to find a Form
+     * @param {ActivitiesFindFirstOrThrowArgs} args - Arguments to find a Activities
      * @example
-     * // Get one Form
-     * const form = await prisma.form.findFirstOrThrow({
+     * // Get one Activities
+     * const activities = await prisma.activities.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findFirstOrThrow<T extends FormFindFirstOrThrowArgs<ExtArgs>>(
-      args?: SelectSubset<T, FormFindFirstOrThrowArgs<ExtArgs>>
-    ): Prisma__FormClient<$Result.GetResult<Prisma.$FormPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
+    findFirstOrThrow<T extends ActivitiesFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, ActivitiesFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__ActivitiesClient<$Result.GetResult<Prisma.$ActivitiesPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
 
     /**
-     * Find zero or more Forms that matches the filter.
+     * Find zero or more Activities that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {FormFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @param {ActivitiesFindManyArgs=} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all Forms
-     * const forms = await prisma.form.findMany()
+     * // Get all Activities
+     * const activities = await prisma.activities.findMany()
      * 
-     * // Get first 10 Forms
-     * const forms = await prisma.form.findMany({ take: 10 })
+     * // Get first 10 Activities
+     * const activities = await prisma.activities.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const formWithIdOnly = await prisma.form.findMany({ select: { id: true } })
+     * const activitiesWithIdOnly = await prisma.activities.findMany({ select: { id: true } })
      * 
     **/
-    findMany<T extends FormFindManyArgs<ExtArgs>>(
-      args?: SelectSubset<T, FormFindManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormPayload<ExtArgs>, T, 'findMany'>>
+    findMany<T extends ActivitiesFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, ActivitiesFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivitiesPayload<ExtArgs>, T, 'findMany'>>
 
     /**
-     * Create a Form.
-     * @param {FormCreateArgs} args - Arguments to create a Form.
+     * Create a Activities.
+     * @param {ActivitiesCreateArgs} args - Arguments to create a Activities.
      * @example
-     * // Create one Form
-     * const Form = await prisma.form.create({
+     * // Create one Activities
+     * const Activities = await prisma.activities.create({
      *   data: {
-     *     // ... data to create a Form
+     *     // ... data to create a Activities
      *   }
      * })
      * 
     **/
-    create<T extends FormCreateArgs<ExtArgs>>(
-      args: SelectSubset<T, FormCreateArgs<ExtArgs>>
-    ): Prisma__FormClient<$Result.GetResult<Prisma.$FormPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
+    create<T extends ActivitiesCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, ActivitiesCreateArgs<ExtArgs>>
+    ): Prisma__ActivitiesClient<$Result.GetResult<Prisma.$ActivitiesPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
 
     /**
-     * Create many Forms.
-     *     @param {FormCreateManyArgs} args - Arguments to create many Forms.
+     * Create many Activities.
+     *     @param {ActivitiesCreateManyArgs} args - Arguments to create many Activities.
      *     @example
-     *     // Create many Forms
-     *     const form = await prisma.form.createMany({
+     *     // Create many Activities
+     *     const activities = await prisma.activities.createMany({
      *       data: {
      *         // ... provide data here
      *       }
      *     })
      *     
     **/
-    createMany<T extends FormCreateManyArgs<ExtArgs>>(
-      args?: SelectSubset<T, FormCreateManyArgs<ExtArgs>>
+    createMany<T extends ActivitiesCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, ActivitiesCreateManyArgs<ExtArgs>>
     ): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Delete a Form.
-     * @param {FormDeleteArgs} args - Arguments to delete one Form.
+     * Delete a Activities.
+     * @param {ActivitiesDeleteArgs} args - Arguments to delete one Activities.
      * @example
-     * // Delete one Form
-     * const Form = await prisma.form.delete({
+     * // Delete one Activities
+     * const Activities = await prisma.activities.delete({
      *   where: {
-     *     // ... filter to delete one Form
+     *     // ... filter to delete one Activities
      *   }
      * })
      * 
     **/
-    delete<T extends FormDeleteArgs<ExtArgs>>(
-      args: SelectSubset<T, FormDeleteArgs<ExtArgs>>
-    ): Prisma__FormClient<$Result.GetResult<Prisma.$FormPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
+    delete<T extends ActivitiesDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, ActivitiesDeleteArgs<ExtArgs>>
+    ): Prisma__ActivitiesClient<$Result.GetResult<Prisma.$ActivitiesPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
 
     /**
-     * Update one Form.
-     * @param {FormUpdateArgs} args - Arguments to update one Form.
+     * Update one Activities.
+     * @param {ActivitiesUpdateArgs} args - Arguments to update one Activities.
      * @example
-     * // Update one Form
-     * const form = await prisma.form.update({
+     * // Update one Activities
+     * const activities = await prisma.activities.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -5421,34 +5421,34 @@ export namespace Prisma {
      * })
      * 
     **/
-    update<T extends FormUpdateArgs<ExtArgs>>(
-      args: SelectSubset<T, FormUpdateArgs<ExtArgs>>
-    ): Prisma__FormClient<$Result.GetResult<Prisma.$FormPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
+    update<T extends ActivitiesUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, ActivitiesUpdateArgs<ExtArgs>>
+    ): Prisma__ActivitiesClient<$Result.GetResult<Prisma.$ActivitiesPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
 
     /**
-     * Delete zero or more Forms.
-     * @param {FormDeleteManyArgs} args - Arguments to filter Forms to delete.
+     * Delete zero or more Activities.
+     * @param {ActivitiesDeleteManyArgs} args - Arguments to filter Activities to delete.
      * @example
-     * // Delete a few Forms
-     * const { count } = await prisma.form.deleteMany({
+     * // Delete a few Activities
+     * const { count } = await prisma.activities.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
     **/
-    deleteMany<T extends FormDeleteManyArgs<ExtArgs>>(
-      args?: SelectSubset<T, FormDeleteManyArgs<ExtArgs>>
+    deleteMany<T extends ActivitiesDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, ActivitiesDeleteManyArgs<ExtArgs>>
     ): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Forms.
+     * Update zero or more Activities.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {FormUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {ActivitiesUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many Forms
-     * const form = await prisma.form.updateMany({
+     * // Update many Activities
+     * const activities = await prisma.activities.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -5458,59 +5458,59 @@ export namespace Prisma {
      * })
      * 
     **/
-    updateMany<T extends FormUpdateManyArgs<ExtArgs>>(
-      args: SelectSubset<T, FormUpdateManyArgs<ExtArgs>>
+    updateMany<T extends ActivitiesUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, ActivitiesUpdateManyArgs<ExtArgs>>
     ): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create or update one Form.
-     * @param {FormUpsertArgs} args - Arguments to update or create a Form.
+     * Create or update one Activities.
+     * @param {ActivitiesUpsertArgs} args - Arguments to update or create a Activities.
      * @example
-     * // Update or create a Form
-     * const form = await prisma.form.upsert({
+     * // Update or create a Activities
+     * const activities = await prisma.activities.upsert({
      *   create: {
-     *     // ... data to create a Form
+     *     // ... data to create a Activities
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the Form we want to update
+     *     // ... the filter for the Activities we want to update
      *   }
      * })
     **/
-    upsert<T extends FormUpsertArgs<ExtArgs>>(
-      args: SelectSubset<T, FormUpsertArgs<ExtArgs>>
-    ): Prisma__FormClient<$Result.GetResult<Prisma.$FormPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
+    upsert<T extends ActivitiesUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, ActivitiesUpsertArgs<ExtArgs>>
+    ): Prisma__ActivitiesClient<$Result.GetResult<Prisma.$ActivitiesPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
 
     /**
-     * Count the number of Forms.
+     * Count the number of Activities.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {FormCountArgs} args - Arguments to filter Forms to count.
+     * @param {ActivitiesCountArgs} args - Arguments to filter Activities to count.
      * @example
-     * // Count the number of Forms
-     * const count = await prisma.form.count({
+     * // Count the number of Activities
+     * const count = await prisma.activities.count({
      *   where: {
-     *     // ... the filter for the Forms we want to count
+     *     // ... the filter for the Activities we want to count
      *   }
      * })
     **/
-    count<T extends FormCountArgs>(
-      args?: Subset<T, FormCountArgs>,
+    count<T extends ActivitiesCountArgs>(
+      args?: Subset<T, ActivitiesCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], FormCountAggregateOutputType>
+          : GetScalarType<T['select'], ActivitiesCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a Form.
+     * Allows you to perform aggregations operations on a Activities.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {FormAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {ActivitiesAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -5530,13 +5530,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends FormAggregateArgs>(args: Subset<T, FormAggregateArgs>): Prisma.PrismaPromise<GetFormAggregateType<T>>
+    aggregate<T extends ActivitiesAggregateArgs>(args: Subset<T, ActivitiesAggregateArgs>): Prisma.PrismaPromise<GetActivitiesAggregateType<T>>
 
     /**
-     * Group by Form.
+     * Group by Activities.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {FormGroupByArgs} args - Group by arguments.
+     * @param {ActivitiesGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -5551,14 +5551,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends FormGroupByArgs,
+      T extends ActivitiesGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: FormGroupByArgs['orderBy'] }
-        : { orderBy?: FormGroupByArgs['orderBy'] },
+        ? { orderBy: ActivitiesGroupByArgs['orderBy'] }
+        : { orderBy?: ActivitiesGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -5607,20 +5607,20 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, FormGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFormGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, ActivitiesGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetActivitiesGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the Form model
+   * Fields of the Activities model
    */
-  readonly fields: FormFieldRefs;
+  readonly fields: ActivitiesFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for Form.
+   * The delegate class that acts as a "Promise-like" for Activities.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__FormClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__ActivitiesClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
 
     group<T extends GroupDefaultArgs<ExtArgs> = {}>(args?: Subset<T, GroupDefaultArgs<ExtArgs>>): Prisma__GroupClient<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
@@ -5650,337 +5650,337 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the Form model
+   * Fields of the Activities model
    */ 
-  interface FormFieldRefs {
-    readonly id: FieldRef<"Form", 'String'>
-    readonly goal: FieldRef<"Form", 'String'>
-    readonly groupId: FieldRef<"Form", 'String'>
-    readonly createdAt: FieldRef<"Form", 'DateTime'>
-    readonly updatedAt: FieldRef<"Form", 'DateTime'>
+  interface ActivitiesFieldRefs {
+    readonly id: FieldRef<"Activities", 'String'>
+    readonly goal: FieldRef<"Activities", 'String'>
+    readonly groupId: FieldRef<"Activities", 'String'>
+    readonly createdAt: FieldRef<"Activities", 'DateTime'>
+    readonly updatedAt: FieldRef<"Activities", 'DateTime'>
   }
     
 
   // Custom InputTypes
 
   /**
-   * Form findUnique
+   * Activities findUnique
    */
-  export type FormFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ActivitiesFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Form
+     * Select specific fields to fetch from the Activities
      */
-    select?: FormSelect<ExtArgs> | null
+    select?: ActivitiesSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: FormInclude<ExtArgs> | null
+    include?: ActivitiesInclude<ExtArgs> | null
     /**
-     * Filter, which Form to fetch.
+     * Filter, which Activities to fetch.
      */
-    where: FormWhereUniqueInput
+    where: ActivitiesWhereUniqueInput
   }
 
 
   /**
-   * Form findUniqueOrThrow
+   * Activities findUniqueOrThrow
    */
-  export type FormFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ActivitiesFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Form
+     * Select specific fields to fetch from the Activities
      */
-    select?: FormSelect<ExtArgs> | null
+    select?: ActivitiesSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: FormInclude<ExtArgs> | null
+    include?: ActivitiesInclude<ExtArgs> | null
     /**
-     * Filter, which Form to fetch.
+     * Filter, which Activities to fetch.
      */
-    where: FormWhereUniqueInput
+    where: ActivitiesWhereUniqueInput
   }
 
 
   /**
-   * Form findFirst
+   * Activities findFirst
    */
-  export type FormFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ActivitiesFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Form
+     * Select specific fields to fetch from the Activities
      */
-    select?: FormSelect<ExtArgs> | null
+    select?: ActivitiesSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: FormInclude<ExtArgs> | null
+    include?: ActivitiesInclude<ExtArgs> | null
     /**
-     * Filter, which Form to fetch.
+     * Filter, which Activities to fetch.
      */
-    where?: FormWhereInput
+    where?: ActivitiesWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Forms to fetch.
+     * Determine the order of Activities to fetch.
      */
-    orderBy?: FormOrderByWithRelationInput | FormOrderByWithRelationInput[]
+    orderBy?: ActivitiesOrderByWithRelationInput | ActivitiesOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Forms.
+     * Sets the position for searching for Activities.
      */
-    cursor?: FormWhereUniqueInput
+    cursor?: ActivitiesWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Forms from the position of the cursor.
+     * Take `±n` Activities from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Forms.
+     * Skip the first `n` Activities.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Forms.
+     * Filter by unique combinations of Activities.
      */
-    distinct?: FormScalarFieldEnum | FormScalarFieldEnum[]
+    distinct?: ActivitiesScalarFieldEnum | ActivitiesScalarFieldEnum[]
   }
 
 
   /**
-   * Form findFirstOrThrow
+   * Activities findFirstOrThrow
    */
-  export type FormFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ActivitiesFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Form
+     * Select specific fields to fetch from the Activities
      */
-    select?: FormSelect<ExtArgs> | null
+    select?: ActivitiesSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: FormInclude<ExtArgs> | null
+    include?: ActivitiesInclude<ExtArgs> | null
     /**
-     * Filter, which Form to fetch.
+     * Filter, which Activities to fetch.
      */
-    where?: FormWhereInput
+    where?: ActivitiesWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Forms to fetch.
+     * Determine the order of Activities to fetch.
      */
-    orderBy?: FormOrderByWithRelationInput | FormOrderByWithRelationInput[]
+    orderBy?: ActivitiesOrderByWithRelationInput | ActivitiesOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Forms.
+     * Sets the position for searching for Activities.
      */
-    cursor?: FormWhereUniqueInput
+    cursor?: ActivitiesWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Forms from the position of the cursor.
+     * Take `±n` Activities from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Forms.
+     * Skip the first `n` Activities.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Forms.
+     * Filter by unique combinations of Activities.
      */
-    distinct?: FormScalarFieldEnum | FormScalarFieldEnum[]
+    distinct?: ActivitiesScalarFieldEnum | ActivitiesScalarFieldEnum[]
   }
 
 
   /**
-   * Form findMany
+   * Activities findMany
    */
-  export type FormFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ActivitiesFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Form
+     * Select specific fields to fetch from the Activities
      */
-    select?: FormSelect<ExtArgs> | null
+    select?: ActivitiesSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: FormInclude<ExtArgs> | null
+    include?: ActivitiesInclude<ExtArgs> | null
     /**
-     * Filter, which Forms to fetch.
+     * Filter, which Activities to fetch.
      */
-    where?: FormWhereInput
+    where?: ActivitiesWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Forms to fetch.
+     * Determine the order of Activities to fetch.
      */
-    orderBy?: FormOrderByWithRelationInput | FormOrderByWithRelationInput[]
+    orderBy?: ActivitiesOrderByWithRelationInput | ActivitiesOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing Forms.
+     * Sets the position for listing Activities.
      */
-    cursor?: FormWhereUniqueInput
+    cursor?: ActivitiesWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Forms from the position of the cursor.
+     * Take `±n` Activities from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Forms.
+     * Skip the first `n` Activities.
      */
     skip?: number
-    distinct?: FormScalarFieldEnum | FormScalarFieldEnum[]
+    distinct?: ActivitiesScalarFieldEnum | ActivitiesScalarFieldEnum[]
   }
 
 
   /**
-   * Form create
+   * Activities create
    */
-  export type FormCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ActivitiesCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Form
+     * Select specific fields to fetch from the Activities
      */
-    select?: FormSelect<ExtArgs> | null
+    select?: ActivitiesSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: FormInclude<ExtArgs> | null
+    include?: ActivitiesInclude<ExtArgs> | null
     /**
-     * The data needed to create a Form.
+     * The data needed to create a Activities.
      */
-    data: XOR<FormCreateInput, FormUncheckedCreateInput>
+    data: XOR<ActivitiesCreateInput, ActivitiesUncheckedCreateInput>
   }
 
 
   /**
-   * Form createMany
+   * Activities createMany
    */
-  export type FormCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ActivitiesCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many Forms.
+     * The data used to create many Activities.
      */
-    data: FormCreateManyInput | FormCreateManyInput[]
+    data: ActivitiesCreateManyInput | ActivitiesCreateManyInput[]
     skipDuplicates?: boolean
   }
 
 
   /**
-   * Form update
+   * Activities update
    */
-  export type FormUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ActivitiesUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Form
+     * Select specific fields to fetch from the Activities
      */
-    select?: FormSelect<ExtArgs> | null
+    select?: ActivitiesSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: FormInclude<ExtArgs> | null
+    include?: ActivitiesInclude<ExtArgs> | null
     /**
-     * The data needed to update a Form.
+     * The data needed to update a Activities.
      */
-    data: XOR<FormUpdateInput, FormUncheckedUpdateInput>
+    data: XOR<ActivitiesUpdateInput, ActivitiesUncheckedUpdateInput>
     /**
-     * Choose, which Form to update.
+     * Choose, which Activities to update.
      */
-    where: FormWhereUniqueInput
+    where: ActivitiesWhereUniqueInput
   }
 
 
   /**
-   * Form updateMany
+   * Activities updateMany
    */
-  export type FormUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ActivitiesUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update Forms.
+     * The data used to update Activities.
      */
-    data: XOR<FormUpdateManyMutationInput, FormUncheckedUpdateManyInput>
+    data: XOR<ActivitiesUpdateManyMutationInput, ActivitiesUncheckedUpdateManyInput>
     /**
-     * Filter which Forms to update
+     * Filter which Activities to update
      */
-    where?: FormWhereInput
+    where?: ActivitiesWhereInput
   }
 
 
   /**
-   * Form upsert
+   * Activities upsert
    */
-  export type FormUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ActivitiesUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Form
+     * Select specific fields to fetch from the Activities
      */
-    select?: FormSelect<ExtArgs> | null
+    select?: ActivitiesSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: FormInclude<ExtArgs> | null
+    include?: ActivitiesInclude<ExtArgs> | null
     /**
-     * The filter to search for the Form to update in case it exists.
+     * The filter to search for the Activities to update in case it exists.
      */
-    where: FormWhereUniqueInput
+    where: ActivitiesWhereUniqueInput
     /**
-     * In case the Form found by the `where` argument doesn't exist, create a new Form with this data.
+     * In case the Activities found by the `where` argument doesn't exist, create a new Activities with this data.
      */
-    create: XOR<FormCreateInput, FormUncheckedCreateInput>
+    create: XOR<ActivitiesCreateInput, ActivitiesUncheckedCreateInput>
     /**
-     * In case the Form was found with the provided `where` argument, update it with this data.
+     * In case the Activities was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<FormUpdateInput, FormUncheckedUpdateInput>
+    update: XOR<ActivitiesUpdateInput, ActivitiesUncheckedUpdateInput>
   }
 
 
   /**
-   * Form delete
+   * Activities delete
    */
-  export type FormDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ActivitiesDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Form
+     * Select specific fields to fetch from the Activities
      */
-    select?: FormSelect<ExtArgs> | null
+    select?: ActivitiesSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: FormInclude<ExtArgs> | null
+    include?: ActivitiesInclude<ExtArgs> | null
     /**
-     * Filter which Form to delete.
+     * Filter which Activities to delete.
      */
-    where: FormWhereUniqueInput
+    where: ActivitiesWhereUniqueInput
   }
 
 
   /**
-   * Form deleteMany
+   * Activities deleteMany
    */
-  export type FormDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ActivitiesDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Forms to delete
+     * Filter which Activities to delete
      */
-    where?: FormWhereInput
+    where?: ActivitiesWhereInput
   }
 
 
   /**
-   * Form without action
+   * Activities without action
    */
-  export type FormDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ActivitiesDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Form
+     * Select specific fields to fetch from the Activities
      */
-    select?: FormSelect<ExtArgs> | null
+    select?: ActivitiesSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: FormInclude<ExtArgs> | null
+    include?: ActivitiesInclude<ExtArgs> | null
   }
 
 
@@ -6044,7 +6044,7 @@ export namespace Prisma {
   export type InvitesScalarFieldEnum = (typeof InvitesScalarFieldEnum)[keyof typeof InvitesScalarFieldEnum]
 
 
-  export const FormScalarFieldEnum: {
+  export const ActivitiesScalarFieldEnum: {
     id: 'id',
     goal: 'goal',
     groupId: 'groupId',
@@ -6052,7 +6052,7 @@ export namespace Prisma {
     updatedAt: 'updatedAt'
   };
 
-  export type FormScalarFieldEnum = (typeof FormScalarFieldEnum)[keyof typeof FormScalarFieldEnum]
+  export type ActivitiesScalarFieldEnum = (typeof ActivitiesScalarFieldEnum)[keyof typeof ActivitiesScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -6249,7 +6249,7 @@ export namespace Prisma {
     description?: StringFilter<"Group"> | string
     createdAt?: DateTimeFilter<"Group"> | Date | string
     updatedAt?: DateTimeFilter<"Group"> | Date | string
-    form?: FormListRelationFilter
+    activities?: ActivitiesListRelationFilter
     users?: UserOnGroupListRelationFilter
     invites?: InvitesListRelationFilter
   }
@@ -6260,7 +6260,7 @@ export namespace Prisma {
     description?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    form?: FormOrderByRelationAggregateInput
+    activities?: ActivitiesOrderByRelationAggregateInput
     users?: UserOnGroupOrderByRelationAggregateInput
     invites?: InvitesOrderByRelationAggregateInput
   }
@@ -6274,7 +6274,7 @@ export namespace Prisma {
     description?: StringFilter<"Group"> | string
     createdAt?: DateTimeFilter<"Group"> | Date | string
     updatedAt?: DateTimeFilter<"Group"> | Date | string
-    form?: FormListRelationFilter
+    activities?: ActivitiesListRelationFilter
     users?: UserOnGroupListRelationFilter
     invites?: InvitesListRelationFilter
   }, "id">
@@ -6356,19 +6356,19 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Invites"> | Date | string
   }
 
-  export type FormWhereInput = {
-    AND?: FormWhereInput | FormWhereInput[]
-    OR?: FormWhereInput[]
-    NOT?: FormWhereInput | FormWhereInput[]
-    id?: StringFilter<"Form"> | string
-    goal?: StringFilter<"Form"> | string
-    groupId?: StringFilter<"Form"> | string
-    createdAt?: DateTimeFilter<"Form"> | Date | string
-    updatedAt?: DateTimeFilter<"Form"> | Date | string
+  export type ActivitiesWhereInput = {
+    AND?: ActivitiesWhereInput | ActivitiesWhereInput[]
+    OR?: ActivitiesWhereInput[]
+    NOT?: ActivitiesWhereInput | ActivitiesWhereInput[]
+    id?: StringFilter<"Activities"> | string
+    goal?: StringFilter<"Activities"> | string
+    groupId?: StringFilter<"Activities"> | string
+    createdAt?: DateTimeFilter<"Activities"> | Date | string
+    updatedAt?: DateTimeFilter<"Activities"> | Date | string
     group?: XOR<GroupRelationFilter, GroupWhereInput>
   }
 
-  export type FormOrderByWithRelationInput = {
+  export type ActivitiesOrderByWithRelationInput = {
     id?: SortOrder
     goal?: SortOrder
     groupId?: SortOrder
@@ -6377,38 +6377,38 @@ export namespace Prisma {
     group?: GroupOrderByWithRelationInput
   }
 
-  export type FormWhereUniqueInput = Prisma.AtLeast<{
+  export type ActivitiesWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     groupId?: string
-    AND?: FormWhereInput | FormWhereInput[]
-    OR?: FormWhereInput[]
-    NOT?: FormWhereInput | FormWhereInput[]
-    goal?: StringFilter<"Form"> | string
-    createdAt?: DateTimeFilter<"Form"> | Date | string
-    updatedAt?: DateTimeFilter<"Form"> | Date | string
+    AND?: ActivitiesWhereInput | ActivitiesWhereInput[]
+    OR?: ActivitiesWhereInput[]
+    NOT?: ActivitiesWhereInput | ActivitiesWhereInput[]
+    goal?: StringFilter<"Activities"> | string
+    createdAt?: DateTimeFilter<"Activities"> | Date | string
+    updatedAt?: DateTimeFilter<"Activities"> | Date | string
     group?: XOR<GroupRelationFilter, GroupWhereInput>
   }, "id" | "groupId">
 
-  export type FormOrderByWithAggregationInput = {
+  export type ActivitiesOrderByWithAggregationInput = {
     id?: SortOrder
     goal?: SortOrder
     groupId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    _count?: FormCountOrderByAggregateInput
-    _max?: FormMaxOrderByAggregateInput
-    _min?: FormMinOrderByAggregateInput
+    _count?: ActivitiesCountOrderByAggregateInput
+    _max?: ActivitiesMaxOrderByAggregateInput
+    _min?: ActivitiesMinOrderByAggregateInput
   }
 
-  export type FormScalarWhereWithAggregatesInput = {
-    AND?: FormScalarWhereWithAggregatesInput | FormScalarWhereWithAggregatesInput[]
-    OR?: FormScalarWhereWithAggregatesInput[]
-    NOT?: FormScalarWhereWithAggregatesInput | FormScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Form"> | string
-    goal?: StringWithAggregatesFilter<"Form"> | string
-    groupId?: StringWithAggregatesFilter<"Form"> | string
-    createdAt?: DateTimeWithAggregatesFilter<"Form"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"Form"> | Date | string
+  export type ActivitiesScalarWhereWithAggregatesInput = {
+    AND?: ActivitiesScalarWhereWithAggregatesInput | ActivitiesScalarWhereWithAggregatesInput[]
+    OR?: ActivitiesScalarWhereWithAggregatesInput[]
+    NOT?: ActivitiesScalarWhereWithAggregatesInput | ActivitiesScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Activities"> | string
+    goal?: StringWithAggregatesFilter<"Activities"> | string
+    groupId?: StringWithAggregatesFilter<"Activities"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Activities"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Activities"> | Date | string
   }
 
   export type UserCreateInput = {
@@ -6538,7 +6538,7 @@ export namespace Prisma {
     description: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    form?: FormCreateNestedManyWithoutGroupInput
+    activities?: ActivitiesCreateNestedManyWithoutGroupInput
     users?: UserOnGroupCreateNestedManyWithoutGroupInput
     invites?: InvitesCreateNestedManyWithoutGroupInput
   }
@@ -6549,7 +6549,7 @@ export namespace Prisma {
     description: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    form?: FormUncheckedCreateNestedManyWithoutGroupInput
+    activities?: ActivitiesUncheckedCreateNestedManyWithoutGroupInput
     users?: UserOnGroupUncheckedCreateNestedManyWithoutGroupInput
     invites?: InvitesUncheckedCreateNestedManyWithoutGroupInput
   }
@@ -6560,7 +6560,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    form?: FormUpdateManyWithoutGroupNestedInput
+    activities?: ActivitiesUpdateManyWithoutGroupNestedInput
     users?: UserOnGroupUpdateManyWithoutGroupNestedInput
     invites?: InvitesUpdateManyWithoutGroupNestedInput
   }
@@ -6571,7 +6571,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    form?: FormUncheckedUpdateManyWithoutGroupNestedInput
+    activities?: ActivitiesUncheckedUpdateManyWithoutGroupNestedInput
     users?: UserOnGroupUncheckedUpdateManyWithoutGroupNestedInput
     invites?: InvitesUncheckedUpdateManyWithoutGroupNestedInput
   }
@@ -6655,15 +6655,15 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type FormCreateInput = {
+  export type ActivitiesCreateInput = {
     id?: string
     goal: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    group: GroupCreateNestedOneWithoutFormInput
+    group: GroupCreateNestedOneWithoutActivitiesInput
   }
 
-  export type FormUncheckedCreateInput = {
+  export type ActivitiesUncheckedCreateInput = {
     id?: string
     goal: string
     groupId: string
@@ -6671,15 +6671,15 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type FormUpdateInput = {
+  export type ActivitiesUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     goal?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    group?: GroupUpdateOneRequiredWithoutFormNestedInput
+    group?: GroupUpdateOneRequiredWithoutActivitiesNestedInput
   }
 
-  export type FormUncheckedUpdateInput = {
+  export type ActivitiesUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     goal?: StringFieldUpdateOperationsInput | string
     groupId?: StringFieldUpdateOperationsInput | string
@@ -6687,7 +6687,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type FormCreateManyInput = {
+  export type ActivitiesCreateManyInput = {
     id?: string
     goal: string
     groupId: string
@@ -6695,14 +6695,14 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type FormUpdateManyMutationInput = {
+  export type ActivitiesUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     goal?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type FormUncheckedUpdateManyInput = {
+  export type ActivitiesUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     goal?: StringFieldUpdateOperationsInput | string
     groupId?: StringFieldUpdateOperationsInput | string
@@ -6844,10 +6844,10 @@ export namespace Prisma {
     assignedBy?: SortOrder
   }
 
-  export type FormListRelationFilter = {
-    every?: FormWhereInput
-    some?: FormWhereInput
-    none?: FormWhereInput
+  export type ActivitiesListRelationFilter = {
+    every?: ActivitiesWhereInput
+    some?: ActivitiesWhereInput
+    none?: ActivitiesWhereInput
   }
 
   export type InvitesListRelationFilter = {
@@ -6856,7 +6856,7 @@ export namespace Prisma {
     none?: InvitesWhereInput
   }
 
-  export type FormOrderByRelationAggregateInput = {
+  export type ActivitiesOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -6912,7 +6912,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type FormCountOrderByAggregateInput = {
+  export type ActivitiesCountOrderByAggregateInput = {
     id?: SortOrder
     goal?: SortOrder
     groupId?: SortOrder
@@ -6920,7 +6920,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type FormMaxOrderByAggregateInput = {
+  export type ActivitiesMaxOrderByAggregateInput = {
     id?: SortOrder
     goal?: SortOrder
     groupId?: SortOrder
@@ -6928,7 +6928,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type FormMinOrderByAggregateInput = {
+  export type ActivitiesMinOrderByAggregateInput = {
     id?: SortOrder
     goal?: SortOrder
     groupId?: SortOrder
@@ -7014,11 +7014,11 @@ export namespace Prisma {
     update?: XOR<XOR<GroupUpdateToOneWithWhereWithoutUsersInput, GroupUpdateWithoutUsersInput>, GroupUncheckedUpdateWithoutUsersInput>
   }
 
-  export type FormCreateNestedManyWithoutGroupInput = {
-    create?: XOR<FormCreateWithoutGroupInput, FormUncheckedCreateWithoutGroupInput> | FormCreateWithoutGroupInput[] | FormUncheckedCreateWithoutGroupInput[]
-    connectOrCreate?: FormCreateOrConnectWithoutGroupInput | FormCreateOrConnectWithoutGroupInput[]
-    createMany?: FormCreateManyGroupInputEnvelope
-    connect?: FormWhereUniqueInput | FormWhereUniqueInput[]
+  export type ActivitiesCreateNestedManyWithoutGroupInput = {
+    create?: XOR<ActivitiesCreateWithoutGroupInput, ActivitiesUncheckedCreateWithoutGroupInput> | ActivitiesCreateWithoutGroupInput[] | ActivitiesUncheckedCreateWithoutGroupInput[]
+    connectOrCreate?: ActivitiesCreateOrConnectWithoutGroupInput | ActivitiesCreateOrConnectWithoutGroupInput[]
+    createMany?: ActivitiesCreateManyGroupInputEnvelope
+    connect?: ActivitiesWhereUniqueInput | ActivitiesWhereUniqueInput[]
   }
 
   export type UserOnGroupCreateNestedManyWithoutGroupInput = {
@@ -7035,11 +7035,11 @@ export namespace Prisma {
     connect?: InvitesWhereUniqueInput | InvitesWhereUniqueInput[]
   }
 
-  export type FormUncheckedCreateNestedManyWithoutGroupInput = {
-    create?: XOR<FormCreateWithoutGroupInput, FormUncheckedCreateWithoutGroupInput> | FormCreateWithoutGroupInput[] | FormUncheckedCreateWithoutGroupInput[]
-    connectOrCreate?: FormCreateOrConnectWithoutGroupInput | FormCreateOrConnectWithoutGroupInput[]
-    createMany?: FormCreateManyGroupInputEnvelope
-    connect?: FormWhereUniqueInput | FormWhereUniqueInput[]
+  export type ActivitiesUncheckedCreateNestedManyWithoutGroupInput = {
+    create?: XOR<ActivitiesCreateWithoutGroupInput, ActivitiesUncheckedCreateWithoutGroupInput> | ActivitiesCreateWithoutGroupInput[] | ActivitiesUncheckedCreateWithoutGroupInput[]
+    connectOrCreate?: ActivitiesCreateOrConnectWithoutGroupInput | ActivitiesCreateOrConnectWithoutGroupInput[]
+    createMany?: ActivitiesCreateManyGroupInputEnvelope
+    connect?: ActivitiesWhereUniqueInput | ActivitiesWhereUniqueInput[]
   }
 
   export type UserOnGroupUncheckedCreateNestedManyWithoutGroupInput = {
@@ -7056,18 +7056,18 @@ export namespace Prisma {
     connect?: InvitesWhereUniqueInput | InvitesWhereUniqueInput[]
   }
 
-  export type FormUpdateManyWithoutGroupNestedInput = {
-    create?: XOR<FormCreateWithoutGroupInput, FormUncheckedCreateWithoutGroupInput> | FormCreateWithoutGroupInput[] | FormUncheckedCreateWithoutGroupInput[]
-    connectOrCreate?: FormCreateOrConnectWithoutGroupInput | FormCreateOrConnectWithoutGroupInput[]
-    upsert?: FormUpsertWithWhereUniqueWithoutGroupInput | FormUpsertWithWhereUniqueWithoutGroupInput[]
-    createMany?: FormCreateManyGroupInputEnvelope
-    set?: FormWhereUniqueInput | FormWhereUniqueInput[]
-    disconnect?: FormWhereUniqueInput | FormWhereUniqueInput[]
-    delete?: FormWhereUniqueInput | FormWhereUniqueInput[]
-    connect?: FormWhereUniqueInput | FormWhereUniqueInput[]
-    update?: FormUpdateWithWhereUniqueWithoutGroupInput | FormUpdateWithWhereUniqueWithoutGroupInput[]
-    updateMany?: FormUpdateManyWithWhereWithoutGroupInput | FormUpdateManyWithWhereWithoutGroupInput[]
-    deleteMany?: FormScalarWhereInput | FormScalarWhereInput[]
+  export type ActivitiesUpdateManyWithoutGroupNestedInput = {
+    create?: XOR<ActivitiesCreateWithoutGroupInput, ActivitiesUncheckedCreateWithoutGroupInput> | ActivitiesCreateWithoutGroupInput[] | ActivitiesUncheckedCreateWithoutGroupInput[]
+    connectOrCreate?: ActivitiesCreateOrConnectWithoutGroupInput | ActivitiesCreateOrConnectWithoutGroupInput[]
+    upsert?: ActivitiesUpsertWithWhereUniqueWithoutGroupInput | ActivitiesUpsertWithWhereUniqueWithoutGroupInput[]
+    createMany?: ActivitiesCreateManyGroupInputEnvelope
+    set?: ActivitiesWhereUniqueInput | ActivitiesWhereUniqueInput[]
+    disconnect?: ActivitiesWhereUniqueInput | ActivitiesWhereUniqueInput[]
+    delete?: ActivitiesWhereUniqueInput | ActivitiesWhereUniqueInput[]
+    connect?: ActivitiesWhereUniqueInput | ActivitiesWhereUniqueInput[]
+    update?: ActivitiesUpdateWithWhereUniqueWithoutGroupInput | ActivitiesUpdateWithWhereUniqueWithoutGroupInput[]
+    updateMany?: ActivitiesUpdateManyWithWhereWithoutGroupInput | ActivitiesUpdateManyWithWhereWithoutGroupInput[]
+    deleteMany?: ActivitiesScalarWhereInput | ActivitiesScalarWhereInput[]
   }
 
   export type UserOnGroupUpdateManyWithoutGroupNestedInput = {
@@ -7098,18 +7098,18 @@ export namespace Prisma {
     deleteMany?: InvitesScalarWhereInput | InvitesScalarWhereInput[]
   }
 
-  export type FormUncheckedUpdateManyWithoutGroupNestedInput = {
-    create?: XOR<FormCreateWithoutGroupInput, FormUncheckedCreateWithoutGroupInput> | FormCreateWithoutGroupInput[] | FormUncheckedCreateWithoutGroupInput[]
-    connectOrCreate?: FormCreateOrConnectWithoutGroupInput | FormCreateOrConnectWithoutGroupInput[]
-    upsert?: FormUpsertWithWhereUniqueWithoutGroupInput | FormUpsertWithWhereUniqueWithoutGroupInput[]
-    createMany?: FormCreateManyGroupInputEnvelope
-    set?: FormWhereUniqueInput | FormWhereUniqueInput[]
-    disconnect?: FormWhereUniqueInput | FormWhereUniqueInput[]
-    delete?: FormWhereUniqueInput | FormWhereUniqueInput[]
-    connect?: FormWhereUniqueInput | FormWhereUniqueInput[]
-    update?: FormUpdateWithWhereUniqueWithoutGroupInput | FormUpdateWithWhereUniqueWithoutGroupInput[]
-    updateMany?: FormUpdateManyWithWhereWithoutGroupInput | FormUpdateManyWithWhereWithoutGroupInput[]
-    deleteMany?: FormScalarWhereInput | FormScalarWhereInput[]
+  export type ActivitiesUncheckedUpdateManyWithoutGroupNestedInput = {
+    create?: XOR<ActivitiesCreateWithoutGroupInput, ActivitiesUncheckedCreateWithoutGroupInput> | ActivitiesCreateWithoutGroupInput[] | ActivitiesUncheckedCreateWithoutGroupInput[]
+    connectOrCreate?: ActivitiesCreateOrConnectWithoutGroupInput | ActivitiesCreateOrConnectWithoutGroupInput[]
+    upsert?: ActivitiesUpsertWithWhereUniqueWithoutGroupInput | ActivitiesUpsertWithWhereUniqueWithoutGroupInput[]
+    createMany?: ActivitiesCreateManyGroupInputEnvelope
+    set?: ActivitiesWhereUniqueInput | ActivitiesWhereUniqueInput[]
+    disconnect?: ActivitiesWhereUniqueInput | ActivitiesWhereUniqueInput[]
+    delete?: ActivitiesWhereUniqueInput | ActivitiesWhereUniqueInput[]
+    connect?: ActivitiesWhereUniqueInput | ActivitiesWhereUniqueInput[]
+    update?: ActivitiesUpdateWithWhereUniqueWithoutGroupInput | ActivitiesUpdateWithWhereUniqueWithoutGroupInput[]
+    updateMany?: ActivitiesUpdateManyWithWhereWithoutGroupInput | ActivitiesUpdateManyWithWhereWithoutGroupInput[]
+    deleteMany?: ActivitiesScalarWhereInput | ActivitiesScalarWhereInput[]
   }
 
   export type UserOnGroupUncheckedUpdateManyWithoutGroupNestedInput = {
@@ -7154,18 +7154,18 @@ export namespace Prisma {
     update?: XOR<XOR<GroupUpdateToOneWithWhereWithoutInvitesInput, GroupUpdateWithoutInvitesInput>, GroupUncheckedUpdateWithoutInvitesInput>
   }
 
-  export type GroupCreateNestedOneWithoutFormInput = {
-    create?: XOR<GroupCreateWithoutFormInput, GroupUncheckedCreateWithoutFormInput>
-    connectOrCreate?: GroupCreateOrConnectWithoutFormInput
+  export type GroupCreateNestedOneWithoutActivitiesInput = {
+    create?: XOR<GroupCreateWithoutActivitiesInput, GroupUncheckedCreateWithoutActivitiesInput>
+    connectOrCreate?: GroupCreateOrConnectWithoutActivitiesInput
     connect?: GroupWhereUniqueInput
   }
 
-  export type GroupUpdateOneRequiredWithoutFormNestedInput = {
-    create?: XOR<GroupCreateWithoutFormInput, GroupUncheckedCreateWithoutFormInput>
-    connectOrCreate?: GroupCreateOrConnectWithoutFormInput
-    upsert?: GroupUpsertWithoutFormInput
+  export type GroupUpdateOneRequiredWithoutActivitiesNestedInput = {
+    create?: XOR<GroupCreateWithoutActivitiesInput, GroupUncheckedCreateWithoutActivitiesInput>
+    connectOrCreate?: GroupCreateOrConnectWithoutActivitiesInput
+    upsert?: GroupUpsertWithoutActivitiesInput
     connect?: GroupWhereUniqueInput
-    update?: XOR<XOR<GroupUpdateToOneWithWhereWithoutFormInput, GroupUpdateWithoutFormInput>, GroupUncheckedUpdateWithoutFormInput>
+    update?: XOR<XOR<GroupUpdateToOneWithWhereWithoutActivitiesInput, GroupUpdateWithoutActivitiesInput>, GroupUncheckedUpdateWithoutActivitiesInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -7315,7 +7315,7 @@ export namespace Prisma {
     description: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    form?: FormCreateNestedManyWithoutGroupInput
+    activities?: ActivitiesCreateNestedManyWithoutGroupInput
     invites?: InvitesCreateNestedManyWithoutGroupInput
   }
 
@@ -7325,7 +7325,7 @@ export namespace Prisma {
     description: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    form?: FormUncheckedCreateNestedManyWithoutGroupInput
+    activities?: ActivitiesUncheckedCreateNestedManyWithoutGroupInput
     invites?: InvitesUncheckedCreateNestedManyWithoutGroupInput
   }
 
@@ -7380,7 +7380,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    form?: FormUpdateManyWithoutGroupNestedInput
+    activities?: ActivitiesUpdateManyWithoutGroupNestedInput
     invites?: InvitesUpdateManyWithoutGroupNestedInput
   }
 
@@ -7390,31 +7390,31 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    form?: FormUncheckedUpdateManyWithoutGroupNestedInput
+    activities?: ActivitiesUncheckedUpdateManyWithoutGroupNestedInput
     invites?: InvitesUncheckedUpdateManyWithoutGroupNestedInput
   }
 
-  export type FormCreateWithoutGroupInput = {
+  export type ActivitiesCreateWithoutGroupInput = {
     id?: string
     goal: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type FormUncheckedCreateWithoutGroupInput = {
+  export type ActivitiesUncheckedCreateWithoutGroupInput = {
     id?: string
     goal: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type FormCreateOrConnectWithoutGroupInput = {
-    where: FormWhereUniqueInput
-    create: XOR<FormCreateWithoutGroupInput, FormUncheckedCreateWithoutGroupInput>
+  export type ActivitiesCreateOrConnectWithoutGroupInput = {
+    where: ActivitiesWhereUniqueInput
+    create: XOR<ActivitiesCreateWithoutGroupInput, ActivitiesUncheckedCreateWithoutGroupInput>
   }
 
-  export type FormCreateManyGroupInputEnvelope = {
-    data: FormCreateManyGroupInput | FormCreateManyGroupInput[]
+  export type ActivitiesCreateManyGroupInputEnvelope = {
+    data: ActivitiesCreateManyGroupInput | ActivitiesCreateManyGroupInput[]
     skipDuplicates?: boolean
   }
 
@@ -7466,31 +7466,31 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type FormUpsertWithWhereUniqueWithoutGroupInput = {
-    where: FormWhereUniqueInput
-    update: XOR<FormUpdateWithoutGroupInput, FormUncheckedUpdateWithoutGroupInput>
-    create: XOR<FormCreateWithoutGroupInput, FormUncheckedCreateWithoutGroupInput>
+  export type ActivitiesUpsertWithWhereUniqueWithoutGroupInput = {
+    where: ActivitiesWhereUniqueInput
+    update: XOR<ActivitiesUpdateWithoutGroupInput, ActivitiesUncheckedUpdateWithoutGroupInput>
+    create: XOR<ActivitiesCreateWithoutGroupInput, ActivitiesUncheckedCreateWithoutGroupInput>
   }
 
-  export type FormUpdateWithWhereUniqueWithoutGroupInput = {
-    where: FormWhereUniqueInput
-    data: XOR<FormUpdateWithoutGroupInput, FormUncheckedUpdateWithoutGroupInput>
+  export type ActivitiesUpdateWithWhereUniqueWithoutGroupInput = {
+    where: ActivitiesWhereUniqueInput
+    data: XOR<ActivitiesUpdateWithoutGroupInput, ActivitiesUncheckedUpdateWithoutGroupInput>
   }
 
-  export type FormUpdateManyWithWhereWithoutGroupInput = {
-    where: FormScalarWhereInput
-    data: XOR<FormUpdateManyMutationInput, FormUncheckedUpdateManyWithoutGroupInput>
+  export type ActivitiesUpdateManyWithWhereWithoutGroupInput = {
+    where: ActivitiesScalarWhereInput
+    data: XOR<ActivitiesUpdateManyMutationInput, ActivitiesUncheckedUpdateManyWithoutGroupInput>
   }
 
-  export type FormScalarWhereInput = {
-    AND?: FormScalarWhereInput | FormScalarWhereInput[]
-    OR?: FormScalarWhereInput[]
-    NOT?: FormScalarWhereInput | FormScalarWhereInput[]
-    id?: StringFilter<"Form"> | string
-    goal?: StringFilter<"Form"> | string
-    groupId?: StringFilter<"Form"> | string
-    createdAt?: DateTimeFilter<"Form"> | Date | string
-    updatedAt?: DateTimeFilter<"Form"> | Date | string
+  export type ActivitiesScalarWhereInput = {
+    AND?: ActivitiesScalarWhereInput | ActivitiesScalarWhereInput[]
+    OR?: ActivitiesScalarWhereInput[]
+    NOT?: ActivitiesScalarWhereInput | ActivitiesScalarWhereInput[]
+    id?: StringFilter<"Activities"> | string
+    goal?: StringFilter<"Activities"> | string
+    groupId?: StringFilter<"Activities"> | string
+    createdAt?: DateTimeFilter<"Activities"> | Date | string
+    updatedAt?: DateTimeFilter<"Activities"> | Date | string
   }
 
   export type UserOnGroupUpsertWithWhereUniqueWithoutGroupInput = {
@@ -7542,7 +7542,7 @@ export namespace Prisma {
     description: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    form?: FormCreateNestedManyWithoutGroupInput
+    activities?: ActivitiesCreateNestedManyWithoutGroupInput
     users?: UserOnGroupCreateNestedManyWithoutGroupInput
   }
 
@@ -7552,7 +7552,7 @@ export namespace Prisma {
     description: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    form?: FormUncheckedCreateNestedManyWithoutGroupInput
+    activities?: ActivitiesUncheckedCreateNestedManyWithoutGroupInput
     users?: UserOnGroupUncheckedCreateNestedManyWithoutGroupInput
   }
 
@@ -7578,7 +7578,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    form?: FormUpdateManyWithoutGroupNestedInput
+    activities?: ActivitiesUpdateManyWithoutGroupNestedInput
     users?: UserOnGroupUpdateManyWithoutGroupNestedInput
   }
 
@@ -7588,11 +7588,11 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    form?: FormUncheckedUpdateManyWithoutGroupNestedInput
+    activities?: ActivitiesUncheckedUpdateManyWithoutGroupNestedInput
     users?: UserOnGroupUncheckedUpdateManyWithoutGroupNestedInput
   }
 
-  export type GroupCreateWithoutFormInput = {
+  export type GroupCreateWithoutActivitiesInput = {
     id?: string
     name: string
     description: string
@@ -7602,7 +7602,7 @@ export namespace Prisma {
     invites?: InvitesCreateNestedManyWithoutGroupInput
   }
 
-  export type GroupUncheckedCreateWithoutFormInput = {
+  export type GroupUncheckedCreateWithoutActivitiesInput = {
     id?: string
     name: string
     description: string
@@ -7612,23 +7612,23 @@ export namespace Prisma {
     invites?: InvitesUncheckedCreateNestedManyWithoutGroupInput
   }
 
-  export type GroupCreateOrConnectWithoutFormInput = {
+  export type GroupCreateOrConnectWithoutActivitiesInput = {
     where: GroupWhereUniqueInput
-    create: XOR<GroupCreateWithoutFormInput, GroupUncheckedCreateWithoutFormInput>
+    create: XOR<GroupCreateWithoutActivitiesInput, GroupUncheckedCreateWithoutActivitiesInput>
   }
 
-  export type GroupUpsertWithoutFormInput = {
-    update: XOR<GroupUpdateWithoutFormInput, GroupUncheckedUpdateWithoutFormInput>
-    create: XOR<GroupCreateWithoutFormInput, GroupUncheckedCreateWithoutFormInput>
+  export type GroupUpsertWithoutActivitiesInput = {
+    update: XOR<GroupUpdateWithoutActivitiesInput, GroupUncheckedUpdateWithoutActivitiesInput>
+    create: XOR<GroupCreateWithoutActivitiesInput, GroupUncheckedCreateWithoutActivitiesInput>
     where?: GroupWhereInput
   }
 
-  export type GroupUpdateToOneWithWhereWithoutFormInput = {
+  export type GroupUpdateToOneWithWhereWithoutActivitiesInput = {
     where?: GroupWhereInput
-    data: XOR<GroupUpdateWithoutFormInput, GroupUncheckedUpdateWithoutFormInput>
+    data: XOR<GroupUpdateWithoutActivitiesInput, GroupUncheckedUpdateWithoutActivitiesInput>
   }
 
-  export type GroupUpdateWithoutFormInput = {
+  export type GroupUpdateWithoutActivitiesInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
@@ -7638,7 +7638,7 @@ export namespace Prisma {
     invites?: InvitesUpdateManyWithoutGroupNestedInput
   }
 
-  export type GroupUncheckedUpdateWithoutFormInput = {
+  export type GroupUncheckedUpdateWithoutActivitiesInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
@@ -7676,7 +7676,7 @@ export namespace Prisma {
     assignedBy?: StringFieldUpdateOperationsInput | string
   }
 
-  export type FormCreateManyGroupInput = {
+  export type ActivitiesCreateManyGroupInput = {
     id?: string
     goal: string
     createdAt?: Date | string
@@ -7697,21 +7697,21 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type FormUpdateWithoutGroupInput = {
+  export type ActivitiesUpdateWithoutGroupInput = {
     id?: StringFieldUpdateOperationsInput | string
     goal?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type FormUncheckedUpdateWithoutGroupInput = {
+  export type ActivitiesUncheckedUpdateWithoutGroupInput = {
     id?: StringFieldUpdateOperationsInput | string
     goal?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type FormUncheckedUpdateManyWithoutGroupInput = {
+  export type ActivitiesUncheckedUpdateManyWithoutGroupInput = {
     id?: StringFieldUpdateOperationsInput | string
     goal?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -7790,9 +7790,9 @@ export namespace Prisma {
      */
     export type InvitesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = InvitesDefaultArgs<ExtArgs>
     /**
-     * @deprecated Use FormDefaultArgs instead
+     * @deprecated Use ActivitiesDefaultArgs instead
      */
-    export type FormArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = FormDefaultArgs<ExtArgs>
+    export type ActivitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ActivitiesDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany
