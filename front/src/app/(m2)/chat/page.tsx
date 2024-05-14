@@ -91,7 +91,7 @@ const Chat = () => {
   }
 
   function createToast(errorResponse: ResolveResponses) {
-    const {title, description} = errorResponse.resolveResponse()
+    const { title, description } = errorResponse.resolveResponse()
     toast(title, {
       description: description,
       action: {
@@ -108,13 +108,14 @@ const Chat = () => {
       <DataContext.Provider value={dataContext}>
         <Suspense fallback={<p>Carregando...</p>}>
           {canRender &&
-          dataContext.groups?.length !==0?
-            <>
-              <Groups />
-              {dataContext.currentGroup && <ChatGroup />}
-            </>
-            :
-            <NoGroups />
+            (dataContext.groups?.length !== 0 ?
+              <>
+                <Groups />
+                {dataContext.currentGroup && <ChatGroup />}
+              </>
+              :
+              <NoGroups />
+            )
           }
         </Suspense>
       </DataContext.Provider>

@@ -48,7 +48,7 @@ const Invites = () => {
       if (respInvite.resp === "Success") {
         const respGroup = await GroupController.addNewParticipant(currentUser, respInvite.data!.invites)
         if (respGroup.resp === "Success") {
-          return router.replace("/my-groups")
+          return router.replace("/chat")
         }
       }
       router.replace("error")
