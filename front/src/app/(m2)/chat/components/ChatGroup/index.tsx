@@ -42,6 +42,7 @@ const ChatGroup = ({ }: ChatGroupProps) => {
     readUnreadMessages(messages)
     addNewMessageToChat()
     findCurrentMessages()
+    console.log("🚀 ~ useEffect ~ messages:", messages)
   }, [recordChats])
 
   useLayoutEffect(() => {
@@ -109,7 +110,7 @@ const ChatGroup = ({ }: ChatGroupProps) => {
     if (allMessagesRecordChat) {
       // se possui mais mensagens, junta as atuais com as antigas e muda o hasMoreMessagesToLoad para false
       const concatedChat = MessagesController.spliceOldestChatByNew(currentGroup!, allMessagesRecordChat, recordChatClass)
-    return concatedChat
+      return concatedChat
 
     } else {
       //se não possui mensagens, apenas muda o hasMoreMessagesToLoad para false
@@ -123,8 +124,8 @@ const ChatGroup = ({ }: ChatGroupProps) => {
     }
   }
 
-  function readUnreadMessages(chats: IChatMessage[]) {
-    const lastMessageIsRead = checkLastMessageWasRead(chats)
+  async function readUnreadMessages(chats: IChatMessage[]) {
+    const lastMessageIsRead = checkLastMessageWasRead(chats) 
     if (!lastMessageIsRead) {
       readNewMessages(chats)
     }
@@ -185,7 +186,9 @@ const ChatGroup = ({ }: ChatGroupProps) => {
     const sizeArrayChat = chats.length
     if (sizeArrayChat) {
       const currentUserIsSender = chats[sizeArrayChat - 1].sender.idUser === currentUser.id
-      const lastMessageIsRead = chats[sizeArrayChat - 1].statusMessage.readBy?.find(readBy => readBy.userId === currentUser.id)
+      const lastMessageIsRead = chats[sizeArrayChat - 1].statusMessage.readBy?.find(readBy => {
+        return readBy.userId === currentUser.id
+      })
       if (!currentUserIsSender && !lastMessageIsRead) {
         return false
       }

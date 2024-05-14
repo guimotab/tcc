@@ -35,7 +35,8 @@ export default abstract class MessageController {
           where: {
             readBy: {
               some: {
-                statusMessageId: message.messageId
+                statusMessageId: message.messageId,
+                userId: user.id
               }
             }
           },
@@ -44,7 +45,7 @@ export default abstract class MessageController {
           }
         })
 
-        if (findMessage.length === 1) {
+        if (findMessage.length !== 0) {
           //mensagem já lida
           return findMessage[0]
         }

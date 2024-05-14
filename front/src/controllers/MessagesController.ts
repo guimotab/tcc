@@ -46,8 +46,9 @@ export default abstract class MessagesController {
       messageId: message.message.id,
       readBy: message.statusMessage.readBy
     } as IStatusMessage))
+    console.log("🚀 ~ MessagesController ~ unreadMessages ~ unreadMessages:", unreadMessages)
 
-    const respStatusMessage = await this._messageService.readMessages(unreadMessages, currentUser) as IStatusMessageResponse
+    const respStatusMessage = await this._messageService.readMessages(unreadMessages, currentUser) as IStatusMessageResponse 
 
     if (respStatusMessage.data) {
 
@@ -56,6 +57,8 @@ export default abstract class MessagesController {
         const index = currentChat.findIndex(message => readMessage.messageId === message.statusMessage.messageId)
         const currentMessages = currentChat[index]
         const arrayReadByCurrentMessages = currentMessages.statusMessage.readBy
+
+        //adiciona os novos leitores da mensagem
         fakeMessages.splice(index, 1, {
           ...currentMessages,
           statusMessage: {
