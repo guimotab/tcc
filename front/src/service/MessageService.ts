@@ -44,7 +44,7 @@ export default class MessageService extends HttpService<IMessage, IMessageRespon
   }
 
   async getAllByChatId(chatId: string) {
-    const result = await axios.get(`${this.url}/all/${chatId}`).catch(this.handleError) as IAxiosResponse<IMessageResponse>
+    const result = await axios.get(`${this.url}/all/${chatId}`).catch(this.handleError) as IAxiosResponse<IMessageArrayResponse>
     return result.data
   }
   async getSomeByChatId(chatId: string, skip: number, take: number) {

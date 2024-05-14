@@ -79,8 +79,8 @@ export default abstract class MessagesController {
    * Retorna todas as mensagens pelo id do Grupo
    * @param group IGroup 
    */
-  static async getAllByGroupId(group: IGroup) {
-    return await this._messageService.getAllByChatId(group.id) as IMessageResponse
+  static async getAllByGroup(group: IGroup) {
+    return await this._messageService.getAllByChatId(group.id) as IMessageArrayResponse
   }
 
   /**
@@ -126,8 +126,8 @@ export default abstract class MessagesController {
    * @param take quantidade de mensagens que serão pegas na requisição
    * @returns retorna mensagens no formato IRecordChat
    */
-  static async loadOldestMessages(group: IGroup, skip: number, take: number) {
-    const messageResp = await MessagesController.getSomeByGroupId(group, skip, take)
+  static async loadAllOldestMessages(group: IGroup) {
+    const messageResp = await MessagesController.getAllByGroup(group)
     const dataMessages = messageResp.data
 
     if (dataMessages && dataMessages.messages.length !== 0) {
@@ -184,6 +184,26 @@ export default abstract class MessagesController {
 
     recordChat.spliceRecordChat(group.id, ...newObj)
     return concatedChat
+  }
+
+  /**
+   * Concatena o chat antigo com o chat atual
+   * @param group IGroup
+   * @param newChat parte do chat mais antiga (que ficará para cima no chat)
+   * @param newChat parte do chat atual (que ficará para baixo no chat)
+   * @param recordChat RecordChats para gravar o chat atualizado
+   * @returns chat concatenado
+   */
+  static spliceOldestChatByNew(group: IGroup, newChat: IRecordChat, recordChat: RecordChats) {
+
+    const newObj = [{
+      groupId: group.id,
+      chats: newChat.chats,
+      hasMoreMessagesToLoad: newChat.hasMoreMessagesToLoad
+    }] as IRecordChat[]
+
+    recordChat.spliceRecordChat(group.id, ...newObj)
+    return newChat.chats
   }
 
   static async put(id: string, data: IMessage) {

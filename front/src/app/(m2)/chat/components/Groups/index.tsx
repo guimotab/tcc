@@ -24,7 +24,11 @@ const Groups = ({ }: GroupsProps) => {
     if (groups) {
       const timeOfGroups = groups.map(group => {
         const lastChatMessage = recordChatsClass.returnLastChatMessage(group)
-        const millisecodsMessage = dayjs(lastChatMessage?.message.createdAt).valueOf()
+        let millisecodsMessage =  0
+        if (lastChatMessage) {
+          millisecodsMessage = dayjs(lastChatMessage?.message.createdAt).valueOf()
+        }
+
         return {
           group,
           millisecondsTimeMessage: millisecodsMessage

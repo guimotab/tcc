@@ -31,7 +31,7 @@ const ChatGroup = ({ }: ChatGroupProps) => {
       if (currentChat && currentChat.hasMoreMessagesToLoad) {
         //entra se não tiver as mensagens não foram carregadas ainda
         setIsLoadingOldestMessages(true)
-        loadMoreMessages(currentChat, 20, 1000)
+        loadAllMessages(currentChat, 1000)
       }
     }
     handleScrollEndPage()
@@ -80,10 +80,10 @@ const ChatGroup = ({ }: ChatGroupProps) => {
    * @param quantity quantidade de mensagens que serão carregadas
    * @param timeResolve tempo mínimo para carregar as mensagens
    */
-  async function loadMoreMessages(currentChatHistory: IRecordChat, quantity: number, timeResolve: number = 0) {
+  async function loadAllMessages(currentChatHistory: IRecordChat, timeResolve: number = 0) {
     // se as mensagens antigas já foram carregadas ou não
     if (currentChatHistory.hasMoreMessagesToLoad) {
-      const newCurrentChat = await handleLoadMoreMessages(currentChatHistory.chats, quantity, timeResolve)
+      const newCurrentChat = await handleLoadAllMessages(currentChatHistory.chats, timeResolve)
       if (newCurrentChat && currentGroup?.id === currentChatHistory.groupId) {
         // setMessages(newCurrentChat)
         readUnreadMessages(newCurrentChat)
@@ -99,17 +99,17 @@ const ChatGroup = ({ }: ChatGroupProps) => {
    * @param timeResolve tempo mínimo para carregar as mensagens
    * @returns IChatMessage[] caso possua mensagens antigas, void caso não possua mais mensagens antigas
    */
-  async function handleLoadMoreMessages(chatMessage: IChatMessage[], quantity: number, timeResolve: number = 0) {
+  async function handleLoadAllMessages(chatMessage: IChatMessage[], timeResolve: number = 0) {
 
-    const [recordedChat] = await Promise.all([
-      await MessagesController.loadOldestMessages(currentGroup!, chatMessage.length, quantity),
+    const [allMessagesRecordChat] = await Promise.all([
+      await MessagesController.loadAllOldestMessages(currentGroup!),
       new Promise((resolve) => setTimeout(resolve, timeResolve)),
     ])
 
-    if (recordedChat) {
+    if (allMessagesRecordChat) {
       // se possui mais mensagens, junta as atuais com as antigas e muda o hasMoreMessagesToLoad para false
-      const concatedChat = MessagesController.concatOldestChatWithCurrent(currentGroup!, recordedChat, chatMessage, recordChatClass)
-      return concatedChat
+      const concatedChat = MessagesController.spliceOldestChatByNew(currentGroup!, allMessagesRecordChat, recordChatClass)
+    return concatedChat
 
     } else {
       //se não possui mensagens, apenas muda o hasMoreMessagesToLoad para false
@@ -162,7 +162,6 @@ const ChatGroup = ({ }: ChatGroupProps) => {
         scrollChatRef.current!.scrollTop = previousScrollTop + heightDifference - 100; // - 100 é específico desse sistema
       });
     }
-
   }
 
   function addNewMessageToChat() {
@@ -205,16 +204,6 @@ const ChatGroup = ({ }: ChatGroupProps) => {
       return setDataContext(prev => ({ ...prev, isAtEndOfChat: true }))
     }
 
-    const isAtTop = (scrollTop + clientHeight) <= (880);
-
-    if (isAtTop) {
-      const currentChat = recordChatClass.currentRecordChat(currentGroup!)
-
-      if (currentChat?.hasMoreMessagesToLoad && !isLoadingOldestMessages) {
-        setIsLoadingOldestMessages(true)
-        keepScrollAfterRequest(() => loadMoreMessages(currentChat, 20, 1000))
-      }
-    }
     setDataContext(prev => ({ ...prev, isAtEndOfChat: false }))
   }
 

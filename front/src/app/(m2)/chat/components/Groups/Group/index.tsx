@@ -46,7 +46,7 @@ const Group = ({ group }: GroupProps) => {
     if (lastMessage && currentGroup) {
       checkReadLastMessage()
     }
-  }, [currentGroup])
+  }, [lastMessage])
 
   function loadLastMessage() {
     const chatMessage = recordChatClass.returnLastChatMessage(group)
