@@ -17,8 +17,6 @@ export interface responseRecordMessage {
 
 export default abstract class MessagesController {
 
-
-
   private static _messageService = new MessageService();
 
   /**
@@ -66,11 +64,11 @@ export default abstract class MessagesController {
               [...arrayReadByCurrentMessages, ...readMessage.readBy!]
               :
               [...readMessage.readBy!]
-          }
+          },
         })
       })
 
-      recordChat.spliceRecordChat(group.id, RecordChats.transformChatMessageToRecordChat(group, fakeMessages, true))
+      recordChat.spliceRecordChat(group.id, RecordChats.transformChatMessageToRecordChat(group, fakeMessages, false))
       return recordChat.currentRecordChat(group)
     }
   }

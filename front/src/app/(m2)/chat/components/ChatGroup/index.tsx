@@ -83,7 +83,7 @@ const ChatGroup = ({ }: ChatGroupProps) => {
   async function loadAllMessages(currentChatHistory: IRecordChat, timeResolve: number = 0) {
     // se as mensagens antigas já foram carregadas ou não
     if (currentChatHistory.hasMoreMessagesToLoad) {
-      const newCurrentChat = await handleLoadAllMessages(currentChatHistory.chats, timeResolve)
+      const newCurrentChat = await handleLoadAllMessages(timeResolve)
       if (newCurrentChat && currentGroup?.id === currentChatHistory.groupId) {
         // setMessages(newCurrentChat)
         readUnreadMessages(newCurrentChat)
@@ -99,7 +99,7 @@ const ChatGroup = ({ }: ChatGroupProps) => {
    * @param timeResolve tempo mínimo para carregar as mensagens
    * @returns IChatMessage[] caso possua mensagens antigas, void caso não possua mais mensagens antigas
    */
-  async function handleLoadAllMessages(chatMessage: IChatMessage[], timeResolve: number = 0) {
+  async function handleLoadAllMessages(timeResolve: number = 0) {
 
     const [allMessagesRecordChat] = await Promise.all([
       await MessagesController.loadAllOldestMessages(currentGroup!),
