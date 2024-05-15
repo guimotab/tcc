@@ -54,12 +54,12 @@ const Message = ({ message }: ChatMessageProps) => {
           </MessagesContent>
         </MessagesBody>
 
-        <MessagesAvatar avatarFallBack={formAcronym(message.sender.name)} />
+        <MessagesAvatar src="" avatarFallBack={formAcronym(message.sender.name)} />
 
       </MessagesRoot>
       :
       <MessagesRoot>
-        <MessagesAvatar avatarFallBack={formAcronym(message.sender.name)} />
+        <MessagesAvatar src="" avatarFallBack={formAcronym(message.sender.name)} />
 
         <MessagesBody>
           <MessagesHeader>

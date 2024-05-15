@@ -81,28 +81,31 @@ const StepFour = ({ }: StepFourProps) => {
             <Label htmlFor="">Clique nas etapas ao lado para fazer alterações caso precise.</Label>
           </div>
           <div className="space-y-4">
-            <div className="space-y-5">
+            <div className="flex w-full">
 
-              <div>
-                <Label>Nome do grupo</Label>
-                <Input value={formSteps.nameGroup} readOnly />
+              <div className="space-y-5 w-full">
+
+                <div>
+                  <Label>Nome do grupo</Label>
+                  <Input value={formSteps.nameGroup} readOnly />
+                </div>
+
+                <div>
+                  <Label>Descriçao do grupo</Label>
+                  <Input value={formSteps.description} readOnly />
+                </div>
+
+                <div>
+                  <Label>Participantes</Label>
+                  <ul className="space-y-3">
+                    {formSteps.participants[0] &&
+                      formSteps.participants.map(participant =>
+                        <Participants key={participant.email} participant={participant} />
+                      )}
+                  </ul>
+                </div>
+
               </div>
-
-              <div>
-                <Label>Descriçao do grupo</Label>
-                <Input value={formSteps.description} readOnly />
-              </div>
-
-              <div>
-                <Label>Participantes</Label>
-                <ul className="space-y-3">
-                  {formSteps.participants[0] &&
-                    formSteps.participants.map(participant =>
-                      <Participants key={participant.email} participant={participant} />
-                    )}
-                </ul>
-              </div>
-
             </div>
 
             <div className="flex justify-center">
