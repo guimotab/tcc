@@ -63,7 +63,7 @@ export default function LoginForm({ signInPage, navigationTo }: LoginProps) {
   }
 
   function createToast(errorResponse: ResolveResponses) {
-    const [title, description] = errorResponse.resolveResponse()
+    const {title, description} = errorResponse.resolveResponse()
     toast(title, {
       description: description,
       action: {

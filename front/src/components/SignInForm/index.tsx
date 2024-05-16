@@ -72,7 +72,7 @@ const SignInForm = ({ loginPage, navigationTo }: SignInProps) => {
   }
 
   function createToast(resolveResponse: ResolveResponses) {
-    const [title, description] = resolveResponse.resolveResponse()
+    const {title, description} = resolveResponse.resolveResponse()
     toast(title, {
       description: description,
       action: {

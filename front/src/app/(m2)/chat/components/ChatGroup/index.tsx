@@ -42,7 +42,6 @@ const ChatGroup = ({ }: ChatGroupProps) => {
     readUnreadMessages(messages)
     addNewMessageToChat()
     findCurrentMessages()
-    console.log("🚀 ~ useEffect ~ messages:", messages)
   }, [recordChats])
 
   useLayoutEffect(() => {
