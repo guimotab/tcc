@@ -3,14 +3,13 @@ import Aside from "@/app/(m2)/components/Aside"
 import Groups from "./components/Groups"
 import ChatGroup from "./components/ChatGroup"
 import useCurrentUser from "../../../../states/hooks/useCurrentUser"
-import { Dispatch, SetStateAction, Suspense, createContext, useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import IGroup from "@/interfaces/IGroup"
 import GroupController from "@/controllers/GroupController"
 import ResolveResponses from "@/utils/resolveResponseErrors"
 import { toast } from "sonner"
-import IUserOnGroup from "@/interfaces/IUserOnGroup"
 import IUser from "@/interfaces/IUser"
-import { Socket, io } from "socket.io-client"
+import { io } from "socket.io-client"
 import MessagesController from "@/controllers/MessagesController"
 import RecordChats from "@/classes/RecordChats"
 import { IChatMessage } from "@/interfaces/IChatMessage"
@@ -24,7 +23,7 @@ env.config()
 const Chat = () => {
   const currentUser = useCurrentUser()
   const [canRender, setCanRender] = useState(false)
-  const [dataContext, setDataContext] = useState({} as IMessageContext)
+  const [messageContext, setMessageContext] = useState({} as IMessageContext)
   const [isAtEndOfChat, setIsAtEndOfChat] = useState(true)
   const urlBack = process.env.URL_BACKEND || "http://localhost:4000"
   const socket = io(`${urlBack}/chat`)
@@ -34,14 +33,14 @@ const Chat = () => {
   }, [])
 
   useEffect(() => {
-    if (dataContext.groups && dataContext.recordChats) {
-      handleSockets(dataContext.groups, dataContext.recordChats)
+    if (messageContext.groups && messageContext.recordChats) {
+      handleSockets(messageContext.groups, messageContext.recordChats)
       return () => {
         socket.off("message")
         socket.disconnect()
       }
     }
-  }, [dataContext])
+  }, [messageContext])
 
   async function load() {
     const respGroup = await GroupController.getAllByUserId(currentUser.id)
@@ -55,7 +54,7 @@ const Chat = () => {
 
       const recordChats = await MessagesController.tranformAllChatsToRecord(groups, 0, 3)
 
-      setDataContext({
+      setMessageContext({
         groups,
         userOnGroups,
         currentGroup,
@@ -63,7 +62,7 @@ const Chat = () => {
         recordChats,
         socket,
         isAtEndOfChat,
-        setDataContext
+        setDataContext: setMessageContext
       })
     } else {
       const errorResponse = new ResolveResponses(respGroup.resp)
@@ -80,7 +79,7 @@ const Chat = () => {
     const recordChatsClass = new RecordChats(recordChats)
     recordChatsClass.addRecordChat(chatId, { message, sender, chatId, statusMessage })
     const newRecordChat = [...recordChatsClass.recordChats]
-    setDataContext(prevState => ({ ...prevState, recordChats: newRecordChat }))
+    setMessageContext(prevState => ({ ...prevState, recordChats: newRecordChat }))
   }
 
   function createToast(errorResponse: ResolveResponses) {
@@ -98,13 +97,13 @@ const Chat = () => {
     <main className="flex h-full overflow-y-hidden">
       <Aside page="chat"></Aside>
 
-      <MessageContext.Provider value={dataContext}>
+      <MessageContext.Provider value={messageContext}>
         <Suspense fallback={<p>Carregando...</p>}>
           {canRender &&
-            (dataContext.groups?.length !== 0 ?
+            (messageContext.groups?.length !== 0 ?
               <>
                 <Groups />
-                {dataContext.currentGroup && <ChatGroup />}
+                {messageContext.currentGroup && <ChatGroup />}
               </>
               :
               <NoGroups />
