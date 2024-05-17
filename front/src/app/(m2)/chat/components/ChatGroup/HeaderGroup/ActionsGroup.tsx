@@ -4,10 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useContext } from "react";
-import { DataContext } from "../../../page";
+import { MessageContext } from "@/providers/MessageContext";
 
 const ActionsGroup = () => {
-  const { currentGroup } = useContext(DataContext)
+  const { currentGroup } = useContext(MessageContext)
   return (
     <div className="flex gap-5 items-center">
       <Link href={`activities/${currentGroup!.id}`}>

@@ -1,7 +1,6 @@
 "use client"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { useContext, useEffect, useState } from "react"
-import { DataContext } from "../../../page"
 import UserController from "@/controllers/UserController"
 import IUser from "@/interfaces/IUser"
 import IGroup from "@/interfaces/IGroup"
@@ -14,6 +13,7 @@ import GroupElapsedTime from "./GroupElapsedTime"
 import GroupRoot from "./GroupRoot"
 import GroupContent from "./GroupContent"
 import GroupMessages from "./GroupMessages"
+import { MessageContext } from "@/providers/MessageContext"
 
 interface GroupProps {
   group: IGroup
@@ -21,7 +21,7 @@ interface GroupProps {
 
 const Group = ({ group }: GroupProps) => {
   const oneMinute = 60000
-  const { currentGroup, groups, setDataContext, recordChats, isAtEndOfChat } = useContext(DataContext)
+  const { currentGroup, groups, setDataContext, recordChats, isAtEndOfChat } = useContext(MessageContext)
   const currentUser = useCurrentUser()
   const recordChatClass = new RecordChats(recordChats)
   const [lastMessage, setLastMessage] = useState<IChatMessage>()

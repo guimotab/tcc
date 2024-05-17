@@ -2,6 +2,7 @@ import IAxiosResponse from "@/interfaces/IAxiosResponse"
 import IUser from "@/interfaces/IUser"
 import HashUtils from "@/utils/HashUtils"
 import axios from "axios"
+import env from "dotenv"
 
 export interface IAuthResponse {
   token: string,
@@ -9,9 +10,12 @@ export interface IAuthResponse {
   user: IUser
 }
 
+env.config()
 export default class AuthService {
 
-  private url = "http://localhost:4000/auth"
+  private urlBack = process.env.URL_BACKEND || "http://localhost:4000"
+
+  private url = `${this.urlBack}/auth`
 
   async signUp(name: string, email: string, hashPassword: HashUtils) {
     const password = await hashPassword.generateSalt()

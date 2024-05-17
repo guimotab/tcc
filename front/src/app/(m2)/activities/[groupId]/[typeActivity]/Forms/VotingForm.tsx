@@ -5,7 +5,6 @@ import { Card } from "@/components/ui/card"
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -21,6 +20,7 @@ interface IFields {
   label: string
   placeholder: string
   type: HTMLInputTypeAttribute | "select" | "toggle" | "switch"
+  className?: string
 }
 
 interface LoginProps {
@@ -97,19 +97,19 @@ const VotingForm = () => {
       name: "name",
       label: "Nome da votação",
       type: "text",
-      placeholder: "Insira o nome da votação"
+      placeholder: "Insira o nome da votação",
     },
     {
       name: "participantsVoting",
       label: "Quem pode participar da votação?",
       type: "toggle",
-      placeholder: "Insira o nome da votação"
+      placeholder: "Insira o nome da votação",
     },
     {
       name: "name",
       label: "Votação com pesos personalizados?",
       type: "switch",
-      placeholder: "Insira o nome da votação"
+      placeholder: "Insira o nome da votação",
     },
   ] as IFields[]
 
@@ -119,7 +119,7 @@ const VotingForm = () => {
     <div className="flex flex-col gap-3">
       <h1 className="text-2xl font-semibold">Criar Votação</h1>
       <FormProvider {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col space-y-3">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-2 gap-x-8 gap-y-4">
 
           {fields.map(fieldForm =>
             <FormField
@@ -139,14 +139,14 @@ const VotingForm = () => {
                   {fieldForm.type === "toggle" &&
                     <ToggleGroup type="multiple" value={valuesParticipantsVoting} className="w-fit" onValueChange={handleParticipantsVoting}>
                       {toggleParticipantsVoting.map(toggle =>
-                        <ToggleGroupItem value={toggle} className="border">{toggle}</ToggleGroupItem>
+                        <ToggleGroupItem key={toggle} value={toggle} className="border">{toggle}</ToggleGroupItem>
                       )}
                     </ToggleGroup>
                   }
 
 
                   {fieldForm.type === "switch" &&
-                    <Card className="flex flex-col px-4 py-2.5 w-fit gap-2">
+                    <Card className="flex flex-col px-4 py-2.5 w-fit gap-2 col-start-2 row-start-1">
                       <div className="flex items-center gap-5">
                         <div className="flex flex-col gap-1">
                           <Label className="text-base">Habilitar votação com pesos personalizados</Label>
@@ -165,7 +165,7 @@ const VotingForm = () => {
             />
           )}
 
-          <Button type="submit">Criar</Button>
+          <Button type="submit" className="col-span-2">Criar</Button>
         </form>
       </FormProvider>
     </div>

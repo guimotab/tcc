@@ -1,5 +1,4 @@
 "use client"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import useCurrentUser from "../../../../../../../states/hooks/useCurrentUser"
 import dayjs from 'dayjs'
 import { formAcronym } from "@/utils/formAcronym"

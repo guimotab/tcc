@@ -1,13 +1,16 @@
 import IHttpResponse from "@/interfaces/IHttpResponse"
 import { messageResponse } from "@/types/messageResponse"
 import axios from "axios"
+import env from "dotenv"
 
 export default class HttpService<T, Resp> implements IHttpResponse<T, Resp> {
 
   protected url: string
 
   constructor(pathUrl: string) {
-    this.url = `http://localhost:4000/${pathUrl}`
+    env.config()
+    const urlFront = process.env.URL_BACKEND || "http://localhost:4000"
+    this.url = `${urlFront}/${pathUrl}`
   }
 
   async get(id: string) {

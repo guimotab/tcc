@@ -1,15 +1,15 @@
 "use client"
 import { ChangeEvent, Dispatch, RefObject, SetStateAction, useContext, useEffect, useRef, useState } from "react"
 import { IoSendSharp } from "react-icons/io5"
-import { DataContext } from "../../page"
 import useCurrentUser from "../../../../../../states/hooks/useCurrentUser"
+import { MessageContext } from "@/providers/MessageContext"
 
 interface ChatInputProps {
 }
 
 const ChatInput = ({  }: ChatInputProps) => {
   const currentUser = useCurrentUser()
-  const { currentGroup, socket } = useContext(DataContext)
+  const { currentGroup, socket } = useContext(MessageContext)
   const [fieldChat, setFieldChat] = useState("")
   const inputChat = useRef<HTMLTextAreaElement>(null)
 

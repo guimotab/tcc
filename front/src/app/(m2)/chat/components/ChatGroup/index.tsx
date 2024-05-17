@@ -1,6 +1,5 @@
 "use client"
 import { useContext, useEffect, useLayoutEffect, useRef, useState } from "react"
-import { DataContext } from "../../page"
 import MessagesController from "@/controllers/MessagesController"
 import ChatInput from "./ChatInput"
 import Message from "./Messages"
@@ -12,12 +11,13 @@ import { IChatMessage } from "@/interfaces/IChatMessage"
 import useCurrentUser from "../../../../../../states/hooks/useCurrentUser"
 import { IRecordChat } from "@/interfaces/IRecordChat"
 import { Label } from "@/components/ui/label"
+import { MessageContext } from "@/providers/MessageContext"
 
 interface ChatGroupProps {
 }
 
 const ChatGroup = ({ }: ChatGroupProps) => {
-  const { currentGroup, groups, recordChats, setDataContext, isAtEndOfChat } = useContext(DataContext)
+  const { currentGroup, groups, recordChats, setDataContext, isAtEndOfChat } = useContext(MessageContext)
   const currentUser = useCurrentUser()
   const scrollChatRef = useRef<HTMLUListElement | null>(null)
   const recordChatClass = new RecordChats(recordChats)

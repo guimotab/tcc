@@ -62,6 +62,7 @@ export default abstract class EmailController {
   }
 
   static async sendEmail({ from, link, to }: reqBodyEmail) {
+    const urlBack = process.env.URLBACK || "http://localhost:3000"
     await transporter.sendMail({
       from: `"ChatWorker" <${from.email}>`, // sender address
       to: to.email, // list of receivers "guimota22@gmail.com, baz@example.com"
@@ -72,7 +73,7 @@ export default abstract class EmailController {
           <p>Você foi convidado(a) pelo ${from.name} (${from.role} do projeto ${from.project}) ${to.role === "Usuário" ? "" : `com o cargo de ${to.role.toLowerCase()}!`}</p>
           <p>Para aceitar o convite, basta clicar no link abaixo 👇</p>
           <br />
-          <a href="http://localhost:3000/invites/${link}">https://chatworker/invites/${link}</a>
+          <a href="${urlBack}/invites/${link}">https://chatworker/invites/${link}</a>
           `
     });
   }

@@ -1,18 +1,18 @@
 "use client"
 import { Separator } from "@/components/ui/separator"
 import { useContext, useEffect, useState } from "react"
-import { DataContext } from "../../page"
 import Group from "./Group"
 import RecordChats from "@/classes/RecordChats"
 import IGroup from "@/interfaces/IGroup"
 import dayjs from "dayjs"
 import { Label } from "@/components/ui/label"
+import { MessageContext } from "@/providers/MessageContext"
 
 interface GroupsProps {
 }
 
 const Groups = ({ }: GroupsProps) => {
-  const { groups, recordChats } = useContext(DataContext)
+  const { groups, recordChats } = useContext(MessageContext)
   const recordChatsClass = new RecordChats(recordChats)
   const [groupsOrdenedByTime, setGroupsOrdenedByTime] = useState<IGroup[]>()
 

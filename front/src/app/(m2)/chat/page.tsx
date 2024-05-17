@@ -16,25 +16,18 @@ import RecordChats from "@/classes/RecordChats"
 import { IChatMessage } from "@/interfaces/IChatMessage"
 import { IRecordChat } from "@/interfaces/IRecordChat"
 import NoGroups from "./components/NoGroups"
+import env from "dotenv"
+import { IMessageContext, MessageContext } from "@/providers/MessageContext"
 
-interface IDataContext {
-  groups: IGroup[] | undefined
-  userOnGroups: IUserOnGroup[] | []
-  currentUsers: IUser[] | []
-  currentGroup: IGroup | undefined
-  recordChats: IRecordChat[]
-  socket: Socket
-  isAtEndOfChat: boolean
-  setDataContext: Dispatch<SetStateAction<IDataContext>>
-}
+env.config()
 
-export const DataContext = createContext<IDataContext>({} as IDataContext);
 const Chat = () => {
   const currentUser = useCurrentUser()
   const [canRender, setCanRender] = useState(false)
-  const [dataContext, setDataContext] = useState({} as IDataContext)
+  const [dataContext, setDataContext] = useState({} as IMessageContext)
   const [isAtEndOfChat, setIsAtEndOfChat] = useState(true)
-  const socket = io("http://localhost:4000/chat")
+  const urlBack = process.env.URL_BACKEND || "http://localhost:4000"
+  const socket = io(`${urlBack}/chat`)
 
   useEffect(() => {
     load()
@@ -105,7 +98,7 @@ const Chat = () => {
     <main className="flex h-full overflow-y-hidden">
       <Aside page="chat"></Aside>
 
-      <DataContext.Provider value={dataContext}>
+      <MessageContext.Provider value={dataContext}>
         <Suspense fallback={<p>Carregando...</p>}>
           {canRender &&
             (dataContext.groups?.length !== 0 ?
@@ -118,7 +111,7 @@ const Chat = () => {
             )
           }
         </Suspense>
-      </DataContext.Provider>
+      </MessageContext.Provider>
     </main>
   )
 }
