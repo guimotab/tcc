@@ -62,7 +62,7 @@ export default abstract class EmailController {
   }
 
   static async sendEmail({ from, link, to }: reqBodyEmail) {
-    const urlBack = process.env.URLBACK || "http://localhost:3000"
+    const urlBack = process.env.URL_FRONT || "http://localhost:3000"
     await transporter.sendMail({
       from: `"ChatWorker" <${from.email}>`, // sender address
       to: to.email, // list of receivers "guimota22@gmail.com, baz@example.com"

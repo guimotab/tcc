@@ -7,12 +7,14 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+import defaultRoles from "@/types/defaultRoles"
 import { zodResolver } from "@hookform/resolvers/zod"
+import React from "react"
 import { HTMLInputTypeAttribute, useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { z } from "zod"
 
-type nameFields = "name" | "participantsVoting"
+type nameFields = "name" | "participantsVoting" | "weightedVoting"
 type participantsVotingTypes = "Todos" | "Admin" | "Editor" | "Usuário"
 
 interface IFields {
@@ -20,7 +22,7 @@ interface IFields {
   label: string
   placeholder: string
   type: HTMLInputTypeAttribute | "select" | "toggle" | "switch"
-  className?: string
+  classNameDiv?: string
 }
 
 interface LoginProps {
@@ -32,17 +34,20 @@ const VotingForm = () => {
   const [valuesParticipantsVoting, setValuesParticipantsVoting] = useState<participantsVotingTypes[]>([])
 
   const [isWeightedVoting, setIsWeightedVoting] = useState(false)
+  const [roleWeight, setRoleWeight] = useState({ Admin: "1", Editor: "1", Líder: "1", Usuário: "1" } as Record<defaultRoles, "1" | "2" | "3">)
 
   const formSchema = z.object({
     name: z.string().min(1, "O email é obrigatório").email("Email inválido"),
     participantsVoting: z.string().min(1, "A senha é obrigatória"),
+    weightedVoting: z.boolean()
   })
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "guimota22@gmail.com",
-      participantsVoting: "1234"
+      participantsVoting: "1234",
+      weightedVoting: false
     },
   })
 
@@ -92,6 +97,13 @@ const VotingForm = () => {
     setValuesParticipantsVoting(values)
   }
 
+  function handleWeightVoting(key: defaultRoles, value: "1" | "2" | "3") {
+    if (!value) {
+      return
+    }
+    setRoleWeight(prev => ({ ...prev, [key]: value }))
+  }
+
   const fields = [
     {
       name: "name",
@@ -104,65 +116,101 @@ const VotingForm = () => {
       label: "Quem pode participar da votação?",
       type: "toggle",
       placeholder: "Insira o nome da votação",
+      classNameDiv: "row-start-2 col-start-1 h-full"
     },
     {
-      name: "name",
+      name: "weightedVoting",
       label: "Votação com pesos personalizados?",
       type: "switch",
       placeholder: "Insira o nome da votação",
+      classNameDiv: "row-span-2"
     },
   ] as IFields[]
 
   const toggleParticipantsVoting = ["Todos", "Admin", "Editor", "Usuário"] as participantsVotingTypes[]
 
+  const weightVotes = ["1", "2", "3"] as string[]
+
   return (
     <div className="flex flex-col gap-3">
       <h1 className="text-2xl font-semibold">Criar Votação</h1>
       <FormProvider {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-2 gap-x-8 gap-y-4">
-
+        <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-2 grid-rows-[auto_1fr] gap-x-8 gap-y-5 justify-start">
           {fields.map(fieldForm =>
-            <FormField
-              key={fieldForm.name}
-              control={form.control}
-              name={fieldForm.name}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{fieldForm.label}</FormLabel>
+            <React.Fragment key={fieldForm.name}>
+              {fieldForm.name !== "weightedVoting" &&
+                <FormField
+                  control={form.control}
+                  name={fieldForm.name}
+                  render={({ field }) => (
+                    <FormItem className={fieldForm.classNameDiv}>
+                      <FormLabel>{fieldForm.label}</FormLabel>
 
-                  {fieldForm.type === "text" &&
-                    <FormControl>
-                      <Input type={fieldForm.type} placeholder={fieldForm.placeholder}{...field} />
-                    </FormControl>
-                  }
+                      {fieldForm.type === "text" &&
+                        <FormControl>
+                          <Input type={fieldForm.type} placeholder={fieldForm.placeholder} {...field} />
+                        </FormControl>
+                      }
 
-                  {fieldForm.type === "toggle" &&
-                    <ToggleGroup type="multiple" value={valuesParticipantsVoting} className="w-fit" onValueChange={handleParticipantsVoting}>
-                      {toggleParticipantsVoting.map(toggle =>
-                        <ToggleGroupItem key={toggle} value={toggle} className="border">{toggle}</ToggleGroupItem>
-                      )}
-                    </ToggleGroup>
-                  }
+                      {fieldForm.type === "toggle" &&
+                        <ToggleGroup type="multiple" value={valuesParticipantsVoting} className="w-fit" onValueChange={handleParticipantsVoting}>
+                          {toggleParticipantsVoting.map(toggle =>
+                            <ToggleGroupItem key={toggle} value={toggle} className="border">{toggle}</ToggleGroupItem>
+                          )}
+                        </ToggleGroup>
+                      }
 
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              }
+              {fieldForm.name === "weightedVoting" &&
+                <FormField
+                  key={fieldForm.name}
+                  control={form.control}
+                  name={fieldForm.name}
+                  render={({ field }) => (
+                    <FormItem className={fieldForm.classNameDiv}>
+                      {fieldForm.type === "switch" &&
+                        <>
+                          <FormLabel>{fieldForm.label}</FormLabel>
+                          <Card className="flex flex-col px-4 py-2.5 w-fit gap-4 col-start-2 row-start-1">
+                            <div className="flex items-center gap-5">
+                              <div className="flex flex-col gap-1">
+                                <Label className="text-base">Habilitar votação com pesos personalizados</Label>
+                                <Label className="text-slate-500 font-medium">Ative essa opção para personalizar o peso dos votos de cada cargo</Label>
+                              </div>
+                              <Switch onCheckedChange={setIsWeightedVoting} />
+                            </div>
 
-                  {fieldForm.type === "switch" &&
-                    <Card className="flex flex-col px-4 py-2.5 w-fit gap-2 col-start-2 row-start-1">
-                      <div className="flex items-center gap-5">
-                        <div className="flex flex-col gap-1">
-                          <Label className="text-base">Habilitar votação com pesos personalizados</Label>
-                          <Label className="text-slate-500 font-medium">Ative essa opção para personalizar o peso dos votos de cada cargo</Label>
-                        </div>
-                        <Switch onCheckedChange={setIsWeightedVoting} />
-                      </div>
+                            {isWeightedVoting &&
+                              <div className="space-y-3">
+                                <Label className="text-base">Pesos do voto</Label>
+                                <div className="grid grid-cols-[auto_auto] gap-3 w-full grid-">
+                                  {Object.entries(roleWeight).map(([key, value]) =>
+                                    <div className="flex max-w-[11rem] w-full justify-between items-center gap-3">
+                                      <Label>{key}</Label>
+                                      <ToggleGroup type="single" value={value} className="w-fit" onValueChange={event => handleWeightVoting(key as defaultRoles, event as "1" | "2" | "3")}>
+                                        {weightVotes.map(weight =>
+                                          <ToggleGroupItem key={weight} value={weight} className="border h-7 w-9">{weight}</ToggleGroupItem>
+                                        )}
+                                      </ToggleGroup>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            }
+                          </Card>
+                        </>
+                      }
 
-                      {isWeightedVoting && "sim"}
-                    </Card>
-                  }
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              }
+            </React.Fragment>
           )}
 
           <Button type="submit" className="col-span-2">Criar</Button>
