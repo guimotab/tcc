@@ -4,11 +4,7 @@ import { Label } from "@/components/ui/label"
 import stepCreateGroup from "@/types/stepCreateGroup"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useContext } from "react"
-import { FormChatContext } from "../../page"
-import { Table, TableCaption, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
-import { FaCheck } from "react-icons/fa";
-import { IoWarningOutline } from "react-icons/io5";
-import defaultRoles from "@/types/defaultRoles"
+import { FormChatContext } from "@/providers/FormChatContext"
 import AssignRoles from "./AssignRoles"
 import RolesDescription from "./RolesDescription"
 import FormCreateGroup from "@/classes/FormCreateGroup"

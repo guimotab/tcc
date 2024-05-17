@@ -13,7 +13,7 @@ export interface IAuthResponse {
 env.config()
 export default class AuthService {
 
-  private urlBack = process.env.URL_BACKEND || "http://localhost:4000"
+  private urlBack = process.env.NEXT_PUBLIC_URL_BACKEND || "http://localhost:4000"
 
   private url = `${this.urlBack}/auth`
 

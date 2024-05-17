@@ -6,18 +6,14 @@ import { useSearchParams } from "next/navigation"
 import StepOne from "./components/StepOne"
 import stepCreateGroup from "@/types/stepCreateGroup"
 import StepTwo from "./components/StepTwo"
-import { Dispatch, SetStateAction, createContext, useState } from "react"
+import { useState } from "react"
 import StepThree from "./components/StepThree"
 import StepFour from "./components/StepFour"
 import IFormCreateGroup from "@/interfaces/IFormCreateGroup"
 import useCurrentUser from "../../../../states/hooks/useCurrentUser"
+import { FormChatContext } from "@/providers/FormChatContext"
 
-interface IContext {
-  formStepsContext: IFormCreateGroup
-  setFormStepsContext: Dispatch<SetStateAction<IFormCreateGroup>>
-}
 
-export const FormChatContext = createContext({} as IContext)
 
 const Chat = () => {
   const searchParams = useSearchParams()
@@ -46,7 +42,7 @@ const Chat = () => {
               <StepTwo />
 
               <StepThree />
- 
+
               <StepFour />
 
             </FormChatContext.Provider>

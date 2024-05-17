@@ -9,7 +9,7 @@ export default class HttpService<T, Resp> implements IHttpResponse<T, Resp> {
 
   constructor(pathUrl: string) {
     env.config()
-    const urlFront = process.env.URL_BACKEND || "http://localhost:4000"
+    const urlFront = process.env.NEXT_PUBLIC_URL_BACKEND || "http://localhost:4000"
     this.url = `${urlFront}/${pathUrl}`
   }
 

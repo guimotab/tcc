@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useContext } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
-import { FormChatContext } from "../../page";
+import { FormChatContext } from "@/providers/FormChatContext"
 import FormCreateGroup from "@/classes/FormCreateGroup";
 
 

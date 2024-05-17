@@ -1,6 +1,6 @@
 import IParticipantsGroup from "@/interfaces/IParticipantsGroup";
 import { useContext } from "react";
-import { FormChatContext } from "../../page";
+import { FormChatContext } from "@/providers/FormChatContext"
 import { Card } from "@/components/ui/card";
 import { AiOutlineUserDelete } from "react-icons/ai";
 import { Label } from "@/components/ui/label";

@@ -25,7 +25,7 @@ const Chat = () => {
   const [canRender, setCanRender] = useState(false)
   const [messageContext, setMessageContext] = useState({} as IMessageContext)
   const [isAtEndOfChat, setIsAtEndOfChat] = useState(true)
-  const urlBack = process.env.URL_BACKEND || "http://localhost:4000"
+  const urlBack = process.env.NEXT_PUBLIC_URL_BACKEND || "http://localhost:4000"
   const socket = io(`${urlBack}/chat`)
 
   useEffect(() => {

@@ -8,7 +8,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { Dispatch, SetStateAction, useContext } from "react"
 import { useForm, FormProvider } from "react-hook-form"
 import { z } from "zod"
-import { FormChatContext } from "../page"
+import { FormChatContext } from "@/providers/FormChatContext"
 
 type formNames = "nameGroup" | "description"
 
