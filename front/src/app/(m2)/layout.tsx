@@ -1,22 +1,31 @@
-"use client"
 import { Toaster } from "@/components/ui/toaster";
 import "../globals.css";
-import VerifySession from "@/providers/VerifySession";
 import { Suspense } from "react";
+import nextAuthOptions from "@/app/api/nextAuthOptions";
+import { Metadata } from "next";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
-export default function RootLayout({
+export const metadata: Metadata = {
+  title: "ChatWorker",
+};
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getServerSession(nextAuthOptions)
+  if (!session) {
+    redirect("/")
+  }
+
   return (
     <body className="h-screen">
-      <VerifySession redirectErrorNoToken="/">
-        <Toaster />
-        <Suspense fallback={<p>teste...</p>}>
-          {children}
-        </Suspense>
-      </VerifySession>
+      <Toaster />
+      <Suspense fallback={<p>teste...</p>}>
+        {children}
+      </Suspense>
     </body>
   );
 }

@@ -1,5 +1,5 @@
 import IHttpResponse from "@/interfaces/IHttpResponse"
-import { messageResponse } from "@/types/messageResponse"
+import { MessageResponse } from "@/types/MessageResponse"
 import axios from "axios"
 
 export default class HttpService<T, Resp> implements IHttpResponse<T, Resp> {
@@ -7,7 +7,8 @@ export default class HttpService<T, Resp> implements IHttpResponse<T, Resp> {
   protected url: string
 
   constructor(pathUrl: string) {
-    this.url = `http://localhost:4000/${pathUrl}`
+    const url = process.env.NEXTAUTH_URL || "http://localhost:3000/api"
+    this.url = `${url}/${pathUrl}`
   }
 
   async get(id: string) {
@@ -32,7 +33,7 @@ export default class HttpService<T, Resp> implements IHttpResponse<T, Resp> {
 
   protected handleError(error: any) {
     console.log(error)
-    return { data: { resp: "AxiosError" } } as { data: { resp: messageResponse } }
+    return { data: { resp: "AxiosError" } } as { data: { resp: MessageResponse } }
   }
 
 }

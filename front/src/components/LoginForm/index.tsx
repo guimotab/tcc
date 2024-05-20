@@ -12,8 +12,7 @@ import { useRouter } from "next/navigation";
 import { HTMLInputTypeAttribute } from "react";
 import ResolveResponses from "@/utils/resolveResponseErrors";
 import { toast } from "sonner";
-import AuthController from "@/controllers/AuthController";
-import { useUpdateCurrentUser } from "../../../states/hooks/useUpdateCurrentUser";
+import { signIn } from "next-auth/react";
 
 type nameFields = "email" | "password"
 
@@ -31,7 +30,6 @@ interface LoginProps {
 
 export default function LoginForm({ signInPage, navigationTo }: LoginProps) {
   const router = useRouter()
-  const setCurrentUser = useUpdateCurrentUser()
 
   const formSchema = z.object({
     email: z.string().min(1, "O email é obrigatório").email("Email inválido"),
@@ -50,15 +48,17 @@ export default function LoginForm({ signInPage, navigationTo }: LoginProps) {
     const email = values.email
     const password = values.password
 
-    const resp = await AuthController.login(email, password)
+    const result = await signIn("credentials" , {
+      email,
+      password,
+      redirect: false
+    })
 
-    if (!resp.data) {
-      const errorResponse = new ResolveResponses(resp.resp)
+    if (result?.error) {
+      const errorResponse = new ResolveResponses("ServerError")
       createToast(errorResponse)
       return
     }
-    //inicia um histórico novo
-    setCurrentUser(resp.data!.user)
     router.replace(navigationTo)
   }
 

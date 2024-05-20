@@ -2,20 +2,20 @@ import IAxiosResponse from "@/interfaces/IAxiosResponse"
 import IGroup from "@/interfaces/IGroup"
 import axios from "axios"
 import HttpService from "./HttpService"
-import { messageResponse } from "@/types/messageResponse"
+import { MessageResponse } from "@/types/MessageResponse"
 import IInvites from "@/interfaces/IInvites"
 import IUser from "@/interfaces/IUser"
 import IUserOnGroup from "@/interfaces/IUserOnGroup"
 
 export interface IGroupResponse {
-  resp: messageResponse
+  resp: MessageResponse
   data?: {
     group: IGroup
   }
 }
 
 export interface IGroupArrayResponse {
-  resp: messageResponse
+  resp: MessageResponse
   data?: {
     groups: IGroup[]
     users: IUser[]

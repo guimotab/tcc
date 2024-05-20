@@ -1,28 +1,28 @@
 import IAxiosResponse from "@/interfaces/IAxiosResponse"
 import axios from "axios"
 import HttpService from "./HttpService"
-import { messageResponse } from "@/types/messageResponse"
+import { MessageResponse } from "@/types/MessageResponse"
 import IMessage from "@/interfaces/Chats/IMessage"
 import { responseRecordMessage } from "@/controllers/MessagesController"
 import IStatusMessage from "@/interfaces/Chats/IStatusMessage"
 import IUser from "@/interfaces/IUser"
 
 export interface IMessageResponse {
-  resp: messageResponse
+  resp: MessageResponse
   data?: {
     messages: IMessage
   }
 }
 
 export interface IStatusMessageResponse {
-  resp: messageResponse
+  resp: MessageResponse
   data?: {
     statusMessages: IStatusMessage[]
   }
 }
 
 export interface IMessageArrayResponse {
-  resp: messageResponse
+  resp: MessageResponse
   data?: responseRecordMessage
 }
 

@@ -2,10 +2,10 @@ import IAxiosResponse from "@/interfaces/IAxiosResponse"
 import axios from "axios"
 import HttpService from "./HttpService"
 import IInvites from "@/interfaces/IInvites"
-import { messageResponse } from "@/types/messageResponse"
+import { MessageResponse } from "@/types/MessageResponse"
 
 export interface IInvitesResponse {
-  resp: messageResponse
+  resp: MessageResponse
   data: {
     invites: IInvites
   }
