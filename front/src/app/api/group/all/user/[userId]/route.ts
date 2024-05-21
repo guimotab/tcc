@@ -14,7 +14,7 @@ export async function GET(request: Request,
   const { userId } = params
 
   try {
-    const userOnGroups = await prismaPg.userOnGroup.findMany({ where: { userId } })
+    const userOnGroups = await prismaPg.userOnGroup.findMany({ where: { userId }, include: { user: true } })
     if (!userOnGroups) {
       return NextResponse.json({ resp: "GroupNotFound", status: 400 } as IApiResponse)
     }
@@ -29,7 +29,7 @@ export async function GET(request: Request,
     }).filter(group => group !== undefined)) as IGroup[]
 
 
-    return NextResponse.json({ resp: "Success", data: groups, status: 200 } as IApiResponse)
+    return NextResponse.json({ resp: "Success", data: { groups, userOnGroups }, status: 200 } as IApiResponse)
   } catch (err) {
     console.log(err);
     return NextResponse.json({ resp: "ServerError", status: 500 })

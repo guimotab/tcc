@@ -1,4 +1,3 @@
-import IAxiosResponse from "@/interfaces/IAxiosResponse";
 import IInvites from "@/interfaces/IInvites";
 import InvitesService, { IInvitesResponse } from "@/service/InvitesService";
 

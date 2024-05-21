@@ -4,14 +4,10 @@ import { Label } from "@/components/ui/label"
 import stepCreateGroup from "@/types/stepCreateGroup"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useContext } from "react"
-import { FormChatContext } from "../../page"
-import { Table, TableCaption, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
-import { FaCheck } from "react-icons/fa";
-import { IoWarningOutline } from "react-icons/io5";
-import defaultRoles from "@/types/defaultRoles"
 import AssignRoles from "./AssignRoles"
 import RolesDescription from "./RolesDescription"
 import FormCreateGroup from "@/classes/FormCreateGroup"
+import { CreateChatContext } from "@/providers/CreateChatContext"
 
 interface StepThreeProps {
 }
@@ -19,7 +15,7 @@ const StepThree = ({ }: StepThreeProps) => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const stepURL = searchParams.get("step") as stepCreateGroup
-  const { formStepsContext, setFormStepsContext } = useContext(FormChatContext)
+  const { formStepsContext, setFormStepsContext } = useContext(CreateChatContext)
   const formSteps = new FormCreateGroup(formStepsContext)
 
   function nextStep() {

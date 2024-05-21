@@ -2,13 +2,13 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Label } from "@/components/ui/label"
 import { useContext } from "react"
-import { DataContext } from "../../../page"
 import { formAcronym } from "@/utils/formAcronym"
 import ActionsGroup from "./ActionsGroup"
+import { ChatContext } from "@/providers/ChatContext"
 
 
 const HeaderGroup = () => {
-  const { currentGroup, currentUsers } = useContext(DataContext)
+  const { currentGroup, currentUsers } = useContext(ChatContext)
   const groupAcronym = currentGroup ? formAcronym(currentGroup.name, 2) : ""
 
   return currentGroup && (

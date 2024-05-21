@@ -10,7 +10,7 @@ interface reqParams {
 export async function GET(request: Request,
   { params }: { params: reqParams },
   res: NextApiResponse) {
-  const { id } = params
+  const { id } = params 
 
   try {
     const user = await prismaPg.user.findUnique({ where: { id } })

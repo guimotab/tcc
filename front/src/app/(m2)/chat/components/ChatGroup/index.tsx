@@ -1,6 +1,5 @@
 "use client"
 import { useContext, useEffect, useLayoutEffect, useRef, useState } from "react"
-import { DataContext } from "../../page"
 import MessagesController from "@/controllers/MessagesController"
 import ChatInput from "./ChatInput"
 import Message from "./Messages"
@@ -9,16 +8,16 @@ import { setTimeout } from "timers"
 import LoadingMessage from "../LoadingMessages"
 import RecordChats from "@/classes/RecordChats"
 import { IChatMessage } from "@/interfaces/IChatMessage"
-import useCurrentUser from "../../../../../../states/hooks/useCurrentUser"
 import { IRecordChat } from "@/interfaces/IRecordChat"
-import { Label } from "@/components/ui/label"
+import { ChatContext } from "@/providers/ChatContext"
+import { Session } from "next-auth"
 
 interface ChatGroupProps {
+  session: Session
 }
 
-const ChatGroup = ({ }: ChatGroupProps) => {
-  const { currentGroup, groups, recordChats, setDataContext, isAtEndOfChat } = useContext(DataContext)
-  const currentUser = useCurrentUser()
+const ChatGroup = ({ session }: ChatGroupProps) => {
+  const { currentGroup, groups, recordChats, setDataContext, isAtEndOfChat } = useContext(ChatContext)
   const scrollChatRef = useRef<HTMLUListElement | null>(null)
   const recordChatClass = new RecordChats(recordChats)
   const [messages, setMessages] = useState<IChatMessage[]>([])
@@ -124,7 +123,7 @@ const ChatGroup = ({ }: ChatGroupProps) => {
   }
 
   async function readUnreadMessages(chats: IChatMessage[]) {
-    const lastMessageIsRead = checkLastMessageWasRead(chats) 
+    const lastMessageIsRead = checkLastMessageWasRead(chats)
     if (!lastMessageIsRead) {
       readNewMessages(chats)
     }
@@ -173,7 +172,7 @@ const ChatGroup = ({ }: ChatGroupProps) => {
   }
 
   async function readNewMessages(chats: IChatMessage[]) {
-    const respMessage = await MessagesController.ReadMessages(currentGroup!, currentUser, recordChatClass, chats)
+    const respMessage = await MessagesController.ReadMessages(currentGroup!, session.user, recordChatClass, chats)
 
     if (respMessage) {
       setDataContext(prevState => ({ ...prevState, recordChats: recordChatClass.recordChats }))
@@ -184,9 +183,9 @@ const ChatGroup = ({ }: ChatGroupProps) => {
   function checkLastMessageWasRead(chats: IChatMessage[]) {
     const sizeArrayChat = chats.length
     if (sizeArrayChat) {
-      const currentUserIsSender = chats[sizeArrayChat - 1].sender.idUser === currentUser.id
+      const currentUserIsSender = chats[sizeArrayChat - 1].sender.idUser === session.user.id
       const lastMessageIsRead = chats[sizeArrayChat - 1].statusMessage.readBy?.find(readBy => {
-        return readBy.userId === currentUser.id
+        return readBy.userId === session.user.id
       })
       if (!currentUserIsSender && !lastMessageIsRead) {
         return false
@@ -221,11 +220,14 @@ const ChatGroup = ({ }: ChatGroupProps) => {
             className={`flex flex-col w-full max-h-[calc(100vh-(72px))] gap-6 overflow-y-auto overflow-x-hidden px-5 py-7`}>
             {isLoadingOldestMessages && <LoadingMessage />}
             {messages.map(message =>
-              <Message key={message.message.id} message={message} />
+              <Message
+                key={message.message.id}
+                session={session}
+                message={message} />
             )}
           </ul>
 
-          <ChatInput />
+          <ChatInput session={session} />
 
         </div>
       </div>

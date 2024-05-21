@@ -20,6 +20,7 @@ const nextAuthOptions = {
       async authorize(credentials, req) {
         if (credentials) {
           const response = await AuthController.login(credentials.email, credentials.password)
+          console.log("🚀 ~ authorize ~ response.data:", response)
           if (response.data) {
             const user = response.data
             return user

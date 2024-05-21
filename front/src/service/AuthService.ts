@@ -18,7 +18,7 @@ export default class AuthService {
     const result = await axios.get(`${this.url}/${email}/${password}`).catch(this.handleError)
     return result.data as IAxiosResponse<IUser>
   }
-
+ 
   private handleError(error: any) {
     console.log(error)
     return { data: { resp: "AxiosError" } }

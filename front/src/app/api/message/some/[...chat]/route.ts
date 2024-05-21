@@ -4,18 +4,17 @@ import IApiResponse from "@/interfaces/api/IApiResponse";
 import ISender from "@/interfaces/Chats/ISender";
 import IStatusMessage from "@/interfaces/Chats/IStatusMessage";
 import fixId from "@/utils/fixId";
+import { NextResponse } from "next/server";
 
 interface reqParams {
-  chatId: string
-  skip: string 
-  take: string
+  chat: string[]
 }
 
 export async function GET(request: Request,
   { params }: { params: reqParams },
   res: NextApiResponse) {
 
-  const { chatId, skip, take } = params
+  const [chatId, skip, take] = params.chat
   const idFixed = fixId(chatId)
   const skipNumber = Number(skip)
   const takeNumber = Number(take)
@@ -53,11 +52,10 @@ export async function GET(request: Request,
       hasMoreMessagesToLoad = true
     }
 
-    return res.status(200).json({ resp: "Success", data: { messages, senders, statusMessages, hasMoreMessagesToLoad } } as IApiResponse)
+    return NextResponse.json({ resp: "Success", data: { messages, senders, statusMessages, hasMoreMessagesToLoad }, status: 200 } as IApiResponse)
 
   } catch (err) {
-
     console.log(err);
-    return res.json({ resp: "ServerError" } as IApiResponse)
+    return NextResponse.json({ resp: "ServerError", status: 500 } as IApiResponse)
   }
 }

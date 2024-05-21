@@ -5,7 +5,6 @@ import { Card } from "@/components/ui/card"
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -116,7 +115,7 @@ const VotingForm = () => {
   const toggleParticipantsVoting = ["Todos", "Admin", "Editor", "Usuário"] as participantsVotingTypes[]
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 px-8">
       <h1 className="text-2xl font-semibold">Criar Votação</h1>
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col space-y-3">
@@ -138,8 +137,8 @@ const VotingForm = () => {
 
                   {fieldForm.type === "toggle" &&
                     <ToggleGroup type="multiple" value={valuesParticipantsVoting} className="w-fit" onValueChange={handleParticipantsVoting}>
-                      {toggleParticipantsVoting.map(toggle =>
-                        <ToggleGroupItem value={toggle} className="border">{toggle}</ToggleGroupItem>
+                      {toggleParticipantsVoting.map((toggle, index) =>
+                        <ToggleGroupItem key={index} value={toggle} className="border">{toggle}</ToggleGroupItem>
                       )}
                     </ToggleGroup>
                   }

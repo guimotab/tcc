@@ -29,7 +29,7 @@ export interface IMessageArrayResponse {
 export default class MessageService extends HttpService<IMessage, IMessageResponse> {
   
   constructor() {
-    super("messages")
+    super("message")
   }
 
   /**

@@ -46,7 +46,6 @@ export default abstract class MessagesController {
       messageId: message.message.id,
       readBy: message.statusMessage.readBy
     } as IStatusMessage))
-    console.log("🚀 ~ MessagesController ~ unreadMessages ~ unreadMessages:", unreadMessages)
 
     const respStatusMessage = await this._messageService.readMessages(unreadMessages, currentUser) as IStatusMessageResponse 
 

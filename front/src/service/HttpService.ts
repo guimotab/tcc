@@ -7,8 +7,8 @@ export default class HttpService<T, Resp> implements IHttpResponse<T, Resp> {
   protected url: string
 
   constructor(pathUrl: string) {
-    const url = process.env.NEXTAUTH_URL || "http://localhost:3000/api"
-    this.url = `${url}/${pathUrl}`
+    const url = process.env.NEXTAUTH_URL || "http://localhost:3000"
+    this.url = `${url}/api/${pathUrl}`
   }
 
   async get(id: string) {
