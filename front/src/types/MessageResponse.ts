@@ -1,4 +1,5 @@
 export type MessageResponse = "Success" |
+  "AxiosError" |
   "ServerError" |
   "EmailAlreadyUsed" |
   "IncorrectCredentials" |
