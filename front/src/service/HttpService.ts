@@ -7,7 +7,7 @@ export default class HttpService<T, Resp> implements IHttpResponse<T, Resp> {
   protected url: string
 
   constructor(pathUrl: string) {
-    const url = process.env.NEXTAUTH_URL || "http://localhost:3000"
+    const url = process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_URL || "http://localhost:3000"
     this.url = `${url}/api/${pathUrl}`
   }
 
