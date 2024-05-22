@@ -26,12 +26,10 @@ export interface IMessageArrayResponse {
   data?: responseRecordMessage
 }
 
-export default class MessageService extends HttpService<IMessage, IMessageResponse> {
+export default class MessageService {
   
-  constructor() {
-    super("message")
-  }
-
+  private apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000"
+  private url = `${this.apiUrl}/messages`
   /**
    * Modifica o status das mensagens de não lidas para lidas
    * @param statusMessages mensagens que serão modificadas o seu status
@@ -52,4 +50,8 @@ export default class MessageService extends HttpService<IMessage, IMessageRespon
     return result.data
   }
 
+  protected handleError(error: any) {
+    console.log(error)
+    return { data: { resp: "AxiosError" } } as { data: { resp: MessageResponse } }
+  }
 }

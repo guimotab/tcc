@@ -1,7 +1,5 @@
-import { PrismaClient as prismaPgClient } from "../../prisma/generated/postgre"
-import { PrismaClient as prismaMongoClient } from "../../prisma/generated/mongo"
+import { PrismaClient } from "@prisma/client"
 
-const prismaPg = new prismaPgClient()
-const prismaMongo = new prismaMongoClient()
+const prismaPg = new PrismaClient()
 
-export { prismaPg, prismaMongo }
+export { prismaPg }

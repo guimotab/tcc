@@ -25,7 +25,7 @@ const Chat = ({ session }: ChatProps) => {
   const [canRender, setCanRender] = useState(false)
   const [dataContext, setDataContext] = useState({} as IChatContext)
   const [isAtEndOfChat, setIsAtEndOfChat] = useState(true)
-  const socket = io("http://localhost:3000/chat")
+  const socket = io("http://localhost:4000/chat")
 
   useEffect(() => {
     load()

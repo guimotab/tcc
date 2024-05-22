@@ -1,5 +1,6 @@
 "use client"
 import LoginForm from "@/components/LoginForm";
+import "./globals.css";
 import { Suspense } from "react";
 
 export default function Login() {

@@ -10,14 +10,14 @@ interface paramsSendEmail {
   to: {
     email: string;
     role: string;
-  }
+  } 
   link: string
 }
 
 export default abstract class EmailController {
 
   static async sendEmail({ from, link, to }: paramsSendEmail) {
-    const url = process.env.NEXTAUTH_URL || "http://localhost:3000"
+    const url = process.env.NEXT_PUBLIC_URL || "http://localhost:3000"
     await transporterEmail.sendMail({
       from: `"ChatWorker" <${from.email}>`, // sender address
       to: to.email, // list of receivers "guimota22@gmail.com, baz@example.com"

@@ -206,11 +206,9 @@ export default abstract class MessagesController {
     return newChat.chats
   }
 
-  static async put(id: string, data: IMessage) {
-    return await this._messageService.put(id, data) as IMessageResponse
-  }
-
-
+  // static async put(id: string, data: IMessage) {
+  //   return await this._messageService.put(id, data) as IMessageResponse
+  // }
   // static async get(id: string) {
   //   return await this._messageService.get(id) as IMessageResponse
   // }

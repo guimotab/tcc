@@ -3,13 +3,14 @@ import { redirect } from "next/navigation"
 import Invites from "./Invites"
 import nextAuthOptions from "@/app/api/nextAuthOptions"
 import { getServerSession } from "next-auth"
+import "../../globals.css";
 
 interface InvitesParams {
   params: { invite: string }
 }
 
 const InvitesRoot = async ({ params }: InvitesParams) => {
-  const url = process.env.URL || "localhost:3000"
+  const url = process.env.NEXT_PUBLIC_URL || "http://localhost:3000"
   const invite = params.invite
   const session = await getServerSession(nextAuthOptions)
 

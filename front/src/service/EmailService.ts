@@ -1,5 +1,3 @@
-import IAxiosResponse from "@/interfaces/IAxiosResponse"
-import axios from "axios"
 import HttpService from "./HttpService"
 import { MessageResponse } from "@/types/MessageResponse"
 import IEmail from "@/interfaces/IEmail"
