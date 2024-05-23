@@ -15,14 +15,12 @@ import { IRecordChat } from "@/interfaces/IRecordChat"
 import NoGroups from "./components/NoGroups"
 import { ChatContext, IChatContext } from "@/providers/ChatContext"
 import { Session } from "next-auth"
-import dot from "dotenv"
 
 interface ChatProps {
   session: Session
 }
 
 const Chat = ({ session }: ChatProps) => {
-  dot.config()
   const [canRender, setCanRender] = useState(false)
   const [dataContext, setDataContext] = useState({} as IChatContext)
   const [isAtEndOfChat, setIsAtEndOfChat] = useState(true)
