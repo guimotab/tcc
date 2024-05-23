@@ -25,7 +25,6 @@ const Chat = ({ session }: ChatProps) => {
   const [dataContext, setDataContext] = useState({} as IChatContext)
   const [isAtEndOfChat, setIsAtEndOfChat] = useState(true)
   const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000"
-  console.log("🚀 ~ Chat ~ process.env.NEXT_PUBLIC_BACKEND_URL:", process.env.NEXT_PUBLIC_BACKEND_URL)
   const socket = io(`${BACKEND_URL}/chat`)
 
   useEffect(() => {
