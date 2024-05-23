@@ -1,5 +1,4 @@
 "use client"
-import Aside from "@/app/(m2)/components/Aside"
 import Groups from "./components/Groups"
 import ChatGroup from "./components/ChatGroup"
 import { Suspense, useEffect, useState } from "react"
@@ -16,11 +15,13 @@ import { IRecordChat } from "@/interfaces/IRecordChat"
 import NoGroups from "./components/NoGroups"
 import { ChatContext, IChatContext } from "@/providers/ChatContext"
 import { Session } from "next-auth"
+import dot from "dotenv"
 
 interface ChatProps {
   session: Session
 }
 
+dot.config()
 const Chat = ({ session }: ChatProps) => {
   const [canRender, setCanRender] = useState(false)
   const [dataContext, setDataContext] = useState({} as IChatContext)
