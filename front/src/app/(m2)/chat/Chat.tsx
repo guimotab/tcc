@@ -21,8 +21,8 @@ interface ChatProps {
   session: Session
 }
 
-dot.config()
 const Chat = ({ session }: ChatProps) => {
+  dot.config()
   const [canRender, setCanRender] = useState(false)
   const [dataContext, setDataContext] = useState({} as IChatContext)
   const [isAtEndOfChat, setIsAtEndOfChat] = useState(true)
