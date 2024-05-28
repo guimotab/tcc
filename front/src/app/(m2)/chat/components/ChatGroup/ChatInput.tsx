@@ -1,15 +1,15 @@
 "use client"
-import { ChangeEvent, Dispatch, RefObject, SetStateAction, useContext, useEffect, useRef, useState } from "react"
+import { ChatContext } from "@/providers/ChatContext"
+import { Session } from "next-auth"
+import { ChangeEvent, useContext, useEffect, useRef, useState } from "react"
 import { IoSendSharp } from "react-icons/io5"
-import useCurrentUser from "../../../../../../states/hooks/useCurrentUser"
-import { MessageContext } from "@/providers/MessageContext"
 
 interface ChatInputProps {
+  session: Session
 }
 
-const ChatInput = ({  }: ChatInputProps) => {
-  const currentUser = useCurrentUser()
-  const { currentGroup, socket } = useContext(MessageContext)
+const ChatInput = ({ session }: ChatInputProps) => {
+  const { currentGroup, socket } = useContext(ChatContext)
   const [fieldChat, setFieldChat] = useState("")
   const inputChat = useRef<HTMLTextAreaElement>(null)
 
@@ -39,7 +39,7 @@ const ChatInput = ({  }: ChatInputProps) => {
     const verifiedMessage = fieldChat.trim() !== ""
     if (verifiedMessage) {
       const content = fieldChat
-      const sender = currentUser
+      const sender = session.user
       const chatId = currentGroup!.id
       socket.emit("message", { content, sender, chatId })
       setFieldChat("")

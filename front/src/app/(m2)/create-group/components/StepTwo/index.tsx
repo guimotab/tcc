@@ -2,13 +2,18 @@ import { Button } from "@/components/ui/button"
 import stepCreateGroup from "@/types/stepCreateGroup"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useContext, useEffect } from "react"
-import { FormChatContext } from "@/providers/FormChatContext"
 import FormAddUsers from "./FormAddUsers"
 import UsersAdded from "./UsersAdded"
 import FormCreateGroup from "@/classes/FormCreateGroup"
+import { CreateChatContext } from "@/providers/CreateChatContext"
+import { Session } from "next-auth"
 
-const StepTwo = () => {
-  const { formStepsContext, setFormStepsContext } = useContext(FormChatContext)
+interface StepTwoProps {
+  session: Session
+}
+
+const StepTwo = ({ session }: StepTwoProps) => {
+  const { formStepsContext, setFormStepsContext } = useContext(CreateChatContext)
   const formSteps = new FormCreateGroup(formStepsContext)
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -28,7 +33,7 @@ const StepTwo = () => {
               <FormAddUsers />
 
               {formSteps.participants.map(participant =>
-                <UsersAdded key={participant.email} participant={participant} />
+                <UsersAdded session={session} key={participant.email} participant={participant} />
               )}
 
             </ul>

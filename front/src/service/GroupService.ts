@@ -2,20 +2,18 @@ import IAxiosResponse from "@/interfaces/IAxiosResponse"
 import IGroup from "@/interfaces/IGroup"
 import axios from "axios"
 import HttpService from "./HttpService"
-import { messageResponse } from "@/types/messageResponse"
+import { MessageResponse } from "@/types/MessageResponse"
 import IInvites from "@/interfaces/IInvites"
 import IUser from "@/interfaces/IUser"
 import IUserOnGroup from "@/interfaces/IUserOnGroup"
 
 export interface IGroupResponse {
-  resp: messageResponse
-  data?: {
-    group: IGroup
-  }
+  resp: MessageResponse
+  data?: IGroup
 }
 
 export interface IGroupArrayResponse {
-  resp: messageResponse
+  resp: MessageResponse
   data?: {
     groups: IGroup[]
     users: IUser[]
@@ -39,7 +37,7 @@ export default class GroupService extends HttpService<IGroup, IGroupResponse> {
   }
 
   async addNewParticipant(currentUser: IUser, invite: IInvites){
-    const result = await axios.post(`${this.url}/addParticipant`, {invite, participant: currentUser}).catch(this.handleError) as IAxiosResponse<IGroupResponse>
+    const result = await axios.put(`${this.url}/`, {invite, participant: currentUser}).catch(this.handleError) as IAxiosResponse<IGroupResponse>
     return result.data
   }
 

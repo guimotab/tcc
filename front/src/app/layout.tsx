@@ -1,8 +1,11 @@
-"use client"
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
-import { RecoilRoot } from "recoil";
+import NextAuthSessionProvider from "@/providers/sessionProvider";
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: "ChatWorker",
+};
 
 export default function RootLayout({
   children,
@@ -10,13 +13,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <Toaster />
-      <body suppressHydrationWarning>
-        <RecoilRoot>
+      <NextAuthSessionProvider>
+        <body suppressHydrationWarning>
           {children}
-        </RecoilRoot>
-      </body>
+        </body>
+      </NextAuthSessionProvider>
     </html >
   );
 }

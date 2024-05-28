@@ -1,37 +1,35 @@
 import IAxiosResponse from "@/interfaces/IAxiosResponse"
 import axios from "axios"
 import HttpService from "./HttpService"
-import { messageResponse } from "@/types/messageResponse"
+import { MessageResponse } from "@/types/MessageResponse"
 import IMessage from "@/interfaces/Chats/IMessage"
 import { responseRecordMessage } from "@/controllers/MessagesController"
 import IStatusMessage from "@/interfaces/Chats/IStatusMessage"
 import IUser from "@/interfaces/IUser"
 
 export interface IMessageResponse {
-  resp: messageResponse
+  resp: MessageResponse
   data?: {
     messages: IMessage
   }
 }
 
 export interface IStatusMessageResponse {
-  resp: messageResponse
+  resp: MessageResponse
   data?: {
     statusMessages: IStatusMessage[]
   }
 }
 
 export interface IMessageArrayResponse {
-  resp: messageResponse
+  resp: MessageResponse
   data?: responseRecordMessage
 }
 
-export default class MessageService extends HttpService<IMessage, IMessageResponse> {
+export default class MessageService {
   
-  constructor() {
-    super("messages")
-  }
-
+  private apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000"
+  private url = `${this.apiUrl}/messages`
   /**
    * Modifica o status das mensagens de não lidas para lidas
    * @param statusMessages mensagens que serão modificadas o seu status
@@ -52,4 +50,8 @@ export default class MessageService extends HttpService<IMessage, IMessageRespon
     return result.data
   }
 
+  protected handleError(error: any) {
+    console.log(error)
+    return { data: { resp: "AxiosError" } } as { data: { resp: MessageResponse } }
+  }
 }

@@ -4,11 +4,11 @@ import { Label } from "@/components/ui/label"
 import { useContext } from "react"
 import { formAcronym } from "@/utils/formAcronym"
 import ActionsGroup from "./ActionsGroup"
-import { MessageContext } from "@/providers/MessageContext"
+import { ChatContext } from "@/providers/ChatContext"
 
 
 const HeaderGroup = () => {
-  const { currentGroup, currentUsers } = useContext(MessageContext)
+  const { currentGroup, currentUsers } = useContext(ChatContext)
   const groupAcronym = currentGroup ? formAcronym(currentGroup.name, 2) : ""
 
   return currentGroup && (

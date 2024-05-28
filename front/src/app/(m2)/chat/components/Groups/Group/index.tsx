@@ -6,23 +6,23 @@ import IUser from "@/interfaces/IUser"
 import IGroup from "@/interfaces/IGroup"
 import RecordChats from "@/classes/RecordChats"
 import { IChatMessage } from "@/interfaces/IChatMessage"
-import useCurrentUser from "../../../../../../../states/hooks/useCurrentUser"
 import dayjs, { Dayjs } from "dayjs"
 import { clearInterval, setInterval } from "timers"
 import GroupElapsedTime from "./GroupElapsedTime"
 import GroupRoot from "./GroupRoot"
 import GroupContent from "./GroupContent"
 import GroupMessages from "./GroupMessages"
-import { MessageContext } from "@/providers/MessageContext"
+import { ChatContext } from "@/providers/ChatContext"
+import { Session } from "next-auth"
 
 interface GroupProps {
   group: IGroup
+  session: Session
 }
 
-const Group = ({ group }: GroupProps) => {
+const Group = ({ group, session }: GroupProps) => {
   const oneMinute = 60000
-  const { currentGroup, groups, setDataContext, recordChats, isAtEndOfChat } = useContext(MessageContext)
-  const currentUser = useCurrentUser()
+  const { currentGroup, groups, setDataContext, recordChats, isAtEndOfChat } = useContext(ChatContext)
   const recordChatClass = new RecordChats(recordChats)
   const [lastMessage, setLastMessage] = useState<IChatMessage>()
   const [lastMessageWasRead, setLastMessageWasRead] = useState(true)
@@ -52,8 +52,8 @@ const Group = ({ group }: GroupProps) => {
     const chatMessage = recordChatClass.returnLastChatMessage(group)
     if (chatMessage) {
       setLastMessage(chatMessage)
-      const lastMessageWasSendByCurrentUser = chatMessage.sender.idUser === currentUser.id
-      const foundRead = chatMessage.statusMessage.readBy?.find(user => user.userId === currentUser.id)
+      const lastMessageWasSendByCurrentUser = chatMessage.sender.idUser === session.user.id
+      const foundRead = chatMessage.statusMessage.readBy?.find(user => user.userId === session.user.id)
       if (!foundRead && !lastMessageWasSendByCurrentUser) {
         setLastMessageWasRead(false)
       }
@@ -62,14 +62,14 @@ const Group = ({ group }: GroupProps) => {
   }
 
   function checkReadLastMessage() {
-    const lastMessageIsFromCurrentUser = lastMessage?.sender.idUser === currentUser.id
+    const lastMessageIsFromCurrentUser = lastMessage?.sender.idUser === session.user.id
     const isAtCurrentChat = currentGroup!.id === lastMessage?.chatId
     if (lastMessageIsFromCurrentUser || (isAtCurrentChat && isAtEndOfChat)) {
       return setLastMessageWasRead(true)
     }
 
     const arrayReadByExist = lastMessage?.statusMessage.readBy
-    const foundRead = arrayReadByExist && arrayReadByExist.find(user => user.userId === currentUser.id)
+    const foundRead = arrayReadByExist && arrayReadByExist.find(user => user.userId === session.user.id)
     if (foundRead) {
       return setLastMessageWasRead(true)
     }
@@ -89,7 +89,7 @@ const Group = ({ group }: GroupProps) => {
       const respUsers = await UserController.getAllByGroupId(newCurrentGroup.id)
 
       if (respUsers.data) {
-        currentUsers = respUsers.data.users
+        currentUsers = respUsers.data
         setDataContext(prevState => ({ ...prevState, currentGroup: newCurrentGroup, currentUsers }))
       }
     }

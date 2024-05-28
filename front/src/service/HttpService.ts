@@ -1,16 +1,14 @@
 import IHttpResponse from "@/interfaces/IHttpResponse"
-import { messageResponse } from "@/types/messageResponse"
+import { MessageResponse } from "@/types/MessageResponse"
 import axios from "axios"
-import env from "dotenv"
 
 export default class HttpService<T, Resp> implements IHttpResponse<T, Resp> {
 
   protected url: string
 
   constructor(pathUrl: string) {
-    env.config()
-    const urlFront = process.env.NEXT_PUBLIC_URL_BACKEND || "http://10.20.12.118:4000"
-    this.url = `${urlFront}/${pathUrl}`
+    const url = process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_URL || "http://localhost:3000"
+    this.url = `${url}/api/${pathUrl}`
   }
 
   async get(id: string) {
@@ -35,7 +33,7 @@ export default class HttpService<T, Resp> implements IHttpResponse<T, Resp> {
 
   protected handleError(error: any) {
     console.log(error)
-    return { data: { resp: "AxiosError" } } as { data: { resp: messageResponse } }
+    return { data: { resp: "AxiosError" } } as { data: { resp: MessageResponse } }
   }
 
 }

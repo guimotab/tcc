@@ -1,21 +1,21 @@
 import IParticipantsGroup from "@/interfaces/IParticipantsGroup";
 import { useContext } from "react";
-import { FormChatContext } from "@/providers/FormChatContext"
 import { Card } from "@/components/ui/card";
 import { AiOutlineUserDelete } from "react-icons/ai";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import FormCreateGroup from "@/classes/FormCreateGroup";
-import useCurrentUser from "../../../../../../states/hooks/useCurrentUser";
+import { Session } from "next-auth";
+import { CreateChatContext } from "@/providers/CreateChatContext";
 
 interface UsersAddedProps {
   participant: IParticipantsGroup
+  session: Session
 }
 
-const UsersAdded = ({ participant }: UsersAddedProps) => {
-  const { formStepsContext, setFormStepsContext } = useContext(FormChatContext)
+const UsersAdded = ({ participant, session }: UsersAddedProps) => {
+  const { formStepsContext, setFormStepsContext } = useContext(CreateChatContext)
   const formSteps = new FormCreateGroup(formStepsContext)
-  const currentUser = useCurrentUser()
 
   function deleteParticipant() {
     formSteps.deleteParticipant(participant.email)
@@ -33,7 +33,7 @@ const UsersAdded = ({ participant }: UsersAddedProps) => {
           </Avatar>
           <Label>{participant.email}</Label>
         </div>
-        {currentUser.email !== participant.email &&
+        {session.user.email !== participant.email &&
           <AiOutlineUserDelete onClick={deleteParticipant} className="text-2xl hover:text-destructive" />
         }
       </Card>

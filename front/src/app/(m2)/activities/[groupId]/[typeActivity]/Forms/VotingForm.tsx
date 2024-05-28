@@ -132,7 +132,7 @@ const VotingForm = () => {
   const weightVotes = ["1", "2", "3"] as string[]
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 px-8">
       <h1 className="text-2xl font-semibold">Criar Votação</h1>
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-2 grid-rows-[auto_1fr] gap-x-8 gap-y-5 justify-start">
@@ -152,13 +152,13 @@ const VotingForm = () => {
                         </FormControl>
                       }
 
-                      {fieldForm.type === "toggle" &&
-                        <ToggleGroup type="multiple" value={valuesParticipantsVoting} className="w-fit" onValueChange={handleParticipantsVoting}>
-                          {toggleParticipantsVoting.map(toggle =>
-                            <ToggleGroupItem key={toggle} value={toggle} className="border">{toggle}</ToggleGroupItem>
-                          )}
-                        </ToggleGroup>
-                      }
+                  {fieldForm.type === "toggle" &&
+                    <ToggleGroup type="multiple" value={valuesParticipantsVoting} className="w-fit" onValueChange={handleParticipantsVoting}>
+                      {toggleParticipantsVoting.map((toggle, index) =>
+                        <ToggleGroupItem key={index} value={toggle} className="border">{toggle}</ToggleGroupItem>
+                      )}
+                    </ToggleGroup>
+                  }
 
                       <FormMessage />
                     </FormItem>

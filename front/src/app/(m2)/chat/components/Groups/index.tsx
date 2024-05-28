@@ -5,14 +5,15 @@ import Group from "./Group"
 import RecordChats from "@/classes/RecordChats"
 import IGroup from "@/interfaces/IGroup"
 import dayjs from "dayjs"
-import { Label } from "@/components/ui/label"
-import { MessageContext } from "@/providers/MessageContext"
+import { Session } from "next-auth"
+import { ChatContext } from "@/providers/ChatContext"
 
 interface GroupsProps {
+  session: Session
 }
 
-const Groups = ({ }: GroupsProps) => {
-  const { groups, recordChats } = useContext(MessageContext)
+const Groups = ({ session }: GroupsProps) => {
+  const { groups, recordChats } = useContext(ChatContext)
   const recordChatsClass = new RecordChats(recordChats)
   const [groupsOrdenedByTime, setGroupsOrdenedByTime] = useState<IGroup[]>()
 
@@ -24,7 +25,7 @@ const Groups = ({ }: GroupsProps) => {
     if (groups) {
       const timeOfGroups = groups.map(group => {
         const lastChatMessage = recordChatsClass.returnLastChatMessage(group)
-        let millisecodsMessage =  0
+        let millisecodsMessage = 0
         if (lastChatMessage) {
           millisecodsMessage = dayjs(lastChatMessage?.message.createdAt).valueOf()
         }
@@ -51,7 +52,7 @@ const Groups = ({ }: GroupsProps) => {
         <div className="flex flex-col ">
           {groupsOrdenedByTime.map((group, index) =>
             <div key={group.id}>
-              <Group group={group} />
+              <Group group={group} session={session} />
               {groupsOrdenedByTime.length - 1 !== index && <Separator className="bg-slate-100" />}
             </div>
           )}

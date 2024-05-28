@@ -1,4 +1,4 @@
-import { messageResponse } from "@/types/messageResponse";
+import { MessageResponse } from "@/types/MessageResponse";
 
 interface IMessageResponse {
   title: string,
@@ -37,14 +37,20 @@ const arrayResponse = {
   },
   CredentialsSignin: {
     title: "Esse email já existe!",
+  },
+  ChatNotFound:{
+    title: "Chat não encontrado!",
+  },
+  MessageNotFound:{
+    title: "Mensagem não encontrada!",
   }
-} as Record<messageResponse, IMessageResponse>
+} as Record<MessageResponse, IMessageResponse>
 
 export default class ResolveResponses {
-  private _error: messageResponse
+  private _error: MessageResponse
   private _customReponse?: IMessageResponse
 
-  constructor(error: messageResponse, customResponse?: IMessageResponse) {
+  constructor(error: MessageResponse, customResponse?: IMessageResponse) {
     this._error = error
     this._customReponse = customResponse
   }

@@ -1,4 +1,3 @@
-"use client"
 import Aside from "@/app/(m2)/components/Aside"
 
 const Home = () => {

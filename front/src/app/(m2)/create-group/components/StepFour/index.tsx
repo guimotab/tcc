@@ -5,24 +5,25 @@ import FormCreateGroup from "@/classes/FormCreateGroup"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useContext, useState } from "react"
 import { Input } from "@/components/ui/input"
-import { FormChatContext } from "@/providers/FormChatContext"
 import GroupController from "@/controllers/GroupController"
 import IGroup from "@/interfaces/IGroup"
-import useCurrentUser from "../../../../../../states/hooks/useCurrentUser"
 import Participants from "./components/Participants"
 import LoadingButton from "@/components/LoadingButton"
 import { setTimeout } from "timers"
 import { toast } from "@/components/ui/use-toast"
 import ResolveResponses from "@/utils/resolveResponseErrors"
 import Link from "next/link"
+import { Session } from "next-auth"
+import { CreateChatContext } from "@/providers/CreateChatContext"
+
 interface StepFourProps {
+  session: Session
 }
 
-const StepFour = ({ }: StepFourProps) => {
+const StepFour = ({ session }: StepFourProps) => {
 
-  const currentUser = useCurrentUser()
   const router = useRouter()
-  const { formStepsContext, setFormStepsContext } = useContext(FormChatContext)
+  const { formStepsContext, setFormStepsContext } = useContext(CreateChatContext)
   const formSteps = new FormCreateGroup(formStepsContext)
   const searchParams = useSearchParams()
   const stepURL = searchParams.get("step") as stepCreateGroup
@@ -41,14 +42,12 @@ const StepFour = ({ }: StepFourProps) => {
       description: formSteps.description,
     } as IGroup
     createGroupRequest(dataGroup)
-
-
   }
 
   async function createGroupRequest(dataGroup: IGroup) {
 
     const [respGroup] = await Promise.all([
-      GroupController.createGroup(dataGroup, currentUser, formSteps.participants),
+      GroupController.createGroup(dataGroup, session.user, formSteps.participants),
       new Promise((resolve) => setTimeout(resolve, 1000)),
     ])
 

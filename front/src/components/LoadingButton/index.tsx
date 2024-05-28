@@ -31,7 +31,7 @@ interface LoadingProps
 }
 
 const LoadingButton = React.forwardRef<HTMLButtonElement, LoadingProps>(
-  ({ variant = "default", size = "sm", styleButton, className }) => {
+  ({ variant = "default", size = "sm", styleButton, className }, ref) => {
     return (
       <Button variant={variant} className={styleButton}>
         <div className={cn(loadingVariantes({ variant, size }), className)} />
