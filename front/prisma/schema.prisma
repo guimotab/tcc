@@ -4,56 +4,80 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_POSTGRE_URL") 
+  url      = env("DATABASE_POSTGRE_URL")
 }
 
 model User {
-  id        String        @id @default(uuid())
-  name      String
-  email     String        @unique
-  password  String
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
-  groups    UserOnGroup[]
+  id       String @id @default(uuid())
+  name     String
+  email    String @unique
+  password String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  groups UserOnGroup[]
 }
 
 model UserOnGroup {
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     String
-  group      Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  groupId    String
-  role       String
+  role String
+
   assignedAt DateTime @default(now())
   assignedBy String
+
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  String
+  group   Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId String
 
   @@id([userId, groupId])
 }
 
 model Group {
-  id          String        @id @default(uuid())
+  id          String @id @default(uuid())
   name        String
   description String
-  activities  Activities[]
-  users       UserOnGroup[]
-  invites     Invites[]
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  voteActivity VotingActivity[]
+  users        UserOnGroup[]
+  invites      Invites[]
 }
 
 model Invites {
-  id        String   @id @default(uuid())
-  role      String
-  group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  groupId   String
+  id   String @id @default(uuid())
+  role String
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  group   Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId String
 }
 
-model Activities {
-  id        String   @id @default(uuid())
-  goal      String
-  group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  groupId   String   @unique
+model VotingActivity {
+  id                 String   @id @default(uuid())
+  title              String
+  description        String?
+  startOfVoting      DateTime
+  endOfVoting        DateTime
+  rolesParticipating String[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  weightVoting VotingWeight[]
+  Group        Group?         @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId      String
+}
+
+model VotingWeight {
+  id     Int    @id @default(autoincrement())
+  role   String
+  weight Int
+
+  voteActivity   VotingActivity @relation(fields: [voteActivityId], references: [id], onDelete: Cascade)
+  voteActivityId String
 }

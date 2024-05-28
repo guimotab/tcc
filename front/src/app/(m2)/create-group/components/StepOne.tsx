@@ -29,7 +29,7 @@ const StepOne = () => {
   const formSteps = new FormCreateGroup(formStepsContext)
 
   const formSchema = z.object({
-    nameGroup: z.string().min(1, "O nome do grupo é obrigatório").max(12, "O nome pode ter até 12 caracteres"),
+    nameGroup: z.string().min(1, "O nome do grupo é obrigatório").max(15, "O nome pode ter até 15 caracteres"),
     description: z.string().max(30, "A descrição pode ter até 30 caracteres"),
   })
 

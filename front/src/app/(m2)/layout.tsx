@@ -21,7 +21,7 @@ export default async function RootLayout({
   }
 
   return (
-    <body className="h-screen">
+    <body className="h-screen" suppressHydrationWarning>
       <Toaster />
       <Suspense fallback={<p>teste...</p>}>
         {children}

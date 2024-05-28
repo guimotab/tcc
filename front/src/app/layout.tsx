@@ -16,9 +16,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <Toaster />
       <NextAuthSessionProvider>
-        <body suppressHydrationWarning>
-          {children}
-        </body>
+        {children}
       </NextAuthSessionProvider>
     </html >
   );

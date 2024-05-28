@@ -2,19 +2,26 @@
 
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
+import { FormField, FormItem, FormLabel, FormControl, FormMessage, FormDescription } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import defaultRoles from "@/types/defaultRoles"
 import { zodResolver } from "@hookform/resolvers/zod"
+import dayjs from "dayjs"
 import React from "react"
 import { HTMLInputTypeAttribute, useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { z } from "zod"
+import { DateRange, SelectRangeEventHandler } from "react-day-picker"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Calendar } from "@/components/ui/calendar"
+import { cn } from "@/lib/utils"
+import { CalendarIcon } from "@radix-ui/react-icons"
+import { format } from "date-fns"
 
-type nameFields = "name" | "participantsVoting" | "weightedVoting"
+type nameFields = "name" | "participantsVoting" | "weightedVoting" | "startEndVoting"
 type participantsVotingTypes = "Todos" | "Admin" | "Editor" | "Usuário"
 
 interface IFields {
@@ -35,11 +42,19 @@ const VotingForm = () => {
 
   const [isWeightedVoting, setIsWeightedVoting] = useState(false)
   const [roleWeight, setRoleWeight] = useState({ Admin: "1", Editor: "1", Líder: "1", Usuário: "1" } as Record<defaultRoles, "1" | "2" | "3">)
+  const [data, setDate] = useState<DateRange | undefined>({
+    from: dayjs().toDate(),
+    to: dayjs().add(1).toDate(),
+  })
 
   const formSchema = z.object({
     name: z.string().min(1, "O email é obrigatório").email("Email inválido"),
     participantsVoting: z.string().min(1, "A senha é obrigatória"),
-    weightedVoting: z.boolean()
+    weightedVoting: z.boolean(),
+    startEndVoting: z.object({
+      from: z.date().optional(),
+      to: z.date().optional(),
+    }, { required_error: "Você deve escolher uma data de início e fim!" })
   })
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -47,7 +62,11 @@ const VotingForm = () => {
     defaultValues: {
       name: "guimota22@gmail.com",
       participantsVoting: "1234",
-      weightedVoting: false
+      weightedVoting: false,
+      startEndVoting: {
+        from: data?.from,
+        to: data?.to,
+      }
     },
   })
 
@@ -104,6 +123,12 @@ const VotingForm = () => {
     setRoleWeight(prev => ({ ...prev, [key]: value }))
   }
 
+  function changeRangeDate(value: DateRange | undefined) {
+    setDate(value)
+    form.setValue("startEndVoting.from", value?.from)
+    form.setValue("startEndVoting.to", value?.to)
+  }
+
   const fields = [
     {
       name: "name",
@@ -117,6 +142,13 @@ const VotingForm = () => {
       type: "toggle",
       placeholder: "Insira o nome da votação",
       classNameDiv: "row-start-2 col-start-1 h-full"
+    },
+    {
+      name: "startEndVoting",
+      label: "Período da votação",
+      type: "date",
+      placeholder: "Escolha as datas",
+      classNameDiv: "row-start-3",
     },
     {
       name: "weightedVoting",
@@ -138,7 +170,7 @@ const VotingForm = () => {
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-2 grid-rows-[auto_1fr] gap-x-8 gap-y-5 justify-start">
           {fields.map(fieldForm =>
             <React.Fragment key={fieldForm.name}>
-              {fieldForm.name !== "weightedVoting" &&
+              {(fieldForm.name !== "weightedVoting" && fieldForm.name !== "startEndVoting") &&
                 <FormField
                   control={form.control}
                   name={fieldForm.name}
@@ -152,13 +184,13 @@ const VotingForm = () => {
                         </FormControl>
                       }
 
-                  {fieldForm.type === "toggle" &&
-                    <ToggleGroup type="multiple" value={valuesParticipantsVoting} className="w-fit" onValueChange={handleParticipantsVoting}>
-                      {toggleParticipantsVoting.map((toggle, index) =>
-                        <ToggleGroupItem key={index} value={toggle} className="border">{toggle}</ToggleGroupItem>
-                      )}
-                    </ToggleGroup>
-                  }
+                      {fieldForm.type === "toggle" &&
+                        <ToggleGroup type="multiple" value={valuesParticipantsVoting} className="w-fit" onValueChange={handleParticipantsVoting}>
+                          {toggleParticipantsVoting.map((toggle, index) =>
+                            <ToggleGroupItem key={index} value={toggle} className="border">{toggle}</ToggleGroupItem>
+                          )}
+                        </ToggleGroup>
+                      }
 
                       <FormMessage />
                     </FormItem>
@@ -210,6 +242,62 @@ const VotingForm = () => {
                   )}
                 />
               }
+
+
+              {fieldForm.name === "startEndVoting" &&
+                <FormField
+                  control={form.control}
+                  name="startEndVoting"
+                  render={({ field }) => (
+                    <FormItem className={cn("flex flex-col", fieldForm.classNameDiv)}>
+                      <FormLabel className="w-fit">{fieldForm.label}</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant={"outline"}
+                              className={cn(
+                                "w-[240px] pl-3 text-left font-normal",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value?.from ? (
+                                field.value.to ? (
+                                  <>
+                                    {dayjs(field.value.from).format("DD/MM/YYYY")} - {dayjs(field.value.to).format("DD/MM/YYYY")}
+                                  </>
+                                ) : (
+                                  dayjs(field.value.from).format("DD/MM/YYYY")
+                                )
+                              ) : (
+                                <span>{fieldForm.placeholder}</span>
+                              )}
+                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="range"
+                            selected={data}
+                            onSelect={changeRangeDate}
+                            disabled={(date) =>
+                              date < new Date()
+                            }
+                            initialFocus
+                            numberOfMonths={2}
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      <FormDescription>
+                        Escolha a data de início e término.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              }
+
             </React.Fragment>
           )}
 

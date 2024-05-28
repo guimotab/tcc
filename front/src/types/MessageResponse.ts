@@ -8,4 +8,5 @@ export type MessageResponse = "Success" |
   "UserExistOnGroup" |
   "UserNotFound" |
   "MessageNotFound" |
-  "ChatNotFound"
+  "ChatNotFound"|
+  "ActivityNotFound"
