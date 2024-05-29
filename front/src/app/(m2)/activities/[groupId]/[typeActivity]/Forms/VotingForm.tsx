@@ -61,15 +61,9 @@ const VotingForm = () => {
       from: z.date().optional(),
       to: z.date().optional(),
     }, { required_error: "Você deve escolher uma data de início e fim!" }),
-    timeStartEndVoting: z.object({
-      start: z.object({
-        hour: z.string(),
-        minute: z.string()
-      }),
-      end: z.object({
-        hour: z.string(),
-        minute: z.string()
-      }),
+    timeEndVoting: z.object({
+      hour: z.string(),
+      minute: z.string()
     }),
     questionVote: z.string().min(1, "A pergunta da votação é obrigatória!"),
   })
@@ -84,15 +78,9 @@ const VotingForm = () => {
         from: data?.from,
         to: data?.to,
       },
-      timeStartEndVoting: {
-        start: {
-          hour: dayjs().hour().toString(),
-          minute: dayjs().minute().toString()
-        },
-        end: {
-          hour: dayjs().hour().toString(),
-          minute: dayjs().minute().toString()
-        }
+      timeEndVoting: {
+        hour: dayjs().hour().toString(),
+        minute: dayjs().minute().toString()
       },
       questionVote: ""
     },
@@ -160,18 +148,14 @@ const VotingForm = () => {
     form.setValue("dayStartEndVoting.to", value?.to)
   }
 
-  function changeTimeStartEndVoting(value: string, type: "startHour" | "startMin" | "endHour" | "endMin") {
-    let newTimeStartEnd = { ...form.getValues("timeStartEndVoting") }
-    if (type === "startHour") {
-      newTimeStartEnd.start.hour = value
-    } else if (type === "startMin") {
-      newTimeStartEnd.start.minute = value
-    } else if (type === "endHour") {
-      newTimeStartEnd.end.hour = value
+  function changeTimeStartEndVoting(value: string, type: "endHour" | "endMin") {
+    let newTimeEnd = { ...form.getValues("timeEndVoting") }
+    if (type === "endHour") {
+      newTimeEnd.hour = value
     } else {
-      newTimeStartEnd.end.minute = value
+      newTimeEnd.minute = value
     }
-    form.setValue("timeStartEndVoting", newTimeStartEnd)
+    form.setValue("timeEndVoting", newTimeEnd)
   }
 
   function createNewOption(newVoteArray: IArrayVote[], lastId: number) {
@@ -215,6 +199,7 @@ const VotingForm = () => {
       label: "Nome da votação",
       type: "text",
       placeholder: "Insira o nome da votação",
+      classNameDiv: "col-start-1 row-start-1 col-span-2",
     },
     {
       name: "dayStartEndVoting",
@@ -224,10 +209,9 @@ const VotingForm = () => {
       classNameDiv: "row-start-2",
     },
     {
-      name: "timeStartEndVoting",
-      label: "Horário início e fim",
+      name: "timeEndVoting",
+      label: "Horário término da votação",
       type: "select",
-      placeholder: "Escolha as datas",
       classNameDiv: "row-start-3",
     },
     {
@@ -235,20 +219,21 @@ const VotingForm = () => {
       label: "Quem pode participar da votação?",
       type: "toggle",
       placeholder: "Insira o nome da votação",
-      classNameDiv: "row-start-1 col-start-2 h-full"
+      classNameDiv: "row-start-1 col-start-2 h-full col-span-2"
     },
     {
       name: "weightedVoting",
       label: "Votação com pesos personalizados?",
       type: "switch",
       placeholder: "Insira o nome da votação",
-      classNameDiv: "row-span-3",
+      classNameDiv: "row-span-3 col-span-2",
     },
     {
       name: "questionVote",
       label: "Pergunta da votação",
       type: "text",
       placeholder: "Insira a pergunta da votação",
+      classNameDiv: "col-span-2",
     },
 
   ] as IFields<keyof z.infer<typeof formSchema>>[]
@@ -260,7 +245,7 @@ const VotingForm = () => {
     <div className="flex flex-col gap-3 px-8">
       <h1 className="text-2xl font-semibold">Criar Votação</h1>
       <FormProvider {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-2 grid-rows-[auto_auto_1fr] gap-x-8 gap-y-5 justify-start">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-4 grid-rows-[auto_auto_1fr] gap-x-8 gap-y-5 justify-start">
           {fields.map(fieldForm =>
             <React.Fragment key={fieldForm.name}>
               {(fieldForm.name === "name") &&
@@ -392,95 +377,49 @@ const VotingForm = () => {
                 />
               }
 
-              {(fieldForm.name === "timeStartEndVoting") &&
+              {(fieldForm.name === "timeEndVoting") &&
                 <FormField
                   control={form.control}
                   name={fieldForm.name}
                   render={({ field }) => (
                     < FormItem className={fieldForm.classNameDiv}>
-                      {fieldForm.name === "timeStartEndVoting" &&
-                        <div className="flex gap-8 items-center">
-                          <div>
-                            <FormLabel>{"Horário início"}</FormLabel>
-                            <div className="flex items-center gap-1">
-                              <Select onValueChange={value => changeTimeStartEndVoting(value, "startHour")} defaultValue={dayjs().hour().toString()}>
-                                <FormControl>
-                                  <SelectTrigger className="w-20">
-                                    <SelectValue placeholder="Hora" />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                  {hours.map(hour =>
-                                    // se o dia de início for igual ao dia de hj, então a hora inicial tem que ser >= que a hora de hoje
-                                    dayjs(form.getValues("dayStartEndVoting.from")).format("DD/MM/YYYY") === dayjs().format("DD/MM/YYYY") ?
-                                      Number(hour) >= dayjs().hour() &&
-                                      <SelectItem key={hour} value={hour}>{hour.length < 2 ? `0${hour}` : hour}h</SelectItem>
-                                      :
-                                      <SelectItem key={hour} value={hour}>{hour.length < 2 ? `0${hour}` : hour}h</SelectItem>
-                                  )}
-                                </SelectContent>
-                              </Select>
-                              <Select onValueChange={value => changeTimeStartEndVoting(value, "startMin")} defaultValue={dayjs().minute().toString()}>
-                                <FormControl>
-                                  <SelectTrigger className="w-24">
-                                    <SelectValue placeholder="Minuto" />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                  {minutes.map(minute =>
-                                    // se o dia de início for igual ao dia de hj, então minuto inicial tem que ser >= que minuto de hoje
-                                    dayjs(form.getValues("dayStartEndVoting.from")).format("DD/MM/YYYY") === dayjs().format("DD/MM/YYYY") ?
-                                      Number(minute) >= dayjs().minute() &&
-                                      <SelectItem key={minute} value={minute}>{minute.length < 2 ? `0${minute}` : minute}min</SelectItem>
-                                      :
-                                      <SelectItem key={minute} value={minute}>{minute.length < 2 ? `0${minute}` : minute}min</SelectItem>
-                                  )}
-                                </SelectContent>
-                              </Select>
-                            </div>
-                          </div>
-
-                          <div>
-                            <FormLabel>{"Horário fim"}</FormLabel>
-                            <div className="flex items-center gap-1">
-                              <Select onValueChange={value => changeTimeStartEndVoting(value, "endHour")} defaultValue={dayjs().hour().toString()}>
-                                <FormControl>
-                                  <SelectTrigger className="w-20">
-                                    <SelectValue placeholder="Hora" />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                  {hours.map(hour =>
-                                    // se os dias forem iguais, então hora final é >= que a hora de início
-                                    dayjs(form.getValues("dayStartEndVoting.from")).format("DD/MM/YYYY") === dayjs(form.getValues("dayStartEndVoting.to")).format("DD/MM/YYYY") ?
-                                      Number(hour) >= Number(form.getValues("timeStartEndVoting.start.hour")) &&
-                                      <SelectItem key={hour} value={hour}>{hour.length < 2 ? `0${hour}` : hour}h</SelectItem>
-                                      :
-                                      <SelectItem key={hour} value={hour}>{hour.length < 2 ? `0${hour}` : hour}h</SelectItem>
-                                  )}
-                                </SelectContent>
-                              </Select>
-                              <Select onValueChange={value => changeTimeStartEndVoting(value, "endMin")} defaultValue={dayjs().minute().toString()}>
-                                <FormControl>
-                                  <SelectTrigger className="w-24">
-                                    <SelectValue placeholder="Minuto" />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                  {minutes.map(minute =>
-                                    // se os dias forem iguais, então minuto final é >= que minuto de início
-                                    dayjs(form.getValues("dayStartEndVoting.from")).format("DD/MM/YYYY") === dayjs(form.getValues("dayStartEndVoting.to")).format("DD/MM/YYYY") ?
-                                      Number(minute) >= Number(form.getValues("timeStartEndVoting.start.minute")) &&
-                                      <SelectItem key={minute} value={minute}>{minute.length < 2 ? `0${minute}` : minute}min</SelectItem>
-                                      :
-                                      <SelectItem key={minute} value={minute}>{minute.length < 2 ? `0${minute}` : minute}min</SelectItem>
-                                  )}
-                                </SelectContent>
-                              </Select>
-                            </div>
-                          </div>
-                        </div>
-                      }
+                      <FormLabel>{fieldForm.label}</FormLabel>
+                      <div className="flex items-center gap-1">
+                        <Select onValueChange={value => changeTimeStartEndVoting(value, "endHour")} defaultValue={dayjs().hour().toString()}>
+                          <FormControl>
+                            <SelectTrigger className="w-20">
+                              <SelectValue placeholder="Hora" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {hours.map(hour =>
+                              // se os dias forem iguais, então hora final é >= que a hora atual
+                              dayjs(form.getValues("dayStartEndVoting.from")).format("DD/MM/YYYY") === dayjs(form.getValues("dayStartEndVoting.to")).format("DD/MM/YYYY") ?
+                                Number(hour) >= dayjs().hour() &&
+                                <SelectItem key={hour} value={hour}>{hour.length < 2 ? `0${hour}` : hour}h</SelectItem>
+                                :
+                                <SelectItem key={hour} value={hour}>{hour.length < 2 ? `0${hour}` : hour}h</SelectItem>
+                            )}
+                          </SelectContent>
+                        </Select>
+                        <Select onValueChange={value => changeTimeStartEndVoting(value, "endMin")} defaultValue={dayjs().minute().toString()}>
+                          <FormControl>
+                            <SelectTrigger className="w-24">
+                              <SelectValue placeholder="Minuto" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {minutes.map(minute =>
+                              // se os dias forem iguais, então minuto final é >= que minuto atual
+                              dayjs(form.getValues("dayStartEndVoting.from")).format("DD/MM/YYYY") === dayjs(form.getValues("dayStartEndVoting.to")).format("DD/MM/YYYY") ?
+                                Number(minute) >= dayjs().minute() &&
+                                <SelectItem key={minute} value={minute}>{minute.length < 2 ? `0${minute}` : minute}min</SelectItem>
+                                :
+                                <SelectItem key={minute} value={minute}>{minute.length < 2 ? `0${minute}` : minute}min</SelectItem>
+                            )}
+                          </SelectContent>
+                        </Select>
+                      </div>
 
                       <FormMessage />
                     </FormItem>
