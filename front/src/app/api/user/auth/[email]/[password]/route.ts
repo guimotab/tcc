@@ -1,7 +1,7 @@
 import { prismaPg } from "@/lib/prisma";
 import { NextApiResponse } from "next";
 import { NextResponse } from "next/server";
-import * as bcrypt from 'bcrypt'
+import * as bcrypt from 'bcryptjs'
 import IApiResponse from "@/interfaces/api/IApiResponse";
 
 interface reqParams {
@@ -10,7 +10,7 @@ interface reqParams {
 }
 
 export async function GET(request: Request,
-  { params }: { params: reqParams },
+  { params }: { params: reqParams }, 
   res: NextApiResponse) {
   const { email, password } = params
 
@@ -20,7 +20,7 @@ export async function GET(request: Request,
       return NextResponse.json({ resp: "IncorrectCredentials", status: 400 } as IApiResponse)
     }
 
-    const checkPassword = await bcrypt.compare(password, user.password)
+    const checkPassword = bcrypt.compareSync(password, user.password)
     if (!checkPassword) {
       return NextResponse.json({ resp: "IncorrectCredentials", status: 400 } as IApiResponse)
     }

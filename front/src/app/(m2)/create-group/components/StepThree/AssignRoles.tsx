@@ -3,11 +3,11 @@ import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useContext, useState } from "react"
-import { FormChatContext } from "../../page"
+import { useContext } from "react"
 import defaultRoles from "@/types/defaultRoles"
 import IParticipantsGroup from "@/interfaces/IParticipantsGroup"
 import FormCreateGroup from "@/classes/FormCreateGroup"
+import { CreateChatContext } from "@/providers/CreateChatContext"
 
 interface UsersRolesProps {
   participant: IParticipantsGroup
@@ -16,7 +16,7 @@ interface UsersRolesProps {
 const arrayRoles = ["Líder", "Admin", "Editor", "Usuário"] as defaultRoles[]
 
 const AssignRoles = ({ participant }: UsersRolesProps) => {
-  const { formStepsContext, setFormStepsContext } = useContext(FormChatContext)
+  const { formStepsContext, setFormStepsContext } = useContext(CreateChatContext)
   const formSteps = new FormCreateGroup(formStepsContext)
 
   function changeUserRole(newRole: defaultRoles) {

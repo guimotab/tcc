@@ -5,7 +5,7 @@ import axios from "axios"
 
 export default class AuthService {
 
-  private apiUrl = process.env.NEXTAUTH_URL || "http://localhost:3000"
+  private apiUrl = process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_URL || "http://localhost:3000"
   private url = `${this.apiUrl}/api/user/auth`
 
   async signUp(name: string, email: string, hashPassword: HashUtils) {
@@ -18,7 +18,7 @@ export default class AuthService {
     const result = await axios.get(`${this.url}/${email}/${password}`).catch(this.handleError)
     return result.data as IAxiosResponse<IUser>
   }
-
+ 
   private handleError(error: any) {
     console.log(error)
     return { data: { resp: "AxiosError" } }

@@ -12,8 +12,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { HTMLInputTypeAttribute, ChangeEvent } from "react"
 import { toast } from "sonner"
 import { z } from "zod"
-import { useUpdateCurrentUser } from "../../../states/hooks/useUpdateCurrentUser"
 import { useRouter } from "next/navigation"
+import { signIn } from "next-auth/react"
 
 type nameFields = "name" | "email" | "password" | "confirmPassword"
 
@@ -31,7 +31,6 @@ interface SignInProps {
 
 const SignInForm = ({ loginPage, navigationTo }: SignInProps) => {
   const router = useRouter()
-  const setCurrentUser = useUpdateCurrentUser()
 
   const formSchema = z.object({
     name: z.string().min(1, "O nome é obrigatório"),
@@ -62,7 +61,15 @@ const SignInForm = ({ loginPage, navigationTo }: SignInProps) => {
         const errorResponse = new ResolveResponses(resp.resp)
         return createToast(errorResponse)
       }
-      setCurrentUser(resp.data!.user)
+      const result = await signIn("credentials", {
+        email: values.email,
+        password: values.password,
+        redirect: false,
+      })
+
+      if (result?.error) {
+        return
+      }
       router.replace(navigationTo)
 
     } else {
@@ -72,7 +79,7 @@ const SignInForm = ({ loginPage, navigationTo }: SignInProps) => {
   }
 
   function createToast(resolveResponse: ResolveResponses) {
-    const {title, description} = resolveResponse.resolveResponse()
+    const { title, description } = resolveResponse.resolveResponse()
     toast(title, {
       description: description,
       action: {

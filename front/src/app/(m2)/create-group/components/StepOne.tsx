@@ -8,7 +8,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { Dispatch, SetStateAction, useContext } from "react"
 import { useForm, FormProvider } from "react-hook-form"
 import { z } from "zod"
-import { FormChatContext } from "../page"
+import { CreateChatContext } from "@/providers/CreateChatContext"
 
 type formNames = "nameGroup" | "description"
 
@@ -25,7 +25,7 @@ const StepOne = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const stepURL = searchParams.get("step") as stepCreateGroup
-  const { formStepsContext, setFormStepsContext } = useContext(FormChatContext)
+  const { formStepsContext, setFormStepsContext } = useContext(CreateChatContext)
   const formSteps = new FormCreateGroup(formStepsContext)
 
   const formSchema = z.object({

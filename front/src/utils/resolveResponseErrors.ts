@@ -37,6 +37,12 @@ const arrayResponse = {
   },
   CredentialsSignin: {
     title: "Esse email já existe!",
+  },
+  ChatNotFound:{
+    title: "Chat não encontrado!",
+  },
+  MessageNotFound:{
+    title: "Mensagem não encontrada!",
   }
 } as Record<MessageResponse, IMessageResponse>
 

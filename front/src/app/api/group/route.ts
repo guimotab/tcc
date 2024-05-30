@@ -5,6 +5,7 @@ import { NextApiResponse } from "next"
 import { NextResponse } from "next/server"
 import EmailController from "../email/EmailController"
 import ChatService from "@/service/ChatService"
+import ChatController from "@/controllers/ChatController"
 
 interface reqBodyPost {
   name: string
@@ -22,8 +23,8 @@ export async function POST(req: Request, res: NextApiResponse) {
 
   try {
     const group = await prismaPg.group.create({
-      data: {
-        name,
+      data: { 
+        name, 
         description,
         users: {
           create: {
@@ -50,7 +51,7 @@ export async function POST(req: Request, res: NextApiResponse) {
       }
     })
 
-    const respChat = await ChatService.createChat(group.id)
+    const respChat = await ChatController.createChat(group)
     if (respChat.resp === "ServerError") {
       throw new Error()
     }
