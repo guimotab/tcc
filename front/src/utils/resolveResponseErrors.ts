@@ -43,6 +43,9 @@ const arrayResponse = {
   },
   MessageNotFound:{
     title: "Mensagem não encontrada!",
+  },
+  ActivityNotFound:{
+    title: "Atividade não encotrada!"
   }
 } as Record<MessageResponse, IMessageResponse>
 
