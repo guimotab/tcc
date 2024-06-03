@@ -22,10 +22,9 @@ export async function GET(request: Request,
     const users = await Promise.all(userOnGroups.map(async (group) => {
       const respGroup = await prismaPg.user.findUnique({ where: { id: group.userId } });
       if (respGroup) {
-        return respGroup
+        return { role: group.role, ...respGroup } 
       }
-    }).filter(group => group !== undefined)) as IUser[]
-
+    }).filter(group => group !== undefined)) as ({ role: string } & IUser)[]
 
     return NextResponse.json({ resp: "Success", data: users, status: 200 } as IApiResponse)
   } catch (err) {

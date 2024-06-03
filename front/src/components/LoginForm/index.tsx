@@ -54,11 +54,13 @@ export default function LoginForm({ signInPage, navigationTo }: LoginProps) {
       redirect: false
     })
 
+    console.log("🚀 ~ onSubmit ~ result:", result)
     if (result?.error) {
       const errorResponse = new ResolveResponses("ServerError")
       createToast(errorResponse)
       return
     }
+    console.log("🚀 ~ onSubmit ~ navigationTo:", navigationTo)
     router.replace(navigationTo)
   }
 

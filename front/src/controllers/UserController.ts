@@ -6,7 +6,7 @@ export default class UserController {
   private static _userService = new UserService()
 
   static async getAllByGroupId(groupId: string) {
-    return await this._userService.getAllByGroupId(groupId) as IUserArrayResponse
+    return await this._userService.getAllByGroupId(groupId) as IUserArrayResponse<({ role: string } & IUser)[]>
   }
   static async get(id: string) {
     return await this._userService.get(id) as IUserResponse

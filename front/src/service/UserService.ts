@@ -11,9 +11,9 @@ export interface IUserResponse {
   }
 }
 
-export interface IUserArrayResponse {
+export interface IUserArrayResponse<T> {
   resp: string
-  data: IUser[]
+  data: T
 }
 
 export default class UserService extends HttpService<IUser, IUserResponse> {
@@ -23,7 +23,7 @@ export default class UserService extends HttpService<IUser, IUserResponse> {
   }
 
   async getAllByGroupId(groupId: string) {
-    const result = await axios.get(`${this.url}/all/group/${groupId}`).catch(this.handleError) as IAxiosResponse<IUserArrayResponse>
+    const result = await axios.get(`${this.url}/all/group/${groupId}`).catch(this.handleError) as IAxiosResponse<IUserArrayResponse<({ role: string } & IUser)[]>>
     return result.data
   }
 }
