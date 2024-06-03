@@ -10,15 +10,15 @@ interface IParamsURL {
 
 const CreateActivity = ({ params }: IParamsURL) => {
 
-  const grouId = params.groupId
+  const groupId = params.groupId
   const typeActivity = params.typeActivity
 
   return (
-    <main className="flex w-screen h-screen">
+    <main className="flex ">
       <Aside />
       <div className="flex flex-col items-center w-full py-16">
         <div className="flex flex-col max-w-[70rem] w-full">
-          <VotingForm />
+          <VotingForm groupId={groupId}/>
         </div>
       </div>
     </main>

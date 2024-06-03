@@ -1,11 +1,16 @@
-export default interface IVotingActivity {
+export interface IVotingActivity extends IVotingActivityWithoutDefaults {
   id: string
+  createdAt: Date
+  updatedAt: Date
+}
+
+export interface IVotingActivityWithoutDefaults {
   title: string
-  description?: string
+  voteOptions: string[]
+  canMultipleVote: boolean
   groupId: string
   endOfVoting: Date
   startOfVoting: Date
   rolesParticipating: string[]
-  createdAt: Date
-  updatedAt: Date
 }
+

@@ -60,10 +60,11 @@ model Invites {
 model VotingActivity {
   id                 String   @id @default(uuid())
   title              String
-  description        String?
+  voteOptions        String[]
   startOfVoting      DateTime
   endOfVoting        DateTime
   rolesParticipating String[]
+  canMultipleVote    Boolean
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

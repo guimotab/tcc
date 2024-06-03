@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { FormField, FormItem, FormLabel, FormControl, FormMessage, FormDescription } from "@/components/ui/form"
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
@@ -10,7 +10,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import defaultRoles from "@/types/defaultRoles"
 import { zodResolver } from "@hookform/resolvers/zod"
 import dayjs from "dayjs"
-import React, { useEffect } from "react"
+import React from "react"
 import { HTMLInputTypeAttribute, useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { z } from "zod"
@@ -20,6 +20,11 @@ import { Calendar } from "@/components/ui/calendar"
 import { cn } from "@/lib/utils"
 import { CalendarIcon } from "@radix-ui/react-icons"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { IVotingActivityWithoutDefaults } from "@/interfaces/activity/IVotingActivity"
+import { IVotingWeightWithoutDefaults } from "@/interfaces/activity/IVotingWeight"
+import ActivityController from "@/controllers/ActivityController"
+import ResolveResponses from "@/utils/resolveResponseErrors"
+import { toast } from "@/components/ui/use-toast"
 
 type participantsVotingTypes = "Todos" | "Admin" | "Editor" | "Usuário"
 
@@ -31,17 +36,16 @@ interface IFields<T> {
   classNameDiv?: string
 }
 
-interface LoginProps {
-  signInPage: "/cadastro" | "signin"
-  navigationTo: "/home" | "./"
-}
-
 interface IArrayVote {
   id: number,
   value: string
 }
 
-const VotingForm = () => {
+interface VotiginForm {
+  groupId: string
+}
+
+const VotingForm = ({ groupId }: VotiginForm) => {
   const toggleParticipantsVoting = ["Todos", "Admin", "Editor", "Usuário"] as participantsVotingTypes[]
   const weightVotes = ["1", "2", "3"] as string[]
   const [isWeightedVoting, setIsWeightedVoting] = useState(false)
@@ -54,7 +58,7 @@ const VotingForm = () => {
   const [multipleVotes, setMultipleVotes] = useState(false)
 
   const formSchema = z.object({
-    name: z.string().min(1, "O email é obrigatório!"),
+    title: z.string().min(1, "O email é obrigatório!"),
     participantsVoting: z.string().array().min(1, "Escolha pelo menos um cargo!"),
     weightedVoting: z.boolean(),
     dayStartEndVoting: z.object({
@@ -71,7 +75,7 @@ const VotingForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "Votação teste",
+      title: "Votação teste",
       participantsVoting: toggleParticipantsVoting,
       weightedVoting: false,
       dayStartEndVoting: {
@@ -87,19 +91,32 @@ const VotingForm = () => {
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // const email = values.email
-    // const password = values.password
+    const startOfVoting = dayjs(values.dayStartEndVoting.from)
+    const endOfVoting = dayjs(values.dayStartEndVoting.to)
+      .set("hour", Number(values.timeEndVoting.hour)).set("minute", Number(values.timeEndVoting.minute))
+    const arrayWeights = Object.entries(roleWeight).map(([key, value]) => ({ role: key, weight: Number(value) }))
+    const weights = values.weightedVoting ? arrayWeights : toggleParticipantsVoting.map(participant => ({ role: participant, weight: 1 }))
+    
+    const votingForm = {
+      title: values.title,
+      startOfVoting: startOfVoting.toDate(),
+      endOfVoting: endOfVoting.toDate(),
+      rolesParticipating: values.participantsVoting.filter(participant => participant !== "Todos"),
+      voteOptions: voteOptions.map(option => option.value.trim()).filter(option => option !== ""),
+      canMultipleVote: multipleVotes,
+      groupId,
+      weights
+    } as IVotingActivityWithoutDefaults & { weights: IVotingWeightWithoutDefaults[] }
 
-    // const resp = await AuthController.login(email, password)
+    const respVote = await ActivityController.createNewVote(votingForm)
 
-    // if (!resp.data) {
-    //   const errorResponse = new ResolveResponses(resp.resp)
-    //   createToast(errorResponse)
-    //   return
-    // }
-    // //inicia um histórico novo
-    // setCurrentUser(resp.data!.user)
-    // router.replace(navigationTo)
+    if (!respVote.data) {
+      const message = new ResolveResponses(respVote.resp)
+      showToast("destructive", message)
+    }
+
+    console.log("sucesso!");
+
   }
 
   function handleParticipantsVoting(values: participantsVotingTypes[]) {
@@ -193,47 +210,56 @@ const VotingForm = () => {
     setVoteOptions(voteChanged)
   }
 
+  function showToast(variant: "default" | "destructive", messageResponse: ResolveResponses) {
+    const { title, description } = messageResponse.resolveResponse()
+    toast({
+      title,
+      description,
+      variant,
+    })
+  }
+
   const fields = [
     {
-      name: "name",
+      name: "title",
       label: "Nome da votação",
       type: "text",
       placeholder: "Insira o nome da votação",
-      classNameDiv: "col-start-1 row-start-1 col-span-2",
+      classNameDiv: "col-span-2",
     },
     {
       name: "dayStartEndVoting",
       label: "Período da votação",
       type: "date",
       placeholder: "Escolha as datas",
-      classNameDiv: "row-start-2",
+      classNameDiv: "row-start-2 justify-end gap-1",
     },
     {
       name: "timeEndVoting",
       label: "Horário término da votação",
       type: "select",
-      classNameDiv: "row-start-3",
+      classNameDiv: "row-start-2",
     },
     {
       name: "participantsVoting",
       label: "Quem pode participar da votação?",
       type: "toggle",
       placeholder: "Insira o nome da votação",
-      classNameDiv: "row-start-1 col-start-2 h-full col-span-2"
+      classNameDiv: "col-start-1 h-full col-span-2"
     },
     {
       name: "weightedVoting",
       label: "Votação com pesos personalizados?",
       type: "switch",
       placeholder: "Insira o nome da votação",
-      classNameDiv: "row-span-3 col-span-2",
+      classNameDiv: "row-start-1 row-span-3 col-span-2",
     },
     {
       name: "questionVote",
       label: "Pergunta da votação",
       type: "text",
       placeholder: "Insira a pergunta da votação",
-      classNameDiv: "col-span-2",
+      classNameDiv: "col-span-4",
     },
 
   ] as IFields<keyof z.infer<typeof formSchema>>[]
@@ -248,7 +274,7 @@ const VotingForm = () => {
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-4 grid-rows-[auto_auto_1fr] gap-x-8 gap-y-5 justify-start">
           {fields.map(fieldForm =>
             <React.Fragment key={fieldForm.name}>
-              {(fieldForm.name === "name") &&
+              {(fieldForm.name === "title") &&
                 <FormField
                   control={form.control}
                   name={fieldForm.name}
@@ -411,9 +437,10 @@ const VotingForm = () => {
                           <SelectContent>
                             {minutes.map(minute =>
                               // se os dias forem iguais, então minuto final é >= que minuto atual
-                              dayjs(form.getValues("dayStartEndVoting.from")).format("DD/MM/YYYY") === dayjs(form.getValues("dayStartEndVoting.to")).format("DD/MM/YYYY") ?
-                                Number(minute) >= dayjs().minute() &&
-                                <SelectItem key={minute} value={minute}>{minute.length < 2 ? `0${minute}` : minute}min</SelectItem>
+                              dayjs(form.getValues("dayStartEndVoting.from")).format("DD/MM/YYYY") === dayjs(form.getValues("dayStartEndVoting.to")).format("DD/MM/YYYY")
+                                && Number(form.getValues("timeEndVoting.hour")) === dayjs().hour() ?
+                                  Number(minute) >= dayjs().minute() &&
+                                  <SelectItem key={minute} value={minute}>{minute.length < 2 ? `0${minute}` : minute}min</SelectItem>
                                 :
                                 <SelectItem key={minute} value={minute}>{minute.length < 2 ? `0${minute}` : minute}min</SelectItem>
                             )}
@@ -468,7 +495,7 @@ const VotingForm = () => {
             </React.Fragment>
           )}
 
-          <Button type="submit" className="col-span-2">Criar</Button>
+          <Button type="submit" className="col-span-4">Criar</Button>
         </form>
       </FormProvider>
     </div>
