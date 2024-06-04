@@ -41,7 +41,7 @@ const MyGroups = ({ session }: MyGroupsProps) => {
 
           <div className="bg-slate-200 w-[1px]"/>
 
-          <CurrentGroup />
+          <CurrentGroup session={session}/>
 
         </MyGroupsContext.Provider>
       </div>

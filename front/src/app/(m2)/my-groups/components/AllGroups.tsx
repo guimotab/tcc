@@ -27,7 +27,7 @@ const AllGroups = ({ }: AllGroupsProps) => {
       <Separator />
       <div className="flex max-w-[40rem] w-full flex-col gap-1">
         {groups?.map(group =>
-          <div
+          <div key={group.id}
             onClick={() => handleChangeCurrentGroup(group.id)}
             className={`flex justify-between px-4 py-2 ${currentGroupId === group.id ? "bg-slate-100" : "hover:bg-slate-50"} rounded-lg cursor-pointer`}>
             <div className="flex items-center gap-2">

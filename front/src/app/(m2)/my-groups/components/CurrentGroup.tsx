@@ -4,19 +4,27 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import ActivityController from "@/controllers/ActivityController"
 import GroupController from "@/controllers/GroupController"
 import IGroup from "@/interfaces/IGroup"
+import { IVotingActivity } from "@/interfaces/activity/IVotingActivity"
 import { MyGroupsContext } from "@/providers/MyGroupsContext"
-import { formAcronym } from "@/utils/formAcronym"
+import dayjs from "dayjs"
+import { Session } from "next-auth"
+import Link from "next/link"
 import { useContext, useEffect, useState } from "react"
 
 interface CurrentGroupProps {
+  session: Session
 }
 
-const CurrentGroup = ({ }: CurrentGroupProps) => {
+const CurrentGroup = ({ session }: CurrentGroupProps) => {
 
   const { groups, users, currentGroupId, usersOnGroup, setMyGroupsContext } = useContext(MyGroupsContext)
   const [currentGroup, setCurrentGroup] = useState<IGroup>()
+  const [votes, setVotes] = useState<IVotingActivity[]>()
+  const [canRender, setCanRender] = useState(false)
 
   useEffect(() => {
     if (currentGroupId) {
@@ -25,65 +33,56 @@ const CurrentGroup = ({ }: CurrentGroupProps) => {
   }, [currentGroupId])
 
   async function load() {
-    const respGroup = await GroupController.get(currentGroupId!)
-    if (respGroup.data) {
+    const [respGroup, respVote] = await Promise.all([
+      GroupController.get(currentGroupId!),
+      ActivityController.getAllVoteByGroupId(currentGroupId!)
+    ])
+    if (respGroup.data && respVote.data) {
       setCurrentGroup(respGroup.data)
+      setVotes(respVote.data)
+      setCanRender(true)
     }
+
   }
 
-  return currentGroup && (
+  function findVoteCurrentUser() {
+    const groupFinded = votes?.find(vote => vote.groupId === currentGroupId)
+    const findVote = groupFinded?.participantVotesId.includes(session.user.id)
+    if (findVote) {
+      return <Label className="text-green-600">Votado</Label>
+    }
+    return <Label className="text-destructive">Não Votado</Label>
+  }
+
+  return currentGroup && canRender && (
     <div className="flex flex-col items-center my-6 w-full">
-      <div className="flex flex-col items-center space-y-3 max-w-[25rem] w-full">
-        <div className="flex items-center justify-between gap-6 w-full">
-          <div className="flex items-center gap-2">
-            <Avatar className="w-16 h-16">
-              <div className={`flex text-2xl items-center justify-center w-16 h-16 rounded-full `}>
-                <AvatarFallback className="bg-slate-200">{formAcronym(currentGroup.name, 2)}</AvatarFallback>
-              </div>
-            </Avatar>
-            <div className="">
-              <p className="text-xl font-medium">{currentGroup.name}</p>
-              <p>{currentGroup.description}</p>
-            </div>
-          </div>
-          <div>
-            <Button size={"sm"}>Ir para o chat</Button>
-          </div>
-        </div>
-        <div className="space-y-8 w-full">
-          <div className="space-y-2">
-            <Label className="font-semibold">Participantes ({users.length} participantes)</Label>
-            <div className="space-y-3">
-              {users.map((user, index) =>
-                <Card className="border-secondary">
-                  <div className="flex items-center justify-between px-4 py-1">
-                    <div className="flex gap-3">
-                      <Avatar className="">
-                        <div className={`flex items-center justify-center w-9 h-9 rounded-full `}>
-                          <AvatarFallback className="bg-slate-200">{formAcronym(currentGroup.name)}</AvatarFallback>
-                        </div>
-                      </Avatar>
-                      <div className="flex flex-col">
-                        <p className="font-medium">{user.name}</p>
-                        <p className="text-sm">{user.email}</p>
-                      </div>
+      <div className="flex flex-col items-center space-y-3 max-w-[26rem] w-full">
+        <Tabs defaultValue="vote" className="w-full">
+          <TabsList>
+            <TabsTrigger value="task">Task</TabsTrigger>
+            <TabsTrigger value="vote">Votação</TabsTrigger>
+            <TabsTrigger value="taskDistribution">Distribuição de Tarefas</TabsTrigger>
+          </TabsList>
+          <TabsContent value="task">Make changes to your account here.</TabsContent>
+          <TabsContent value="vote">
+            <div className="flex flex-col gap-3">
+              {votes?.map(vote =>
+                <Link href={`my-groups/activity/voting/${vote.id}`} key={vote.id}>
+                  <Card className="flex justify-between px-4 py-2 cursor-pointer">
+                    <div className="flex flex-col gap-1">
+                      <Label className="text-lg">{vote.title}</Label>
+                      <Label>Limite: {dayjs(vote.endOfVoting).format("DD/MM/YYYY, HH:mm")}h</Label>
                     </div>
-                    <Badge>
-                      {usersOnGroup[index].role}
-                    </Badge>
-                  </div>
-                </Card>
+                    <div>
+                      {findVoteCurrentUser()}
+                    </div>
+                  </Card>
+                </Link>
               )}
             </div>
-          </div>
-
-          <div className="flex justify-center w-full">
-            <div className="flex justify-between max-w-[20rem] w-full">
-              <Button variant={"destructive"}>Excluir Grupo</Button>
-              <Button>Editar Grupo</Button>
-            </div>
-          </div>
-        </div>
+          </TabsContent>
+          <TabsContent value="taskDistribution">Change your password here.</TabsContent>
+        </Tabs>
       </div>
     </div>
   )

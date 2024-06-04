@@ -12,5 +12,6 @@ export interface IVotingActivityWithoutDefaults {
   endOfVoting: Date
   startOfVoting: Date
   rolesParticipating: string[]
+  participantVotesId: string[]
 }
 

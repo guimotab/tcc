@@ -1,4 +1,4 @@
-import { IVotingActivityWithoutDefaults } from "@/interfaces/activity/IVotingActivity";
+import { IVotingActivity, IVotingActivityWithoutDefaults } from "@/interfaces/activity/IVotingActivity";
 import { IVotingWeightWithoutDefaults } from "@/interfaces/activity/IVotingWeight";
 import ActivityService, { IActivityResponse } from "@/service/ActivityService";
 
@@ -8,10 +8,14 @@ export default abstract class ActivityController {
 
   static async createNewVote(voting: IVotingActivityWithoutDefaults & { weights: IVotingWeightWithoutDefaults[] }) {
     const { weights, ...activity } = voting
-    return await this._activityService.postVote({ activity, weights }) as IActivityResponse
+    return await this._activityService.postVote({ activity, weights }) as IActivityResponse<IVotingActivity>
   }
 
   static async getVote(idVote: string) {
-    return await this._activityService.getVote(idVote) as IActivityResponse
+    return await this._activityService.getVote(idVote) as IActivityResponse<IVotingActivity>
+  }
+
+  static async getAllVoteByGroupId(idVote: string) {
+    return await this._activityService.getAllVoteByGroupId(idVote) as IActivityResponse<IVotingActivity[]>
   }
 }

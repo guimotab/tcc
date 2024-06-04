@@ -1,5 +1,6 @@
 import Aside from "@/app/(m2)/components/Aside"
 import VotingForm from "./Forms/VotingForm";
+import TypeActivity from "@/types/TypeActivities";
 
 interface IParamsURL {
   params: {
@@ -11,7 +12,7 @@ interface IParamsURL {
 const CreateActivity = ({ params }: IParamsURL) => {
 
   const groupId = params.groupId
-  const typeActivity = params.typeActivity
+  const typeActivity = params.typeActivity as TypeActivity
 
   return (
     <main className="flex ">
