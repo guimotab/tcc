@@ -16,7 +16,8 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  groups UserOnGroup[]
+  groups   UserOnGroup[]
+  UserVote UserVote[]
 }
 
 model UserOnGroup {
@@ -66,13 +67,22 @@ model VotingActivity {
   rolesParticipating String[]
   canMultipleVote    Boolean
   groupId            String
-  participantVotesId String[] @default([])
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
+  userVote     UserVote[]
   weightVoting VotingWeight[]
   Group        Group?         @relation(fields: [groupId], references: [id], onDelete: Cascade)
+}
+
+model UserVote {
+  id               String   @id @default(uuid())
+  votedOption      String[]
+  userId           String
+  votingActivityId String?
+
+  user           User            @relation(fields: [userId], references: [id])
+  VotingActivity VotingActivity? @relation(fields: [votingActivityId], references: [id])
 }
 
 model VotingWeight {

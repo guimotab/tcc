@@ -4,21 +4,21 @@ import { NextResponse } from "next/server";
 import IApiResponse from "@/interfaces/api/IApiResponse";
 
 interface reqParams {
-  groupId: string,
+  votingId: string,
 }
 
 export async function GET(request: Request,
   { params }: { params: reqParams },
   res: NextApiResponse) {
-  const { groupId } = params
+  const { votingId } = params
 
   try {
-    const activities = await prismaPg.votingActivity.findMany({ where: { groupId }, include: { userVote: true } })
-    if (!activities) {
-      return NextResponse.json({ resp: "ActivityNotFound", status: 400 } as IApiResponse)
+    const userVote = await prismaPg.userVote.findMany({ where: { votingActivityId: votingId }, include: { user: true } })
+    if (!userVote) {
+      return NextResponse.json({ resp: "UserVotingNotFound", status: 400 } as IApiResponse)
     }
 
-    return NextResponse.json({ resp: "Success", data: activities, status: 200 } as IApiResponse)
+    return NextResponse.json({ resp: "Success", data: userVote, status: 200 } as IApiResponse)
   } catch (error) {
     console.log(error);
     return NextResponse.json({ resp: "ServerError", status: 500 } as IApiResponse)

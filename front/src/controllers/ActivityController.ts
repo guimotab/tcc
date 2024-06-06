@@ -1,3 +1,5 @@
+import IUser from "@/interfaces/IUser";
+import IUserVote from "@/interfaces/activity/IUserVote";
 import { IVotingActivity, IVotingActivityWithoutDefaults } from "@/interfaces/activity/IVotingActivity";
 import { IVotingWeightWithoutDefaults } from "@/interfaces/activity/IVotingWeight";
 import ActivityService, { IActivityResponse } from "@/service/ActivityService";
@@ -16,6 +18,10 @@ export default abstract class ActivityController {
   }
 
   static async getAllVoteByGroupId(idVote: string) {
-    return await this._activityService.getAllVoteByGroupId(idVote) as IActivityResponse<IVotingActivity[]>
+    return await this._activityService.getAllVoteByGroupId(idVote) as IActivityResponse<(IVotingActivity & { userVote: IUserVote[] })[]>
+  }
+
+  static async getAllUsersVotesByVotingId(votingId: string) {
+    return await this._activityService.getAllUsersVotesByVotingId(votingId) as IActivityResponse<(IUserVote & { user: IUser })[]>
   }
 }

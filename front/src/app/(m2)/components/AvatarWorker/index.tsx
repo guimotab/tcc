@@ -6,7 +6,7 @@ import { HTMLAttributes } from "react"
 interface AvatarUserProps extends HTMLAttributes<HTMLSpanElement> {
   src: string | undefined
   nameFallback: string
-  sizeText?: "text-2xl" | "text-xl" | "text-lg" | "text-base"
+  sizeText?: "text-2xl" | "text-xl" | "text-lg" | "text-base" | "text-sm" | "text-xs"
 }
 
 const AvatarWorker = ({ src, nameFallback, className, sizeText = "text-2xl", ...props }: AvatarUserProps) => {

@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import ActivityController from "@/controllers/ActivityController"
 import GroupController from "@/controllers/GroupController"
 import IGroup from "@/interfaces/IGroup"
+import IUserVote from "@/interfaces/activity/IUserVote"
 import { IVotingActivity } from "@/interfaces/activity/IVotingActivity"
 import { MyGroupsContext } from "@/providers/MyGroupsContext"
 import dayjs from "dayjs"
@@ -23,7 +24,7 @@ const CurrentGroup = ({ session }: CurrentGroupProps) => {
 
   const { groups, users, currentGroupId, usersOnGroup, setMyGroupsContext } = useContext(MyGroupsContext)
   const [currentGroup, setCurrentGroup] = useState<IGroup>()
-  const [votes, setVotes] = useState<IVotingActivity[]>()
+  const [votes, setVotes] = useState<(IVotingActivity & { userVote: IUserVote[] })[]>()
   const [canRender, setCanRender] = useState(false)
 
   useEffect(() => {
@@ -45,9 +46,8 @@ const CurrentGroup = ({ session }: CurrentGroupProps) => {
 
   }
 
-  function findVoteCurrentUser() {
-    const groupFinded = votes?.find(vote => vote.groupId === currentGroupId)
-    const findVote = groupFinded?.participantVotesId.includes(session.user.id)
+  function findVoteCurrentUser(userVote: IUserVote[]) {
+    const findVote = userVote.find(user=> user.userId === session.user.id)
     if (findVote) {
       return <Label className="text-green-600">Votado</Label>
     }
@@ -74,7 +74,7 @@ const CurrentGroup = ({ session }: CurrentGroupProps) => {
                       <Label>Limite: {dayjs(vote.endOfVoting).format("DD/MM/YYYY, HH:mm")}h</Label>
                     </div>
                     <div>
-                      {findVoteCurrentUser()}
+                      {findVoteCurrentUser(vote.userVote)}
                     </div>
                   </Card>
                 </Link>

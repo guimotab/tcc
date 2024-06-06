@@ -1,5 +1,4 @@
 import Aside from "@/app/(m2)/components/Aside"
-import { Label } from "@/components/ui/label"
 import Voting from "./components/Voting"
 import TypeActivity from "@/types/TypeActivities"
 
@@ -18,7 +17,7 @@ const Activity = ({ params }: IParamsActivity) => {
   return (
     <main className="flex w-screen h-screen">
       <Aside page="myGroups" />
-      <div className="flex justify-center w-full mt-[6rem] h-full">
+      <div className="flex justify-center w-full mt-[6rem]">
         {typeActivity === "voting" && <Voting activityId={activityId}/>}
       </div>
     </main>
