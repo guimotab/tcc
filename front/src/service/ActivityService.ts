@@ -7,6 +7,7 @@ import { IVotingWeightWithoutDefaults } from "@/interfaces/activity/IVotingWeigh
 import { IVotingActivity, IVotingActivityWithoutDefaults } from "@/interfaces/activity/IVotingActivity"
 import IUserVote from "@/interfaces/activity/IUserVote"
 import IUser from "@/interfaces/IUser"
+import IUserOnGroup from "@/interfaces/IUserOnGroup"
 
 export interface IActivityResponse<T> {
   resp: MessageResponse
@@ -40,7 +41,7 @@ export default class ActivityService extends HttpService<IGroup, IActivityRespon
   }
 
   async getAllUsersVotesByVotingId(votigingId: string) {
-    const result = await axios.get(`${this.url}/vote/all/userVote/byVotingId/${votigingId}`).catch(this.handleError) as IAxiosResponse<IActivityResponse<(IUserVote & { user: IUser })[]>>
+    const result = await axios.get(`${this.url}/vote/all/userVote/byVotingId/${votigingId}`).catch(this.handleError) as IAxiosResponse<IActivityResponse<(IUserVote & { user: IUser & { groups: (IGroup & IUserOnGroup)[] } })[]>>
     return result.data
   }
 }

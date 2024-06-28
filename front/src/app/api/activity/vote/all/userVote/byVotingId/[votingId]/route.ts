@@ -13,7 +13,8 @@ export async function GET(request: Request,
   const { votingId } = params
 
   try {
-    const userVote = await prismaPg.userVote.findMany({ where: { votingActivityId: votingId }, include: { user: true } })
+    const userVote = await prismaPg.userVote.findMany({ where: { votingActivityId: votingId }, include: { user: { include: { groups: { include: { group: true } } } } } })
+    userVote[0].user.groups[0].role
     if (!userVote) {
       return NextResponse.json({ resp: "UserVotingNotFound", status: 400 } as IApiResponse)
     }

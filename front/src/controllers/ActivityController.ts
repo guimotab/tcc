@@ -1,4 +1,6 @@
+import IGroup from "@/interfaces/IGroup";
 import IUser from "@/interfaces/IUser";
+import IUserOnGroup from "@/interfaces/IUserOnGroup";
 import IUserVote from "@/interfaces/activity/IUserVote";
 import { IVotingActivity, IVotingActivityWithoutDefaults } from "@/interfaces/activity/IVotingActivity";
 import { IVotingWeightWithoutDefaults } from "@/interfaces/activity/IVotingWeight";
@@ -22,6 +24,6 @@ export default abstract class ActivityController {
   }
 
   static async getAllUsersVotesByVotingId(votingId: string) {
-    return await this._activityService.getAllUsersVotesByVotingId(votingId) as IActivityResponse<(IUserVote & { user: IUser })[]>
+    return await this._activityService.getAllUsersVotesByVotingId(votingId) as IActivityResponse<(IUserVote & { user: IUser & { groups: (IGroup & IUserOnGroup)[] } })[]>
   }
 }

@@ -16,10 +16,9 @@ const Invites = ({ session }: InvitesProps) => {
   const router = useRouter()
   const searchParams = useParams<{ invite: string }>()
   const invite = searchParams.invite as string | null
-  verifyInvite(session.user)
-
+  
   useEffect(() => {
-
+    verifyInvite(session.user)
   }, [])
 
   async function verifyInvite(currentUser: IUser) {

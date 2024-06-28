@@ -24,7 +24,7 @@ import { IVotingActivityWithoutDefaults } from "@/interfaces/activity/IVotingAct
 import { IVotingWeightWithoutDefaults } from "@/interfaces/activity/IVotingWeight"
 import ActivityController from "@/controllers/ActivityController"
 import ResolveResponses from "@/utils/resolveResponseErrors"
-import { toast } from "@/components/ui/use-toast"
+import { createToast } from "@/utils/createToastUtil"
 
 type participantsVotingTypes = "Todos" | "Admin" | "Editor" | "Usuário"
 
@@ -49,12 +49,17 @@ const VotingForm = ({ groupId }: VotiginForm) => {
   const toggleParticipantsVoting = ["Todos", "Admin", "Editor", "Usuário"] as participantsVotingTypes[]
   const weightVotes = ["1", "2", "3"] as string[]
   const [isWeightedVoting, setIsWeightedVoting] = useState(false)
+  const [errorOptions, setErrorOptions] = useState<string>()
   const [roleWeight, setRoleWeight] = useState({ Usuário: "1", Editor: "1", Admin: "1", Líder: "1" } as Record<defaultRoles, "1" | "2" | "3">)
-  const [data, setDate] = useState<DateRange | undefined>({
-    from: dayjs().toDate(),
-    to: dayjs().add(1).toDate(),
-  })
-  const [voteOptions, setVoteOptions] = useState<IArrayVote[]>([{ id: 1, value: "" }, { id: 2, value: "" }])
+  const [data, setDate] = useState<DateRange | undefined>({ from: dayjs().toDate(), to: dayjs().add(1).toDate(), })
+  const voteOptionsSchema = z.array(z.object({
+    id: z.number(),
+    value: z.string(),
+  })).refine(voteOptions => {
+    const values = voteOptions.map(option => option.value)
+    return new Set(values).size === values.length
+  }, { message: "As opções não podem ser iguais!" })
+  const [voteOptions, setVoteOptions] = useState<z.infer<typeof voteOptionsSchema>>([{ id: 1, value: "" }, { id: 2, value: "" }])
   const [multipleVotes, setMultipleVotes] = useState(false)
 
   const formSchema = z.object({
@@ -91,12 +96,15 @@ const VotingForm = ({ groupId }: VotiginForm) => {
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    const resultVoteOptions = voteOptionsSchema.safeParse(voteOptions)
+    if (!resultVoteOptions.success) {
+      return setErrorOptions(resultVoteOptions.error.errors[0].message)
+    }
     const startOfVoting = dayjs(values.dayStartEndVoting.from)
-    const endOfVoting = dayjs(values.dayStartEndVoting.to)
-      .set("hour", Number(values.timeEndVoting.hour)).set("minute", Number(values.timeEndVoting.minute))
+    const endOfVoting = dayjs(values.dayStartEndVoting.to).set("hour", Number(values.timeEndVoting.hour)).set("minute", Number(values.timeEndVoting.minute))
     const arrayWeights = Object.entries(roleWeight).map(([key, value]) => ({ role: key, weight: Number(value) }))
     const weights = values.weightedVoting ? arrayWeights : toggleParticipantsVoting.map(participant => ({ role: participant, weight: 1 }))
-    
+
     const votingForm = {
       title: values.title,
       startOfVoting: startOfVoting.toDate(),
@@ -112,11 +120,10 @@ const VotingForm = ({ groupId }: VotiginForm) => {
 
     if (!respVote.data) {
       const message = new ResolveResponses(respVote.resp)
-      showToast("destructive", message)
+      createToast("destructive", message)
     }
 
     console.log("sucesso!");
-
   }
 
   function handleParticipantsVoting(values: participantsVotingTypes[]) {
@@ -129,10 +136,8 @@ const VotingForm = ({ groupId }: VotiginForm) => {
       return form.setValue("participantsVoting", [])
     }
 
-
     if (!hadOptionAll && hasOptionAll) {
       //se o botão "todos" foi selecionado
-
       return form.setValue("participantsVoting", ["Todos", "Admin", "Editor", "Usuário"])
     }
 
@@ -153,10 +158,9 @@ const VotingForm = ({ groupId }: VotiginForm) => {
   }
 
   function handleWeightVoting(key: defaultRoles, value: "1" | "2" | "3") {
-    if (!value) {
-      return
+    if (value) {
+      setRoleWeight(prev => ({ ...prev, [key]: value }))
     }
-    setRoleWeight(prev => ({ ...prev, [key]: value }))
   }
 
   function changeRangeDate(value: DateRange | undefined) {
@@ -202,21 +206,12 @@ const VotingForm = ({ groupId }: VotiginForm) => {
     const lastItem = voteOptions[voteOptions.length - 1]
     const indexItemChanged = voteOptions.findIndex(vote => vote.id === id)
     const voteChanged = [...voteOptions]
-
+    setErrorOptions(undefined)
     voteChanged.splice(indexItemChanged, 1, { id: voteOptions[indexItemChanged].id, value })
     if (lastItem.id === id) {
       createNewOption(voteChanged, lastItem.id)
     }
     setVoteOptions(voteChanged)
-  }
-
-  function showToast(variant: "default" | "destructive", messageResponse: ResolveResponses) {
-    const { title, description } = messageResponse.resolveResponse()
-    toast({
-      title,
-      description,
-      variant,
-    })
   }
 
   const fields = [
@@ -439,8 +434,8 @@ const VotingForm = ({ groupId }: VotiginForm) => {
                               // se os dias forem iguais, então minuto final é >= que minuto atual
                               dayjs(form.getValues("dayStartEndVoting.from")).format("DD/MM/YYYY") === dayjs(form.getValues("dayStartEndVoting.to")).format("DD/MM/YYYY")
                                 && Number(form.getValues("timeEndVoting.hour")) === dayjs().hour() ?
-                                  Number(minute) >= dayjs().minute() &&
-                                  <SelectItem key={minute} value={minute}>{minute.length < 2 ? `0${minute}` : minute}min</SelectItem>
+                                Number(minute) >= dayjs().minute() &&
+                                <SelectItem key={minute} value={minute}>{minute.length < 2 ? `0${minute}` : minute}min</SelectItem>
                                 :
                                 <SelectItem key={minute} value={minute}>{minute.length < 2 ? `0${minute}` : minute}min</SelectItem>
                             )}
@@ -480,6 +475,7 @@ const VotingForm = ({ groupId }: VotiginForm) => {
                                 onBlur={event => checkDeleteOption(vote.id)} />
                             </li>
                           )}
+                          <Label className="text-destructive">{errorOptions}</Label>
                           <div className="flex items-center gap-3">
                             <Label>Permitir várias votações</Label>
                             <Switch checked={multipleVotes} onCheckedChange={setMultipleVotes} />

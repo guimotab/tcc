@@ -7,26 +7,30 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/h
 import { Label } from "@/components/ui/label"
 import ActivityController from "@/controllers/ActivityController"
 import { IVotingActivity } from "@/interfaces/activity/IVotingActivity"
+import defaultRoles from "@/types/defaultRoles"
+import { Session } from "next-auth"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { FaArrowLeft } from "react-icons/fa";
 interface VotingProps {
   activityId: string
+  voting: IVotingActivity
+  session: Session
 }
 
 interface VoteOfUsers {
-  option: string
   usersVote: {
     id: string
     name: string
+    role: defaultRoles
     imagem?: string
   }[]
 }
 
-const Voting = ({ activityId }: VotingProps) => {
+const VotingForm = ({ activityId, voting, session }: VotingProps) => {
+  const user = session.user
   const router = useRouter()
-  const [voting, setVoting] = useState<IVotingActivity>()
-  const [allUserVote, setAllUserVote] = useState<VoteOfUsers[]>()
+  const [allUserVote, setAllUserVote] = useState<Record<string, VoteOfUsers>>({})
   const [canRender, setCanRender] = useState(false)
   const [optionsChoose, setOptionsChoose] = useState<string[]>([])
 
@@ -43,26 +47,28 @@ const Voting = ({ activityId }: VotingProps) => {
   }
 
   async function load() {
-    const [respVote, respAllUserVotes] = await Promise.all([
-      ActivityController.getVote(activityId),
+    const [respAllUserVotes] = await Promise.all([
       ActivityController.getAllUsersVotesByVotingId(activityId)
     ])
 
-    if (respVote.data && respAllUserVotes.data) {
-      setVoting(respVote.data)
-      const voteOfUsers = respVote.data?.voteOptions.map(voteOption => {
+    if (respAllUserVotes.data) {
+      const voteOfUsers = {} as Record<string, VoteOfUsers>
+      voting.voteOptions.forEach(voteOption => {
         const userVotedThisOption = respAllUserVotes.data!.filter(userVote => {
           return userVote.votedOption.includes(voteOption)
         })
-        return {
-          option: voteOption,
-          usersVote: userVotedThisOption.map(user => ({
-            id: user.userId,
-            name: user.user.name,
-            image: user.user.image
-          }))
+        voteOfUsers[voteOption] = {
+          usersVote: userVotedThisOption.map(user => {
+            const currentGroupIndex = user.user.groups.findIndex(group => group.id === voting.groupId)
+            return {
+              id: user.userId,
+              name: user.user.name,
+              image: user.user.image,
+              role: user.user.groups[currentGroupIndex].role as defaultRoles
+            }
+          })
         }
-      }) as VoteOfUsers[]
+      })
       setAllUserVote(voteOfUsers)
       setCanRender(true)
     }
@@ -70,13 +76,21 @@ const Voting = ({ activityId }: VotingProps) => {
 
   function changeOption(optionChoose: string) {
     const optionFinded = optionsChoose.find(option => option === optionChoose)
+    const fakeAllUserVote = { ...allUserVote }
     if (optionFinded) {
+      fakeAllUserVote[optionChoose].usersVote = allUserVote[optionsChoose[0]].usersVote.filter(user => user.id !== user.id)
       return setOptionsChoose(prev => prev.filter(prevOption => prevOption !== optionFinded))
     }
 
     if (voting?.canMultipleVote) {
+      fakeAllUserVote[optionChoose].usersVote.push({ id: user.id, name: user.name, imagem: user.image, role: user. })
       setOptionsChoose(prev => [...prev, optionChoose])
     } else {
+      if (optionsChoose[0]) {
+        fakeAllUserVote[optionsChoose[0]].usersVote = allUserVote[optionsChoose[0]].usersVote.filter(user => user.id !== user.id)
+      }
+      fakeAllUserVote[optionChoose].usersVote.push({ id: user.id, name: user.name, imagem: user.image })
+      setAllUserVote(fakeAllUserVote)
       setOptionsChoose([optionChoose])
     }
   }
@@ -106,32 +120,32 @@ const Voting = ({ activityId }: VotingProps) => {
         <div className="w-full">
           <Label className="text-lg">Votações Realizadas</Label>
           <Card className="px-3 py-2 space-y-2">
-            {allUserVote?.map((vote, index) =>
-              <div key={vote.option} className="flex items-center gap-2 w-full">
-                <p className="font-medium">{vote.option}:</p>
-                <p>{vote.usersVote.length} {vote.usersVote.length === 1 ? "voto" : "votos"}</p>
-                {vote.usersVote.length !== 0 &&
+            {Object.entries(allUserVote!)?.map(([vote, value], index) =>
+              <div key={vote} className="flex items-center gap-2 w-full">
+                <p className="font-medium">{vote}:</p>
+                <p>{value.usersVote.length} {value.usersVote.length === 1 ? "voto" : "votos"}</p>
+                {value.usersVote.length !== 0 &&
                   <HoverCard openDelay={100}>
                     <HoverCardTrigger>
                       <Badge variant={"outline"}>
-                        {vote.usersVote.length > 3 ?
+                        {value.usersVote.length > 3 ?
                           <div className="flex items-center gap-2">
                             <div className="flex items-center gap-1">
-                              {vote.usersVote.slice(0, 3).map((user, index) =>
+                              {value.usersVote.slice(0, 3).map((user, index) =>
                                 <AvatarWorker nameFallback={user.name} src={user.imagem} className={`h-5 w-5 z-${index} cursor-default`} sizeText="text-xs" />
                               )}
                             </ div>
-                            <Label>{vote.usersVote.length - 3}+</Label>
+                            <Label>{value.usersVote.length - 3}+</Label>
                           </div>
                           :
-                          vote.usersVote.map(user =>
+                          value.usersVote.map(user =>
                             <AvatarWorker nameFallback={user.name} src={user.imagem} className="h-5 w-5" sizeText="text-xs" />
                           )
                         }
                       </Badge>
                     </HoverCardTrigger>
                     <HoverCardContent side="right" className="space-y-4">
-                      {vote.usersVote.map(user =>
+                      {value.usersVote.map(user =>
                         <div key={user.id} className="flex items-center gap-2">
                           <AvatarWorker nameFallback={user.name} src={user.imagem} className={`h-5 w-5 z-${index} cursor-default`} sizeText="text-xs" />
                           <Label>{user.name}</Label>
@@ -149,8 +163,8 @@ const Voting = ({ activityId }: VotingProps) => {
         onClick={submitVote}
         className="mt-3 w-full"
         variant={optionsChoose.length !== 0 ? "default" : "outline"}
-        disabled={optionsChoose.length === 0}>Concluir Votação</Button>
+        disabled={optionsChoose.length === 0}>Finalizar Votação</Button>
     </div >
   )
 }
-export default Voting
+export default VotingForm

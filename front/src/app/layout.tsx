@@ -14,10 +14,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning className="w-screen h-full">
-      <Toaster />
-      <NextAuthSessionProvider>
-        {children}
-      </NextAuthSessionProvider>
+      <body>
+        <Toaster />
+        <NextAuthSessionProvider>
+          {children}
+        </NextAuthSessionProvider>
+      </body>
     </html >
   );
 }
