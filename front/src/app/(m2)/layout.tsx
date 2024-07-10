@@ -21,13 +21,11 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang="en" suppressHydrationWarning className="w-screen h-full overflow-x-hidden">
-      <body className="w-screen h-full overflow-x-hidden" suppressHydrationWarning>
-        <Toaster />
-        <Suspense fallback={<p>teste...</p>}> 
-          {children}
-        </Suspense>
-      </body>
-    </html>
+    <div className="w-screen h-full overflow-x-hidden">
+      <Toaster />
+      <Suspense fallback={<p>teste...</p>}>
+        {children}
+      </Suspense>
+    </div>
   );
 }

@@ -8,7 +8,7 @@ const ChatRoot = async () => {
   const session = await getServerSession(nextAuthOptions)
 
   return session && (
-    <main className="flex h-full overflow-y-hidden">
+    <main className="flex h-screen overflow-y-hidden">
       <Aside page="chat"></Aside>
       <Chat session={session} />
     </main>

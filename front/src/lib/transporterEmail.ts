@@ -1,12 +1,13 @@
 import nodemailer from "nodemailer"
+import env from 'dotenv/config'
 
 const transporterEmail = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 465,
   secure: true,
   auth: {
-    user: "guimotateste@gmail.com",
-    pass: "oxsdastajswyvgts",
+    user: process.env.NODEMAILER_USER,
+    pass: process.env.NODEMAILER_PASSWORD,
   },
 });
 

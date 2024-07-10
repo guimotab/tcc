@@ -67,7 +67,7 @@ const CurrentGroup = ({ session }: CurrentGroupProps) => {
           <TabsContent value="vote">
             <div className="flex flex-col gap-3">
               {votes?.map(vote =>
-                <Link href={`my-groups/activity/voting/${vote.id}`} key={vote.id}>
+                <Link href={`my-groups/${currentGroupId}/activity/voting/${vote.id}`} key={vote.id}>
                   <Card className="flex justify-between px-4 py-2 cursor-pointer">
                     <div className="flex flex-col gap-1">
                       <Label className="text-lg">{vote.title}</Label>

@@ -6,16 +6,18 @@ import { Card } from "@/components/ui/card"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 import { Label } from "@/components/ui/label"
 import ActivityController from "@/controllers/ActivityController"
+import GroupController from "@/controllers/GroupController"
 import { IVotingActivity } from "@/interfaces/activity/IVotingActivity"
 import defaultRoles from "@/types/defaultRoles"
 import { Session } from "next-auth"
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { FaArrowLeft } from "react-icons/fa";
 interface VotingProps {
   activityId: string
   voting: IVotingActivity
   session: Session
+  groupId: string
 }
 
 interface VoteOfUsers {
@@ -27,7 +29,7 @@ interface VoteOfUsers {
   }[]
 }
 
-const VotingForm = ({ activityId, voting, session }: VotingProps) => {
+const VotingForm = ({ activityId, voting, session, groupId }: VotingProps) => {
   const user = session.user
   const router = useRouter()
   const [allUserVote, setAllUserVote] = useState<Record<string, VoteOfUsers>>({})
@@ -74,24 +76,33 @@ const VotingForm = ({ activityId, voting, session }: VotingProps) => {
     }
   }
 
-  function changeOption(optionChoose: string) {
+  async function changeOption(optionChoose: string) {
     const optionFinded = optionsChoose.find(option => option === optionChoose)
     const fakeAllUserVote = { ...allUserVote }
-    if (optionFinded) {
-      fakeAllUserVote[optionChoose].usersVote = allUserVote[optionsChoose[0]].usersVote.filter(user => user.id !== user.id)
-      return setOptionsChoose(prev => prev.filter(prevOption => prevOption !== optionFinded))
-    }
+    const usersOnGroup = await GroupController.getAllByUserId(user.id)
+    if (usersOnGroup.data) {
+      const thisUserFound = usersOnGroup.data.userOnGroups.find(thisUser => thisUser.groupId === groupId && thisUser.userId === user.id)
 
-    if (voting?.canMultipleVote) {
-      fakeAllUserVote[optionChoose].usersVote.push({ id: user.id, name: user.name, imagem: user.image, role: user. })
-      setOptionsChoose(prev => [...prev, optionChoose])
-    } else {
-      if (optionsChoose[0]) {
-        fakeAllUserVote[optionsChoose[0]].usersVote = allUserVote[optionsChoose[0]].usersVote.filter(user => user.id !== user.id)
+      if (thisUserFound) {
+        if (optionFinded) {
+          fakeAllUserVote[optionChoose].usersVote = allUserVote[optionsChoose[0]].usersVote.filter(user => user.id !== user.id)
+          return setOptionsChoose(prev => prev.filter(prevOption => prevOption !== optionFinded))
+        }
+
+        if (voting?.canMultipleVote) {
+          //falta considerar peso do voto de cargos
+          fakeAllUserVote[optionChoose].usersVote.push({ id: user.id, name: user.name, imagem: user.image, role: thisUserFound.role as defaultRoles })
+          setOptionsChoose(prev => [...prev, optionChoose])
+        } else {
+          //falta considerar peso do voto de cargos
+          if (optionsChoose[0]) {
+            fakeAllUserVote[optionsChoose[0]].usersVote = allUserVote[optionsChoose[0]].usersVote.filter(user => user.id !== user.id)
+          }
+          fakeAllUserVote[optionChoose].usersVote.push({ id: user.id, name: user.name, imagem: user.image, role: thisUserFound.role as defaultRoles })
+          setAllUserVote(fakeAllUserVote)
+          setOptionsChoose([optionChoose])
+        }
       }
-      fakeAllUserVote[optionChoose].usersVote.push({ id: user.id, name: user.name, imagem: user.image })
-      setAllUserVote(fakeAllUserVote)
-      setOptionsChoose([optionChoose])
     }
   }
 
