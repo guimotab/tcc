@@ -7,7 +7,6 @@ export interface IMyGroupsContext {
   groups: IGroup[] | undefined
   usersOnGroup: IUserOnGroup[] | []
   users: ({ role: string } & IUser)[] | []
-  currentGroupId?: string
   setMyGroupsContext: Dispatch<SetStateAction<IMyGroupsContext>>
 }
 

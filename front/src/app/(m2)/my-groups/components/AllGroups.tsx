@@ -2,21 +2,28 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
 import UserController from "@/controllers/UserController"
-import { MyGroupsContext } from "@/providers/MyGroupsContext"
+import { MyGroupsContext } from "@/app/(m2)/my-groups/MyGroupsContext"
 import { formAcronym } from "@/utils/formAcronym"
 import { useContext } from "react"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 
 interface AllGroupsProps {
 }
 
 const AllGroups = ({ }: AllGroupsProps) => {
-  const { groups, users, currentGroupId, setMyGroupsContext } = useContext(MyGroupsContext)
+  const { groups, users, setMyGroupsContext } = useContext(MyGroupsContext)
+  const searchParams = useSearchParams()
+  const pathname = usePathname();
+  const router = useRouter();
 
-  async function handleChangeCurrentGroup(newCurrentGroup: string) {
-    const respUsers = await UserController.getAllByGroupId(newCurrentGroup)
+  async function handleChangeCurrentGroup(newCurrentGroupId: string) {
+    const respUsers = await UserController.getAllByGroupId(newCurrentGroupId)
     if (respUsers.data) {
-      setMyGroupsContext(prev => ({ ...prev, users: respUsers.data, currentGroupId: newCurrentGroup }))
-    }
+      const urlParams = new URLSearchParams()
+      urlParams.set("group", newCurrentGroupId)
+      setMyGroupsContext(prev => ({ ...prev, users: respUsers.data, currentGroupId: newCurrentGroupId }))
+      router.push(`${pathname}/?${urlParams.toString()}`)
+    } 
   }
 
   return (
@@ -29,7 +36,7 @@ const AllGroups = ({ }: AllGroupsProps) => {
         {groups?.map(group =>
           <div key={group.id}
             onClick={() => handleChangeCurrentGroup(group.id)}
-            className={`flex justify-between px-4 py-2 ${currentGroupId === group.id ? "bg-slate-100" : "hover:bg-slate-50"} rounded-lg cursor-pointer`}>
+            className={`flex justify-between px-4 py-2 ${searchParams.get("group") === group.id ? "bg-slate-100" : "hover:bg-slate-50"} rounded-lg cursor-pointer`}>
             <div className="flex items-center gap-2">
               <Avatar className="">
                 <div className={`flex items-center justify-center w-9 h-9 rounded-full `}>
