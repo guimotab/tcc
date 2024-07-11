@@ -10,4 +10,5 @@ export type MessageResponse = "Success" |
   "MessageNotFound" |
   "ChatNotFound" |
   "ActivityNotFound" |
-  "UserVotingNotFound"
+  "UserVotingNotFound"|
+  "UserVoteNotFound"

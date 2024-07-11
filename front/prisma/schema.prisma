@@ -79,7 +79,7 @@ model UserVote {
   id               String   @id @default(uuid())
   votedOption      String[]
   userId           String
-  votingActivityId String?
+  votingActivityId String
 
   user           User            @relation(fields: [userId], references: [id])
   VotingActivity VotingActivity? @relation(fields: [votingActivityId], references: [id])

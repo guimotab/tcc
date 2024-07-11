@@ -43,15 +43,22 @@ const CurrentGroup = ({ session }: CurrentGroupProps) => {
       setVotes(respVote.data)
       setCanRender(true)
     }
-
   }
 
-  function findVoteCurrentUser(userVote: IUserVote[]) {
-    const findVote = userVote.find(user=> user.userId === session.user.id)
-    if (findVote) {
-      return <Label className="text-green-600">Votado</Label>
+  function statusVote(vote: IVotingActivity & { userVote: IUserVote[] }) {
+    const now = dayjs()
+    const endfOfVote = dayjs(vote.endOfVoting)
+    const diffTimeVote = endfOfVote.diff(now)
+
+    if (diffTimeVote < 0) {
+      return <Label className="text-slate-600 cursor-pointer">Finalizado</Label>
     }
-    return <Label className="text-destructive">Não Votado</Label>
+
+    const findVote = vote.userVote.find(user => user.userId === session.user.id)
+    if (findVote) {
+      return <Label className="text-green-600 cursor-pointer">Votado</Label>
+    }
+    return <Label className="text-destructive cursor-pointer">Não Votado</Label>
   }
 
   return currentGroup && canRender && (
@@ -68,13 +75,13 @@ const CurrentGroup = ({ session }: CurrentGroupProps) => {
             <div className="flex flex-col gap-3">
               {votes?.map(vote =>
                 <Link href={`my-groups/${currentGroupId}/activity/voting/${vote.id}`} key={vote.id}>
-                  <Card className="flex justify-between px-4 py-2 cursor-pointer">
-                    <div className="flex flex-col gap-1">
-                      <Label className="text-lg">{vote.title}</Label>
-                      <Label>Limite: {dayjs(vote.endOfVoting).format("DD/MM/YYYY, HH:mm")}h</Label>
+                  <Card className="flex justify-between px-4 py-2 cursor-pointer hover:shadow-md">
+                    <div className="flex flex-col gap-1 ">
+                      <Label className="text-lg cursor-pointer">{vote.title}</Label>
+                      <Label className="cursor-pointer">Limite: {dayjs(vote.endOfVoting).format("DD/MM/YYYY, HH:mm")}h</Label>
                     </div>
                     <div>
-                      {findVoteCurrentUser(vote.userVote)}
+                      {statusVote(vote)}
                     </div>
                   </Card>
                 </Link>

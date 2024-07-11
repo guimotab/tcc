@@ -12,11 +12,19 @@ export default abstract class ActivityController {
 
   static async createNewVote(voting: IVotingActivityWithoutDefaults & { weights: IVotingWeightWithoutDefaults[] }) {
     const { weights, ...activity } = voting
-    return await this._activityService.postVote({ activity, weights }) as IActivityResponse<IVotingActivity>
+    return await this._activityService.newVote({ activity, weights }) as IActivityResponse<IVotingActivity>
+  }
+
+  static async submitVote(user: IUser, optionsChoose: string[], activityVoteId: string) {
+    return await this._activityService.submitVote(user.id, optionsChoose, activityVoteId) as IActivityResponse<IVotingActivity>
   }
 
   static async getVote(idVote: string) {
     return await this._activityService.getVote(idVote) as IActivityResponse<IVotingActivity>
+  }
+
+  static async deleteVote(idVote: string) {
+    return await this._activityService.deleteVote(idVote) as IActivityResponse<IVotingActivity>
   }
 
   static async getAllVoteByGroupId(idVote: string) {

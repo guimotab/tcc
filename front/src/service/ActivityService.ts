@@ -25,13 +25,23 @@ export default class ActivityService extends HttpService<IGroup, IActivityRespon
     super("activity")
   }
 
-  async postVote({ weights, activity }: IParamVotePost) {
+  async newVote({ weights, activity }: IParamVotePost) {
     const result = await axios.post(`${this.url}/vote`, { weights, activity }).catch(this.handleError) as IAxiosResponse<IActivityResponse<IVotingActivity>>
+    return result.data
+  }
+
+  async submitVote(userId: string, votedOption: string[], votingActivityId: string) {
+    const result = await axios.post(`${this.url}/vote/userVote/`, { userId, votedOption, votingActivityId }).catch(this.handleError) as IAxiosResponse<IActivityResponse<IVotingActivity>>
     return result.data
   }
 
   async getVote(id: string) {
     const result = await axios.get(`${this.url}/vote/${id}`).catch(this.handleError) as IAxiosResponse<IActivityResponse<IVotingActivity>>
+    return result.data
+  }
+
+  async deleteVote(id: string) {
+    const result = await axios.delete(`${this.url}/vote/${id}`).catch(this.handleError) as IAxiosResponse<IActivityResponse<IVotingActivity>>
     return result.data
   }
 

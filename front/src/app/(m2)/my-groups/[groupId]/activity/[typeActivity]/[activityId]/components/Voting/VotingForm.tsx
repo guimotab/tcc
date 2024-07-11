@@ -1,4 +1,3 @@
-"use client"
 import AvatarWorker from "@/app/(m2)/components/AvatarWorker"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -40,11 +39,12 @@ const VotingForm = ({ activityId, voting, session, groupId }: VotingProps) => {
     load()
   }, [])
 
-  function submitVote() {
-    if (optionsChoose.length === 0) {
-
-    } else {
-
+  async function submitVote() {
+    if (optionsChoose.length !== 0) {
+      const respVote = await ActivityController.submitVote(user, optionsChoose, activityId)
+      if (respVote.resp === "Success") {
+        router.push("/my-groups")
+      }
     }
   }
 
@@ -55,13 +55,16 @@ const VotingForm = ({ activityId, voting, session, groupId }: VotingProps) => {
 
     if (respAllUserVotes.data) {
       const voteOfUsers = {} as Record<string, VoteOfUsers>
+
       voting.voteOptions.forEach(voteOption => {
+
         const userVotedThisOption = respAllUserVotes.data!.filter(userVote => {
           return userVote.votedOption.includes(voteOption)
         })
+
         voteOfUsers[voteOption] = {
           usersVote: userVotedThisOption.map(user => {
-            const currentGroupIndex = user.user.groups.findIndex(group => group.id === voting.groupId)
+            const currentGroupIndex = user.user.groups.findIndex(group => group.groupId === voting.groupId)
             return {
               id: user.userId,
               name: user.user.name,
@@ -70,6 +73,7 @@ const VotingForm = ({ activityId, voting, session, groupId }: VotingProps) => {
             }
           })
         }
+        
       })
       setAllUserVote(voteOfUsers)
       setCanRender(true)
@@ -117,7 +121,9 @@ const VotingForm = ({ activityId, voting, session, groupId }: VotingProps) => {
         <h1 className="text-2xl font-medium">Votação</h1>
         <Label className="text-base">Tema: {voting?.title}</Label>
       </div>
+
       <div className="flex gap-5">
+
         <div className="flex flex-col gap-2 w-full">
           <Label>Opções</Label>
           <div className="flex flex-col gap-3">
@@ -128,6 +134,7 @@ const VotingForm = ({ activityId, voting, session, groupId }: VotingProps) => {
             )}
           </div>
         </div>
+
         <div className="w-full">
           <Label className="text-lg">Votações Realizadas</Label>
           <Card className="px-3 py-2 space-y-2">
@@ -169,6 +176,7 @@ const VotingForm = ({ activityId, voting, session, groupId }: VotingProps) => {
             )}
           </Card>
         </div>
+        
       </div>
       <Button
         onClick={submitVote}

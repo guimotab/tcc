@@ -1,3 +1,5 @@
+import IUserVote from "./IUserVote"
+
 export interface IVotingActivity extends IVotingActivityWithoutDefaults {
   id: string
   createdAt: Date
@@ -12,6 +14,6 @@ export interface IVotingActivityWithoutDefaults {
   endOfVoting: Date
   startOfVoting: Date
   rolesParticipating: string[]
-  participantVotesId: string[]
+  userVote?: IUserVote[]
 }
 

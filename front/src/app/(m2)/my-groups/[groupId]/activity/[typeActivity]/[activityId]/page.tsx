@@ -23,7 +23,7 @@ const Activity = async ({ params }: IParamsActivity) => {
     <main className="flex w-screen h-screen">
       <Aside page="myGroups" />
       <div className="flex justify-center w-full mt-[6rem]">
-        {typeActivity === "voting" && <Voting activityId={activityId} groupId={groupId}/>}
+        {typeActivity === "voting" && <Voting session={session} activityId={activityId} groupId={groupId}/>}
       </div>
     </main>
   )
