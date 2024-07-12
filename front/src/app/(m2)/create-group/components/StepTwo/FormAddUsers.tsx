@@ -24,6 +24,7 @@ const FormAddUsers = () => {
       emailParticipant: "guimotab22@gmail.com",
     },
   })
+  
   function onAddParticipant(formValues: z.infer<typeof formSchema>) {
     const alreadyExists = checkIfAlreadyExist(formValues.emailParticipant)
     if (alreadyExists) {

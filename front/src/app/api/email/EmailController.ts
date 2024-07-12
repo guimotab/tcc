@@ -14,7 +14,7 @@ interface paramsSendEmail {
   link: string
 }
 
-export default abstract class EmailController {
+export default abstract class EmailControllerApi {
 
   static async sendEmail({ from, link, to }: paramsSendEmail) {
     const url = process.env.NEXT_PUBLIC_URL || "http://localhost:3000"

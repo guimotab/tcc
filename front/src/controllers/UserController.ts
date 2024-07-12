@@ -1,6 +1,7 @@
 import UserService, { IUserResponse } from "@/service/UserService";
 import IUser from "@/interfaces/IUser";
 import IUserOnGroup from "@/interfaces/IUserOnGroup";
+import defaultRoles from "@/types/defaultRoles";
 
 export default class UserController {
 
@@ -10,7 +11,7 @@ export default class UserController {
     return await this._userService.getUserOnGroup(userId, groupId) as IUserResponse<IUserOnGroup>
   }
   static async getAllByGroupId(groupId: string) {
-    return await this._userService.getAllByGroupId(groupId) as IUserResponse<({ role: string } & IUser)[]>
+    return await this._userService.getAllByGroupId(groupId) as IUserResponse<({ role: defaultRoles } & IUser)[]>
   }
   static async get(id: string) {
     return await this._userService.get(id) as IUserResponse<IUser>

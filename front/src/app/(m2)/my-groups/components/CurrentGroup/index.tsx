@@ -49,7 +49,7 @@ const CurrentGroup = ({ session }: CurrentGroupProps) => {
       <AsideIcons sectionSelected={sectionSelected} setSectionSelected={setSectionSelected} />
 
       {sectionSelected === "task" && <Activities session={session} />}
-      {sectionSelected === "group" && <GroupInformation session={session} />}
+      {sectionSelected === "group" && <GroupInformation session={session} currentGroup={currentGroup} />}
 
     </div>
   )

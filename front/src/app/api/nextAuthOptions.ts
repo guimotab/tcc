@@ -8,7 +8,7 @@ const oneHour = 60 * 60
 const nextAuthOptions = {
   session: {
     strategy: "jwt",
-    maxAge: 10 * oneHour
+    maxAge: 10 * oneHour,
   },
   providers: [
     Credentials({
@@ -49,7 +49,35 @@ const nextAuthOptions = {
       }
       return session
     }
-  }
+  },
+  cookies: {
+    sessionToken: {
+      name: `chatworker-next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: true
+      }
+    },
+    callbackUrl: {
+      name: `chatworker-next-auth.callback-url`,
+      options: {
+        sameSite: 'lax',
+        path: '/',
+        secure: true
+      }
+    },
+    csrfToken: {
+      name: `chatworker-next-auth.csrf-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: true
+      }
+    },
+  },
 } as AuthOptions
 
 export default nextAuthOptions

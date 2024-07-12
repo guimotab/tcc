@@ -9,7 +9,7 @@ const Chat = async () => {
   return session && (
     <main className="flex w-screen h-screen">
       <Aside page="myGroups" />
-      <div className="flex justify-center w-full mt-[6rem] h-full">
+      <div className="flex justify-center w-full mt-[6rem]">
         <MyGroups session={session}/>
       </div>
     </main>

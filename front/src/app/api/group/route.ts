@@ -3,7 +3,7 @@ import IApiResponse from "@/interfaces/api/IApiResponse"
 import { prismaPg } from "@/lib/prisma"
 import { NextApiResponse } from "next"
 import { NextResponse } from "next/server"
-import EmailController from "../email/EmailController"
+import EmailControllerApi from "../email/EmailController"
 import ChatService from "@/service/ChatService"
 import ChatController from "@/controllers/ChatController"
 
@@ -43,7 +43,7 @@ export async function POST(req: Request, res: NextApiResponse) {
     participants.forEach(async participant => {
       if (participant.email !== user.email) {
         const invites = await prismaPg.invites.create({ data: { role: participant.role, group: { connect: { id: group.id } } } })
-        EmailController.sendEmail({
+        EmailControllerApi.sendEmail({
           from: { email: user.email, role: "Líder", name: user.name, project: name },
           link: invites.id,
           to: participant

@@ -16,10 +16,12 @@ const ActionsGroup = () => {
           <FaSquarePlus className="text-xl text-slate-600" />
         </Button>
       </Link>
-      <Button variant={"outline"} className="flex gap-2">
-        <Label>Ver Grupo</Label>
-        <MdGroups className="text-2xl text-slate-600" />
-      </Button>
+      <Link href={`my-groups/?group=${currentGroup!.id}`}>
+        <Button variant={"outline"} className="flex gap-2">
+          <Label>Ver Grupo</Label>
+          <MdGroups className="text-2xl text-slate-600" />
+        </Button>
+      </Link>
     </div>
   )
 }

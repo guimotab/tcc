@@ -42,16 +42,16 @@ const AsideNavigate = ({ session, page }: AsideProps) => {
       active: page === "chat",
       redirect: "/chat"
     },
-    {
-      icon: MdGroupAdd,
-      active: page === "createGroup",
-      redirect: "/create-group/?step=1"
-    },
-    {
-      icon: FaGithub,
-      active: page === "project",
-      redirect: "/project"
-    },
+    // {
+    //   icon: MdGroupAdd,
+    //   active: page === "createGroup",
+    //   redirect: "/create-group/?step=1"
+    // },
+    // {
+    //   icon: FaGithub,
+    //   active: page === "project",
+    //   redirect: "/project"
+    // },
   ]
   return (
     <div className="flex flex-col justify-between h-full space-y-4 md:space-y-9">
