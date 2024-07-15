@@ -1,5 +1,4 @@
 import EmailControllerApi from "@/app/api/email/EmailController"
-import ChatController from "@/controllers/ChatController"
 import IApiResponse from "@/interfaces/api/IApiResponse"
 import IGroup from "@/interfaces/IGroup"
 import IUser from "@/interfaces/IUser"
@@ -29,7 +28,6 @@ export async function POST(req: Request,
   const { user, participants, group } = await req.json() as reqBodyPost
 
   try {
-
     participants.forEach(async participant => {
       if (participant.email !== user.email) {
         const invites = await prismaPg.invites.create({ data: { role: participant.role, group: { connect: { id: groupId } } } })
@@ -40,13 +38,7 @@ export async function POST(req: Request,
         })
       }
     })
-
-    const respChat = await ChatController.createChat(group)
-    if (respChat.resp === "ServerError") {
-      throw new Error()
-    }
-
-    return NextResponse.json({ resp: "Success", data: group, status: 200 } as IApiResponse)
+    return NextResponse.json({ resp: "Success", status: 200 } as IApiResponse)
   } catch (error) {
     console.log(error);
     return NextResponse.json({ resp: "ServerError", status: 500 } as IApiResponse)

@@ -12,9 +12,6 @@ import IFormCreateGroup from "@/interfaces/IFormCreateGroup"
 import { Session } from "next-auth"
 import { CreateChatContext } from "@/providers/CreateChatContext"
 
-
-
-
 interface CreateChatProps {
   session: Session
 }

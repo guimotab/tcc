@@ -49,6 +49,9 @@ const arrayResponse = {
   },
   UserVotingNotFound:{
     title: "Votação do usuário não encontrada!"
+  },
+  UserVoteNotFound:{
+    title: "Voto do usuário não encontrado"
   }
 } as Record<MessageResponse, IMessageResponse>
 

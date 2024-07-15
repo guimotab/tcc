@@ -15,6 +15,7 @@ import ResolveResponses from "@/utils/resolveResponseErrors"
 import Link from "next/link"
 import { Session } from "next-auth"
 import { CreateChatContext } from "@/providers/CreateChatContext"
+import { createToast } from "@/utils/createToastUtil"
 
 interface StepFourProps {
   session: Session
@@ -53,23 +54,15 @@ const StepFour = ({ session }: StepFourProps) => {
 
     if (respGroup.resp !== "Success") {
       const messageResponse = new ResolveResponses(respGroup.resp)
-      showToast("destructive", messageResponse)
+      createToast("destructive", messageResponse)
       return setIsLoadingSubmit(false)
     }
     const messageResponse = new ResolveResponses(respGroup.resp, { title: "Grupo criado com sucesso!", description: "Convites enviados por email aos participantes." })
-    showToast("default", messageResponse)
+    createToast("default", messageResponse)
     setIsLoadingSubmit(false)
     setGroupCreated(true)
   }
 
-  function showToast(variant: "default" | "destructive", messageResponse: ResolveResponses) {
-    const { title, description } = messageResponse.resolveResponse()
-    toast({
-      title,
-      description,
-      variant,
-    })
-  }
 
   return (
     <>

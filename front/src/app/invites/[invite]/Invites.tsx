@@ -26,7 +26,7 @@ const Invites = ({ session }: InvitesProps) => {
       const respInvite = await InvitesController.verifyInvite(invite)
 
       if (respInvite.resp === "Success") {
-        const respGroup = await GroupController.addNewParticipant(currentUser, respInvite.data!)
+        const respGroup = await GroupController.acceptedNewParticipant(currentUser, respInvite.data!)
         if (respGroup.resp === "Success") {
           return router.replace("/chat")
         }
