@@ -1,4 +1,4 @@
-import IUser from "@/interfaces/IUser"
+import IGroup from "@/interfaces/IGroup"
 import IApiResponse from "@/interfaces/api/IApiResponse"
 import { prismaPg } from "@/lib/prisma"
 import { NextApiResponse } from "next"
@@ -6,6 +6,10 @@ import { NextResponse } from "next/server"
 
 interface reqParams {
   id: string
+}
+
+interface reqBodyPost {
+  group: IGroup
 }
 
 export async function GET(request: Request,
@@ -28,7 +32,7 @@ export async function GET(request: Request,
 }
 
 
-export async function DELETE(req: Request, 
+export async function DELETE(req: Request,
   { params }: { params: reqParams },
   res: NextApiResponse) {
 
@@ -37,9 +41,26 @@ export async function DELETE(req: Request,
   try {
     await prismaPg.group.delete({ where: { id } })
 
-    return res.status(200).json({ resp: "Success", status: 200 } as IApiResponse) 
+    return NextResponse.json({ resp: "Success", status: 200 } as IApiResponse)
   } catch (err) {
     console.log(err);
-    return res.json({ resp: "ServerError", status: 500 })
+    return NextResponse.json({ resp: "ServerError", status: 500 })
+  }
+}
+
+export async function PUT(req: Request,
+  { params }: { params: reqParams },
+  res: NextApiResponse) {
+
+  const { id } = params
+  const { group } = await req.json() as reqBodyPost
+
+  try {
+    const newGroup = await prismaPg.group.update({ where: { id }, data: group })
+
+    return NextResponse.json({ resp: "Success", data: newGroup, status: 200 } as IApiResponse)
+  } catch (err) {
+    console.log(err);
+    return NextResponse.json({ resp: "ServerError", status: 500 })
   }
 }

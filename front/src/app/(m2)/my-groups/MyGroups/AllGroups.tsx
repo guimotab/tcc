@@ -2,10 +2,10 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
 import UserController from "@/controllers/UserController"
-import { MyGroupsContext } from "@/app/(m2)/my-groups/MyGroupsContext"
 import { formAcronym } from "@/utils/formAcronym"
 import { useContext } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { MyGroupsContext } from "./MyGroupsContext"
 
 interface AllGroupsProps {
 }

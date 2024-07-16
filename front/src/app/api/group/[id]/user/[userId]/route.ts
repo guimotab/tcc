@@ -1,5 +1,6 @@
 import IApiResponse from "@/interfaces/api/IApiResponse"
 import IUser from "@/interfaces/IUser"
+import IUserOnGroup from "@/interfaces/IUserOnGroup"
 import { prismaPg } from "@/lib/prisma"
 import defaultRoles from "@/types/defaultRoles"
 import { NextApiResponse } from "next"
@@ -21,7 +22,15 @@ export async function DELETE(req: Request,
   const { id: groupId, userId } = params
 
   try {
-    await prismaPg.userOnGroup.delete({ where: { userId_groupId: { groupId, userId } } })
+    const user = await prismaPg.userOnGroup.findUnique({ where: { userId_groupId: { groupId, userId } } }) as IUserOnGroup
+    
+    if (user?.role === "Líder") {
+      await prismaPg.userOnGroup.delete({ where: { userId_groupId: { groupId, userId } } })
+      const oldestUser = await prismaPg.userOnGroup.findMany({ where: { groupId }, orderBy: { assignedAt: "asc" } })
+      await prismaPg.userOnGroup.update({ where: { userId_groupId: { groupId, userId: oldestUser[0].userId } }, data: { ...oldestUser[0], role: "Líder" } })
+    } else {
+      await prismaPg.userOnGroup.delete({ where: { userId_groupId: { groupId, userId } } })
+    }
 
     return NextResponse.json({ resp: "Success", status: 200 } as IApiResponse)
   } catch (error) {

@@ -52,5 +52,9 @@ export default class GroupService extends HttpService<IGroup, IGroupResponse> {
     const result = await axios.post(`${this.url}/${group.id}/user`, { user, participants, group }).catch(this.handleError) as IAxiosResponse<IGroupResponse>
     return result.data
   }
+  async teste(group: IGroup) {
+    const result = await axios.put(`${this.url}/${group.id}/`, { group }).catch(this.handleError) as IAxiosResponse<IGroupResponse>
+    return result.data
+  }
 
 }

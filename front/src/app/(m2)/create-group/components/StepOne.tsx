@@ -10,10 +10,9 @@ import { useForm, FormProvider } from "react-hook-form"
 import { z } from "zod"
 import { CreateChatContext } from "@/providers/CreateChatContext"
 
-type formNames = "nameGroup" | "description"
 
-interface formArray {
-  name: formNames,
+interface formArray<T> {
+  name: T,
   label: string,
   placeholder: string
 }
@@ -61,7 +60,7 @@ const StepOne = () => {
       label: "Descrição (Opcional)",
       placeholder: "Adicione a descrição aqui"
     },
-  ] as formArray[]
+  ] as formArray<keyof z.infer<typeof formSchema>>[]
 
   return (
     <>

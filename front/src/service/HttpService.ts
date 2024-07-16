@@ -17,7 +17,7 @@ export default class HttpService<T, Resp> implements IHttpResponse<T, Resp> {
   }
 
   async put(id: string, data: T) {
-    const result = await axios.put(`${this.url}`, { id, ...data }).catch(this.handleError)
+    const result = await axios.put(`${this.url}/${id}`, { id, ...data }).catch(this.handleError)
     return result.data
   }
 

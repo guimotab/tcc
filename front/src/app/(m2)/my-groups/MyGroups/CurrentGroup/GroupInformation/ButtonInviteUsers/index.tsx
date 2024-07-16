@@ -3,7 +3,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Badge } from "@/components/ui/badge"
 import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import { IoMdPersonAdd } from "react-icons/io"
 import IUser from "@/interfaces/IUser"
 import defaultRoles from "@/types/defaultRoles"
@@ -14,21 +14,21 @@ import GroupController from "@/controllers/GroupController"
 import IGroup from "@/interfaces/IGroup"
 import ResolveResponses from "@/utils/resolveResponseErrors"
 import { createToast } from "@/utils/createToastUtil"
+import { GroupInformationContext } from "../../GroupInformationContext"
 
 interface ButtonInviteNewUsersProps {
   session: Session
   usersOnGroup: ({ role: defaultRoles; } & IUser)[]
-  currentGroup: IGroup
 }
 
-const ButtonInviteNewUsers = ({ usersOnGroup, session, currentGroup }: ButtonInviteNewUsersProps) => {
-
+const ButtonInviteNewUsers = ({ usersOnGroup, session }: ButtonInviteNewUsersProps) => {
+  const { currentGroup } = useContext(GroupInformationContext)
   const [participants, setParticipants] = useState<{ email: string, role: defaultRoles }[]>()
 
   async function handleInviteUser() {
     const findUserLogged = usersOnGroup.find(userOnGroup => userOnGroup.id === session.user.id)
     if (findUserLogged) {
-      const respGroup = await GroupController.addNewParticipant(participants!, findUserLogged, currentGroup)
+      const respGroup = await GroupController.addNewParticipant(participants!, findUserLogged, currentGroup!)
       if (respGroup.resp !== "Success") {
         const messageResponse = new ResolveResponses(respGroup.resp)
         return createToast("destructive", messageResponse)

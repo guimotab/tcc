@@ -32,8 +32,8 @@ export default abstract class GroupController {
     const newData = { ...data, user, participants }
     return await this._groupService.post(newData) as IGroupResponse
   }
-  static async put(id: string, data: IGroup) {
-    return await this._groupService.put(id, data) as IGroupResponse
+  static async updateGroupInformations(newData: IGroup) {
+    return await this._groupService.teste(newData) as IGroupResponse
   }
   static async delete(id: string) {
     return await this._groupService.delete(id) as IGroupResponse

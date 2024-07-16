@@ -2,33 +2,32 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import UserController from "@/controllers/UserController"
-import IGroup from "@/interfaces/IGroup"
 import IUser from "@/interfaces/IUser"
 import { formAcronym } from "@/utils/formAcronym"
 import { Session } from "next-auth"
-import { useEffect, useState } from "react"
-import { MdModeEdit } from "react-icons/md";
+import { useContext, useEffect, useState } from "react"
 import defaultRoles from "@/types/defaultRoles"
 import React from "react"
 import ButtonInviteNewUsers from "./ButtonInviteUsers"
 import ButtonLeaveGroup from "./ButtonLeaveGroup"
 import UserOfGroup from "./UserOfGroup"
 import ButtonEditGroupInformations from "./ButtonEditGroupInformations"
+import { GroupInformationContext } from "../GroupInformationContext"
 
 interface CurrentGroupProps {
   session: Session
-  currentGroup: IGroup
 }
 
-const GroupInformation = ({ session, currentGroup }: CurrentGroupProps) => {
+const GroupInformation = ({ session }: CurrentGroupProps) => {
   const [usersOnGroup, setUsersOnGroup] = useState<({ role: defaultRoles } & IUser)[]>()
+  const { currentGroup } = useContext(GroupInformationContext)
 
   useEffect(() => {
     loadData()
   }, [])
 
   async function loadData() {
-    const respUsers = await UserController.getAllByGroupId(currentGroup.id)
+    const respUsers = await UserController.getAllByGroupId(currentGroup!.id)
     if (respUsers.data) {
       setUsersOnGroup(respUsers.data)
     }
@@ -41,19 +40,19 @@ const GroupInformation = ({ session, currentGroup }: CurrentGroupProps) => {
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center gap-2">
             <Avatar className="flex items-center justify-center w-14 h-14 rounded-full">
-              <AvatarFallback className="bg-slate-200 text-xl" >{formAcronym(currentGroup.name, 2)}</AvatarFallback>
+              <AvatarFallback className="bg-slate-200 text-xl" >{formAcronym(currentGroup!.name, 2)}</AvatarFallback>
             </Avatar>
             <div className="flex flex-col gap-1">
-              <Label className="text-xl">{currentGroup.name}</Label>
-              <Label>{currentGroup.description}</Label>
+              <Label className="text-xl">{currentGroup!.name}</Label>
+              <Label>{currentGroup!.description}</Label>
             </div>
           </div>
-          <ButtonEditGroupInformations currentGroup={currentGroup} />
+          <ButtonEditGroupInformations  />
         </div>
 
         <Separator />
 
-        {usersOnGroup && <ButtonInviteNewUsers session={session} usersOnGroup={usersOnGroup} currentGroup={currentGroup} />}
+        {usersOnGroup && <ButtonInviteNewUsers session={session} usersOnGroup={usersOnGroup} />}
 
         <ul className="flex flex-col">
           {usersOnGroup?.map(user =>
@@ -62,8 +61,7 @@ const GroupInformation = ({ session, currentGroup }: CurrentGroupProps) => {
               session={session}
               user={user}
               usersOnGroup={usersOnGroup}
-              setUsersOnGroup={setUsersOnGroup}
-              currentGroup={currentGroup} />
+              setUsersOnGroup={setUsersOnGroup}/>
           )}
         </ul>
 

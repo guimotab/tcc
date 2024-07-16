@@ -1,11 +1,11 @@
 "use client"
 import { Card } from "@/components/ui/card"
 import GroupController from "@/controllers/GroupController"
-import { IMyGroupsContext, MyGroupsContext } from "@/app/(m2)/my-groups/MyGroupsContext"
 import { Session } from "next-auth"
 import { useEffect, useState } from "react"
-import AllGroups from "./components/AllGroups"
-import CurrentGroup from "./components/CurrentGroup"
+import CurrentGroup from "./CurrentGroup"
+import AllGroups from "./AllGroups"
+import { IMyGroupsContext, MyGroupsContext } from "./MyGroupsContext"
 
 interface MyGroupsProps {
   session: Session

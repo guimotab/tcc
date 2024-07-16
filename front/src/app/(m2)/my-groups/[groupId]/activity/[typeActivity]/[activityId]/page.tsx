@@ -1,6 +1,6 @@
 import Aside from "@/app/(m2)/components/Aside"
 import TypeActivity from "@/types/TypeActivities"
-import Voting from "./components/Voting"
+import Voting from "./Voting"
 import nextAuthOptions from "@/app/api/nextAuthOptions"
 import { getServerSession } from "next-auth"
 

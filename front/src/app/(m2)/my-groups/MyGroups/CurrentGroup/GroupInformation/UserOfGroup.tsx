@@ -9,27 +9,28 @@ import IUser from "@/interfaces/IUser"
 import { cn } from "@/lib/utils"
 import defaultRoles from "@/types/defaultRoles"
 import { Session } from "next-auth"
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
+import { GroupInformationContext } from "../GroupInformationContext"
 
 interface UserOfGroupProps {
   user: { role: defaultRoles } & IUser
   session: Session
-  currentGroup: IGroup
   usersOnGroup: ({ role: defaultRoles; } & IUser)[]
   setUsersOnGroup: React.Dispatch<React.SetStateAction<({ role: defaultRoles; } & IUser)[] | undefined>>
 }
 
-const UserOfGroup = ({ user, session, currentGroup, usersOnGroup, setUsersOnGroup }: UserOfGroupProps) => {
+const UserOfGroup = ({ user, session, usersOnGroup, setUsersOnGroup }: UserOfGroupProps) => {
   const allRoles = ["Admin", "Editor", "Usuário"] as defaultRoles[]
+  const { currentGroup } = useContext(GroupInformationContext)
   const [userRole, setUserRole] = useState(user.role)
 
   async function removeUserOfGroup() {
-    GroupController.deleteParticipant(currentGroup.id, user.id)
+    GroupController.deleteParticipant(currentGroup!.id, user.id)
     setUsersOnGroup(prev => prev!.filter(prevUser => prevUser.id !== user.id))
   }
 
   function concludeActions() {
-    GroupController.changeRoleUser(currentGroup.id, user, userRole)
+    GroupController.changeRoleUser(currentGroup!.id, user, userRole)
     const allUsers = [...usersOnGroup]
     const thisUserIndex = allUsers.findIndex(thisUser => thisUser.id === user.id)
     allUsers.splice(thisUserIndex, 1, { ...user, role: userRole })
