@@ -19,6 +19,7 @@ const CurrentGroup = ({ session }: CurrentGroupProps) => {
   const currentGroupId = searchParams.get("group")
   const [currentGroup, setCurrentGroup] = useState<IGroupInformationContext>()
   const [sectionSelected, setSectionSelected] = useState<"task" | "group">("group")
+  console.log("🚀 ~ CurrentGroup ~ currentGroup:", currentGroup)
 
   useEffect(() => {
     if (currentGroupId) {
@@ -38,8 +39,7 @@ const CurrentGroup = ({ session }: CurrentGroupProps) => {
     }
   }
 
-
-  return currentGroup && (
+  return currentGroup?.currentGroup && (
     <div className="flex justify-center my-6 w-full gap-8">
 
       <GroupInformationContext.Provider value={currentGroup}>

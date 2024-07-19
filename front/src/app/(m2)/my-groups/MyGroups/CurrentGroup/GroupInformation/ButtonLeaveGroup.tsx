@@ -4,13 +4,27 @@ import { cn } from "@/lib/utils"
 import { useContext } from "react"
 import { MyGroupsContext } from "../../MyGroupsContext"
 import { GroupInformationContext } from "../GroupInformationContext"
+import { usePathname, useSearchParams, useRouter } from "next/navigation"
+import GroupController from "@/controllers/GroupController"
+import { Session } from "next-auth"
 
-const ButtonLeaveGroup = () => {
-  const { currentGroup } = useContext(GroupInformationContext)
+interface ButtonLeaveGroupProps {
+  session: Session
+}
+
+const ButtonLeaveGroup = ({ session }: ButtonLeaveGroupProps) => {
+  const { currentGroup, setCurrentGroup } = useContext(GroupInformationContext)
   const { groups, setMyGroupsContext } = useContext(MyGroupsContext)
+  const pathname = usePathname();
+  const router = useRouter();
 
   function leaveGroup() {
+    GroupController.deleteParticipant(currentGroup!.id, session.user.id)
+    const currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.delete('group');
+    router.push(`${pathname}/?${currentUrl.searchParams.toString()}`)
     setMyGroupsContext(prev => ({ ...prev, groups: prev.groups?.filter(group => group.id !== currentGroup!.id) }))
+    setCurrentGroup(prev => ({ ...prev!, currentGroup: undefined }))
   }
 
   return (

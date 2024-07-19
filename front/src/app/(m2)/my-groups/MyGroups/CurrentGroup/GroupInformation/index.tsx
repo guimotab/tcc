@@ -23,7 +23,9 @@ const GroupInformation = ({ session }: CurrentGroupProps) => {
   const { currentGroup } = useContext(GroupInformationContext)
 
   useEffect(() => {
-    loadData()
+    if (currentGroup) {
+      loadData()
+    }
   }, [])
 
   async function loadData() {
@@ -33,21 +35,21 @@ const GroupInformation = ({ session }: CurrentGroupProps) => {
     }
   }
 
-  return (
+  return currentGroup && (
     <div className="relative flex flex-col h-full items-center justify-between max-w-[26rem] w-full">
 
       <div className="flex flex-col gap-3 w-full">
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center gap-2">
             <Avatar className="flex items-center justify-center w-14 h-14 rounded-full">
-              <AvatarFallback className="bg-slate-200 text-xl" >{formAcronym(currentGroup!.name, 2)}</AvatarFallback>
+              <AvatarFallback className="bg-slate-200 text-xl" >{formAcronym(currentGroup.name, 2)}</AvatarFallback>
             </Avatar>
             <div className="flex flex-col gap-1">
-              <Label className="text-xl">{currentGroup!.name}</Label>
-              <Label>{currentGroup!.description}</Label>
+              <Label className="text-xl">{currentGroup.name}</Label>
+              <Label>{currentGroup.description}</Label>
             </div>
           </div>
-          <ButtonEditGroupInformations  />
+          <ButtonEditGroupInformations />
         </div>
 
         <Separator />
@@ -61,13 +63,13 @@ const GroupInformation = ({ session }: CurrentGroupProps) => {
               session={session}
               user={user}
               usersOnGroup={usersOnGroup}
-              setUsersOnGroup={setUsersOnGroup}/>
+              setUsersOnGroup={setUsersOnGroup} />
           )}
         </ul>
 
       </div>
 
-      <ButtonLeaveGroup />
+      <ButtonLeaveGroup session={session}/>
 
     </div>
   )

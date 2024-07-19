@@ -23,7 +23,11 @@ export async function DELETE(req: Request,
 
   try {
     const user = await prismaPg.userOnGroup.findUnique({ where: { userId_groupId: { groupId, userId } } }) as IUserOnGroup
-    
+    const qtdUsers = await prismaPg.userOnGroup.count({ where: { groupId } })
+    if (qtdUsers === 1) {
+      await prismaPg.group.delete({ where: { id: groupId } })
+      return NextResponse.json({ resp: "Success", status: 200 } as IApiResponse)
+    }
     if (user?.role === "Líder") {
       await prismaPg.userOnGroup.delete({ where: { userId_groupId: { groupId, userId } } })
       const oldestUser = await prismaPg.userOnGroup.findMany({ where: { groupId }, orderBy: { assignedAt: "asc" } })
