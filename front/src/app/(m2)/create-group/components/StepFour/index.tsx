@@ -10,7 +10,6 @@ import IGroup from "@/interfaces/IGroup"
 import Participants from "./components/Participants"
 import LoadingButton from "@/components/LoadingButton"
 import { setTimeout } from "timers"
-import { toast } from "@/components/ui/use-toast"
 import ResolveResponses from "@/utils/resolveResponseErrors"
 import Link from "next/link"
 import { Session } from "next-auth"
@@ -29,7 +28,7 @@ const StepFour = ({ session }: StepFourProps) => {
   const searchParams = useSearchParams()
   const stepURL = searchParams.get("step") as stepCreateGroup
   const [isLoadingSubmit, setIsLoadingSubmit] = useState(false)
-  const [groupCreated, setGroupCreated] = useState(false)
+  const [groupCreated, setGroupCreated] = useState<IGroup>()
 
   function prevStep() {
     if (formSteps.verifyStepThree()) {
@@ -60,9 +59,8 @@ const StepFour = ({ session }: StepFourProps) => {
     const messageResponse = new ResolveResponses(respGroup.resp, { title: "Grupo criado com sucesso!", description: "Convites enviados por email aos participantes." })
     createToast("default", messageResponse)
     setIsLoadingSubmit(false)
-    setGroupCreated(true)
+    setGroupCreated(respGroup.data)
   }
-
 
   return (
     <>
@@ -116,7 +114,7 @@ const StepFour = ({ session }: StepFourProps) => {
                       Finalizar
                     </Button>
                   :
-                  <Link href={"chat"}>
+                  <Link href={`/my-groups?group=${groupCreated.id}`}>
                     <Button>Ver grupo</Button>
                   </Link>
                 }

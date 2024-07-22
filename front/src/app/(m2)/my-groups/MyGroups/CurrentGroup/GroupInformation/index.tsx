@@ -13,6 +13,7 @@ import ButtonLeaveGroup from "./ButtonLeaveGroup"
 import UserOfGroup from "./UserOfGroup"
 import ButtonEditGroupInformations from "./ButtonEditGroupInformations"
 import { GroupInformationContext } from "../GroupInformationContext"
+import { Skeleton } from "@/components/ui/skeleton"
 
 interface CurrentGroupProps {
   session: Session
@@ -29,7 +30,10 @@ const GroupInformation = ({ session }: CurrentGroupProps) => {
   }, [])
 
   async function loadData() {
-    const respUsers = await UserController.getAllByGroupId(currentGroup!.id)
+    const [respUsers] = await Promise.all([
+      UserController.getAllByGroupId(currentGroup!.id),
+      new Promise(resolve => setTimeout(resolve, 1000))
+    ])
     if (respUsers.data) {
       setUsersOnGroup(respUsers.data)
     }
@@ -57,19 +61,27 @@ const GroupInformation = ({ session }: CurrentGroupProps) => {
         {usersOnGroup && <ButtonInviteNewUsers session={session} usersOnGroup={usersOnGroup} />}
 
         <ul className="flex flex-col">
-          {usersOnGroup?.map(user =>
-            <UserOfGroup
-              key={user.name}
-              session={session}
-              user={user}
-              usersOnGroup={usersOnGroup}
-              setUsersOnGroup={setUsersOnGroup} />
-          )}
+          {usersOnGroup ?
+            usersOnGroup?.map(user =>
+              <UserOfGroup
+                key={user.name}
+                session={session}
+                user={user}
+                usersOnGroup={usersOnGroup}
+                setUsersOnGroup={setUsersOnGroup} />
+            )
+            :
+            <div className="flex flex-col gap-3">
+              <Skeleton className="w-full h-5" />
+              <Skeleton className="w-full h-9 mt-6" />
+              <Skeleton className="w-full h-9" />
+            </div>
+          }
         </ul>
 
       </div>
 
-      <ButtonLeaveGroup session={session}/>
+      <ButtonLeaveGroup session={session} />
 
     </div>
   )

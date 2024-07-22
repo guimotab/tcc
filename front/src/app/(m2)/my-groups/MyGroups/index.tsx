@@ -20,7 +20,10 @@ const MyGroups = ({ session }: MyGroupsProps) => {
   }, [])
 
   async function load() {
-    const respGroup = await GroupController.getAllByUserId(session.user.id)
+    const [respGroup] = await Promise.all([
+      GroupController.getAllByUserId(session.user.id),
+      // new Promise(resolve => setTimeout(resolve, 1000))
+    ])
     if (respGroup.data) {
       setMyGroupsContext({
         groups: respGroup.data.groups,
@@ -39,9 +42,9 @@ const MyGroups = ({ session }: MyGroupsProps) => {
 
           <AllGroups />
 
-          <div className="bg-slate-200 w-[1px]"/>
+          <div className="bg-slate-200 w-[1px]" />
 
-          <CurrentGroup session={session}/>
+          <CurrentGroup session={session} />
 
         </MyGroupsContext.Provider>
       </div>
