@@ -9,10 +9,11 @@ import { z } from "zod"
 import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { HTMLInputTypeAttribute } from "react";
+import { HTMLInputTypeAttribute, useState } from "react";
 import ResolveResponses from "@/utils/resolveResponseErrors";
 import { toast } from "sonner";
 import { signIn } from "next-auth/react";
+import LoadingButton from "../LoadingButton";
 
 type nameFields = "email" | "password"
 
@@ -30,6 +31,7 @@ interface LoginProps {
 
 export default function LoginForm({ signInPage, navigationTo }: LoginProps) {
   const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
 
   const formSchema = z.object({
     email: z.string().min(1, "O email é obrigatório").email("Email inválido"),
@@ -47,25 +49,27 @@ export default function LoginForm({ signInPage, navigationTo }: LoginProps) {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const email = values.email
     const password = values.password
+    setIsLoading(true)
+    validateCredentials(email, password)
+  }
 
-    const result = await signIn("credentials" , {
+  async function validateCredentials(email: string, password: string) {
+    const result = await signIn("credentials", {
       email,
       password,
       redirect: false
     })
-
-    console.log("🚀 ~ onSubmit ~ result:", result)
+    setIsLoading(false)
     if (result?.error) {
       const errorResponse = new ResolveResponses("ServerError")
       createToast(errorResponse)
       return
     }
-    console.log("🚀 ~ onSubmit ~ navigationTo:", navigationTo)
     router.replace(navigationTo)
   }
 
   function createToast(errorResponse: ResolveResponses) {
-    const {title, description} = errorResponse.resolveResponse()
+    const { title, description } = errorResponse.resolveResponse()
     toast(title, {
       description: description,
       action: {
@@ -130,7 +134,11 @@ export default function LoginForm({ signInPage, navigationTo }: LoginProps) {
               />
             )}
 
-            <Button type="submit">Entrar</Button>
+            {isLoading ?
+              <LoadingButton />
+              :
+              <Button type="submit">Entrar</Button>
+            }
           </form>
         </FormProvider>
       </CardContent>

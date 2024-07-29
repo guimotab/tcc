@@ -94,11 +94,11 @@ const Chat = ({ session }: ChatProps) => {
 
   return (
     <ChatContext.Provider value={dataContext}>
+      <Groups session={session} />
       <Suspense fallback={<p>Carregando...</p>}>
         {canRender &&
           (dataContext.groups?.length !== 0 ?
             <>
-              <Groups session={session} />
               {dataContext.currentGroup && <ChatGroup session={session} />}
             </>
             :

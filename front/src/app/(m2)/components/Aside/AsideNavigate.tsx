@@ -8,9 +8,7 @@ import { IoChatbubbleEllipses } from "react-icons/io5";
 import { AiFillHome } from "react-icons/ai";
 import { LuLogOut } from "react-icons/lu";
 import { MdGroups } from "react-icons/md";
-import { MdGroupAdd } from "react-icons/md";
 import { Separator } from "../../../../components/ui/separator"
-import { FaGithub } from "react-icons/fa6";
 import { useRouter } from "next/navigation"
 import { Session } from "next-auth"
 
