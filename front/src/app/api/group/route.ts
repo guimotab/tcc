@@ -1,4 +1,4 @@
-import IUser from "@/interfaces/IUser"
+import { User } from "@prisma/client"
 import IApiResponse from "@/interfaces/api/IApiResponse"
 import { prismaPg } from "@/lib/prisma"
 import { NextApiResponse } from "next"
@@ -10,7 +10,7 @@ import ChatController from "@/controllers/ChatController"
 interface reqBodyPost {
   name: string
   description: string,
-  user: IUser
+  user: User 
   participants: {
     email: string
     role: string

@@ -1,9 +1,9 @@
 "use client"
 import { Separator } from "@/components/ui/separator"
 import { useContext, useEffect, useState } from "react"
-import Group from "./Group"
+import GroupComponent from "./Group"
 import RecordChats from "@/classes/RecordChats"
-import IGroup from "@/interfaces/IGroup"
+import { Group } from "@prisma/client"
 import dayjs from "dayjs"
 import { Session } from "next-auth"
 import { ChatContext } from "@/providers/ChatContext"
@@ -18,7 +18,7 @@ interface GroupsProps {
 const Groups = ({ session }: GroupsProps) => {
   const { groups, recordChats } = useContext(ChatContext)
   const recordChatsClass = new RecordChats(recordChats)
-  const [groupsOrdenedByTime, setGroupsOrdenedByTime] = useState<IGroup[]>()
+  const [groupsOrdenedByTime, setGroupsOrdenedByTime] = useState<Group[]>()
 
   useEffect(() => {
     setGroupsOrdenedByTime(orderGroupsByLastChat())
@@ -59,7 +59,7 @@ const Groups = ({ session }: GroupsProps) => {
           <div className="flex flex-col ">
             {groupsOrdenedByTime.map((group, index) =>
               <div key={group.id}>
-                <Group group={group} session={session} />
+                <GroupComponent group={group} session={session} />
                 {groupsOrdenedByTime.length - 1 !== index && <Separator className="bg-slate-100" />}
               </div>
             )}

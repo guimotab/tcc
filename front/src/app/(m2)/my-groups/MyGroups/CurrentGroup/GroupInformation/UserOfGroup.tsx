@@ -4,8 +4,7 @@ import { Badge } from "@/components/ui/badge"
 import { buttonVariants } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import GroupController from "@/controllers/GroupController"
-import IGroup from "@/interfaces/IGroup"
-import IUser from "@/interfaces/IUser"
+import { User } from "@prisma/client"
 import { cn } from "@/lib/utils"
 import defaultRoles from "@/types/defaultRoles"
 import { Session } from "next-auth"
@@ -13,10 +12,10 @@ import React, { useContext, useState } from "react"
 import { GroupInformationContext } from "../GroupInformationContext"
 
 interface UserOfGroupProps {
-  user: { role: defaultRoles } & IUser
+  user: { role: defaultRoles } & User 
   session: Session
-  usersOnGroup: ({ role: defaultRoles; } & IUser)[]
-  setUsersOnGroup: React.Dispatch<React.SetStateAction<({ role: defaultRoles; } & IUser)[] | undefined>>
+  usersOnGroup: ({ role: defaultRoles; } & User )[]
+  setUsersOnGroup: React.Dispatch<React.SetStateAction<({ role: defaultRoles; } & User )[] | undefined>>
 }
 
 const UserOfGroup = ({ user, session, usersOnGroup, setUsersOnGroup }: UserOfGroupProps) => {
@@ -42,7 +41,7 @@ const UserOfGroup = ({ user, session, usersOnGroup, setUsersOnGroup }: UserOfGro
       {user.role === "Líder" || user.id === session.user.id ?
         <div className="flex items-center justify-between w-full px-3 hover:bg-slate-50 py-2 rounded-lg cursor-pointer">
           <div className="flex items-center gap-2 w-full">
-            <AvatarWorker nameFallback={user.name} src={user.image} sizeText="text-lg" className="w-9 h-9" />
+            <AvatarWorker nameFallback={user.name} src={user.photo} sizeText="text-lg" className="w-9 h-9" />
             <p className="">{user.name}</p>
           </div>
           <div className="flex items-center gap-3">
@@ -56,7 +55,7 @@ const UserOfGroup = ({ user, session, usersOnGroup, setUsersOnGroup }: UserOfGro
           <div className="flex items-center justify-between w-full">
             <AlertDialogTrigger className={cn("flex items-center w-full hover:bg-slate-50 px-3 py-2 rounded-lg focus-visible:ring-0")}>
               <div className="flex items-center gap-2 w-full">
-                <AvatarWorker nameFallback={user.name} src={user.image} sizeText="text-lg" className="w-9 h-9" />
+                <AvatarWorker nameFallback={user.name} src={user.photo} sizeText="text-lg" className="w-9 h-9" />
                 <p className="">{user.name}</p>
               </div>
               <div className="flex items-center gap-3">

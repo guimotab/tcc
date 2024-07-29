@@ -1,6 +1,6 @@
-import IInvites from "@/interfaces/IInvites";
 import IApiResponse from "@/interfaces/api/IApiResponse";
 import { prismaPg } from "@/lib/prisma";
+import { Invites } from "@prisma/client";
 import { NextApiResponse } from "next";
 
 export async function POST(req: Request, res: NextApiResponse) {
@@ -8,7 +8,7 @@ export async function POST(req: Request, res: NextApiResponse) {
 
   try {
 
-    const arrayInvites = [] as IInvites[]
+    const arrayInvites = [] as Invites[]
 
     for (let i = 0; i < Number(quantity); i++) {
       // const invites = await prismaPg.invites.create({ data: { group: { connect: { id: groupId } } } })

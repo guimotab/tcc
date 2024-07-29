@@ -1,9 +1,9 @@
-import IGroup from "@/interfaces/IGroup"
+import { Group } from "@prisma/client"
 import { cn } from "@/lib/utils"
 import { HTMLAttributes } from "react"
 
 interface GroupMessagesProps extends HTMLAttributes<HTMLDivElement> {
-  group: IGroup
+  group: Group
 }
 
 const GroupMessages = ({ children, group, className, ...props }: GroupMessagesProps) => {

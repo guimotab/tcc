@@ -1,4 +1,4 @@
-import { IChatMessage } from "./IChatMessage"
+import { IChatMessage } from "./Chats/IChatMessage"
 
 /**
  * interface utilizada para manipular as conversas dos chats pelo messages do useContext

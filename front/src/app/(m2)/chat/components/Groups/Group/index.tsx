@@ -2,10 +2,9 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { useContext, useEffect, useState } from "react"
 import UserController from "@/controllers/UserController"
-import IUser from "@/interfaces/IUser"
-import IGroup from "@/interfaces/IGroup"
+import { User, Group } from "@prisma/client"
 import RecordChats from "@/classes/RecordChats"
-import { IChatMessage } from "@/interfaces/IChatMessage"
+import { IChatMessage } from "@/interfaces/Chats/IChatMessage"
 import dayjs, { Dayjs } from "dayjs"
 import { clearInterval, setInterval } from "timers"
 import GroupElapsedTime from "./GroupElapsedTime"
@@ -16,11 +15,11 @@ import { ChatContext } from "@/providers/ChatContext"
 import { Session } from "next-auth"
 
 interface GroupProps {
-  group: IGroup
+  group: Group
   session: Session
 }
 
-const Group = ({ group, session }: GroupProps) => {
+const GroupComponent = ({ group, session }: GroupProps) => {
   const oneMinute = 60000
   const { currentGroup, groups, setDataContext, recordChats, isAtEndOfChat } = useContext(ChatContext)
   const recordChatClass = new RecordChats(recordChats)
@@ -83,7 +82,7 @@ const Group = ({ group, session }: GroupProps) => {
     }
 
     const newCurrentGroup = groups!.find(group => group.id === idGroup)
-    let currentUsers = [] as IUser[]
+    let currentUsers = [] as User []
 
     if (newCurrentGroup) {
       const respUsers = await UserController.getAllByGroupId(newCurrentGroup.id)
@@ -161,4 +160,4 @@ const Group = ({ group, session }: GroupProps) => {
   )
 }
 
-export default Group
+export default GroupComponent

@@ -1,15 +1,15 @@
-import IGroup from "@/interfaces/IGroup";
+import { Group } from "@prisma/client";
 import { IRecordChat } from "@/interfaces/IRecordChat";
-import IUser from "@/interfaces/IUser";
-import IUserOnGroup from "@/interfaces/IUserOnGroup";
+import { User } from "@prisma/client";
+import { UserOnGroup } from "@prisma/client"
 import { Dispatch, SetStateAction, createContext } from "react";
 import { Socket } from "socket.io-client";
 
 export interface IMessageContext {
-  groups: IGroup[] | undefined
-  userOnGroups: IUserOnGroup[] | []
-  currentUsers: IUser[] | []
-  currentGroup: IGroup | undefined
+  groups: Group[] | undefined
+  userOnGroups: UserOnGroup[] | []
+  currentUsers: User [] | []
+  currentGroup: Group | undefined
   recordChats: IRecordChat[]
   socket: Socket
   isAtEndOfChat: boolean

@@ -1,7 +1,7 @@
 import EmailControllerApi from "@/app/api/email/EmailController"
 import IApiResponse from "@/interfaces/api/IApiResponse"
-import IGroup from "@/interfaces/IGroup"
-import IUser from "@/interfaces/IUser"
+import { Group } from "@prisma/client"
+import { User } from "@prisma/client"
 import { prismaPg } from "@/lib/prisma"
 import defaultRoles from "@/types/defaultRoles"
 import { NextApiResponse } from "next"
@@ -12,8 +12,8 @@ interface reqBodyPost {
     email: string
     role: string
   }[]
-  user: IUser & { role: defaultRoles }
-  group: IGroup
+  user: User  & { role: defaultRoles }
+  group: Group
 }
 
 interface reqParams {

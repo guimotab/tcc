@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { useContext, useState } from "react"
 import { Input } from "@/components/ui/input"
 import GroupController from "@/controllers/GroupController"
-import IGroup from "@/interfaces/IGroup"
+import { Group } from "@prisma/client"
 import Participants from "./components/Participants"
 import LoadingButton from "@/components/LoadingButton"
 import { setTimeout } from "timers"
@@ -28,7 +28,7 @@ const StepFour = ({ session }: StepFourProps) => {
   const searchParams = useSearchParams()
   const stepURL = searchParams.get("step") as stepCreateGroup
   const [isLoadingSubmit, setIsLoadingSubmit] = useState(false)
-  const [groupCreated, setGroupCreated] = useState<IGroup>()
+  const [groupCreated, setGroupCreated] = useState<Group>()
 
   function prevStep() {
     if (formSteps.verifyStepThree()) {
@@ -40,11 +40,11 @@ const StepFour = ({ session }: StepFourProps) => {
     const dataGroup = {
       name: formSteps.nameGroup,
       description: formSteps.description,
-    } as IGroup
+    } as Group
     createGroupRequest(dataGroup)
   }
 
-  async function createGroupRequest(dataGroup: IGroup) {
+  async function createGroupRequest(dataGroup: Group) {
 
     const [respGroup] = await Promise.all([
       GroupController.createGroup(dataGroup, session.user, formSteps.participants),

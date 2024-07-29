@@ -2,7 +2,6 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import UserController from "@/controllers/UserController"
-import IUser from "@/interfaces/IUser"
 import { formAcronym } from "@/utils/formAcronym"
 import { Session } from "next-auth"
 import { useContext, useEffect, useState } from "react"
@@ -14,13 +13,14 @@ import UserOfGroup from "./UserOfGroup"
 import ButtonEditGroupInformations from "./ButtonEditGroupInformations"
 import { GroupInformationContext } from "../GroupInformationContext"
 import { Skeleton } from "@/components/ui/skeleton"
+import { User } from "@prisma/client"
 
 interface CurrentGroupProps {
   session: Session
 }
 
 const GroupInformation = ({ session }: CurrentGroupProps) => {
-  const [usersOnGroup, setUsersOnGroup] = useState<({ role: defaultRoles } & IUser)[]>()
+  const [usersOnGroup, setUsersOnGroup] = useState<({ role: defaultRoles } & User)[]>()
   const { currentGroup } = useContext(GroupInformationContext)
 
   useEffect(() => {
@@ -45,6 +45,7 @@ const GroupInformation = ({ session }: CurrentGroupProps) => {
       <div className="flex flex-col gap-3 w-full">
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center gap-2">
+            {/* <AvatarGroup nameFallback={currentGroup.name}  }/> */}
             <Avatar className="flex items-center justify-center w-14 h-14 rounded-full">
               <AvatarFallback className="bg-slate-200 text-xl" >{formAcronym(currentGroup.name, 2)}</AvatarFallback>
             </Avatar>

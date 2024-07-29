@@ -2,7 +2,7 @@
 import dayjs from 'dayjs'
 import { formAcronym } from "@/utils/formAcronym"
 import { Label } from "@/components/ui/label"
-import { IChatMessage } from "@/interfaces/IChatMessage"
+import { IChatMessage } from "@/interfaces/Chats/IChatMessage"
 import React from "react"
 import MessagesRoot from "./MessagesRoot"
 import MessagesAvatar from "./MessagesAvatar"

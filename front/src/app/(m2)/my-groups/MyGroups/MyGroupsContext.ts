@@ -1,12 +1,12 @@
-import IGroup from "@/interfaces/IGroup";
-import IUser from "@/interfaces/IUser";
-import IUserOnGroup from "@/interfaces/IUserOnGroup";
+import { Group } from "@prisma/client";
+import { User } from "@prisma/client";
+import { UserOnGroup } from "@prisma/client"
 import { Dispatch, SetStateAction, createContext } from "react";
 
 export interface IMyGroupsContext {
-  groups: IGroup[] | undefined
-  usersOnGroup: IUserOnGroup[] | []
-  users: ({ role: string } & IUser)[] | []
+  groups: Group[] | undefined
+  usersOnGroup: UserOnGroup[] | []
+  users: ({ role: string } & User )[] | []
   setMyGroupsContext: Dispatch<SetStateAction<IMyGroupsContext>>
 }
 

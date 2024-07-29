@@ -45,8 +45,8 @@ const CurrentGroup = ({ session }: CurrentGroupProps) => {
         currentGroup ?
           <GroupInformationContext.Provider value={currentGroup} >
             <AsideIcons sectionSelected={sectionSelected} setSectionSelected={setSectionSelected} />
-            {sectionSelected === "task" && <Activities session={session} />}
             {sectionSelected === "group" && <GroupInformation session={session} />}
+            {sectionSelected === "task" && <Activities session={session} />}
           </GroupInformationContext.Provider>
           :
           <div className="flex w-full gap-10">

@@ -2,9 +2,9 @@ import FormCreateGroup from "@/classes/FormCreateGroup"
 import { Button } from "@/components/ui/button"
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import IGroup from "@/interfaces/IGroup"
+import { Group } from "@prisma/client"
 import IParticipantsGroup from "@/interfaces/IParticipantsGroup"
-import IUser from "@/interfaces/IUser"
+import { User } from "@prisma/client"
 import { CreateChatContext } from "@/providers/CreateChatContext"
 import defaultRoles from "@/types/defaultRoles"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -15,7 +15,7 @@ import { z } from "zod"
 interface FormAddNewParticipantsProps {
   usersOnGroup: ({
     role: string;
-  } & IUser)[]
+  } & User )[]
   participants: {
     email: string;
     role: defaultRoles;

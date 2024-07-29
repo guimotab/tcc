@@ -2,13 +2,13 @@ import { prismaPg } from "@/lib/prisma";
 import { NextApiResponse } from "next";
 import { NextResponse } from "next/server";
 import IApiResponse from "@/interfaces/api/IApiResponse";
-import IUser from "@/interfaces/IUser";
+import { User } from "@prisma/client";
 
 interface reqParams {
   id: string,
 }
 interface requestPut {
-  user: IUser,
+  user: User ,
   optionsChoose: string[],
 }
 

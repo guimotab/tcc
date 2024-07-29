@@ -3,7 +3,7 @@
 import InvitesController from "@/controllers/InvitesController"
 import { useParams, useRouter } from "next/navigation"
 import GroupController from "@/controllers/GroupController"
-import IUser from "@/interfaces/IUser"
+import { User } from "@prisma/client"
 import { Session } from "next-auth"
 import "../../globals.css";
 import { useEffect } from "react"
@@ -21,7 +21,7 @@ const Invites = ({ session }: InvitesProps) => {
     verifyInvite(session.user)
   }, [])
 
-  async function verifyInvite(currentUser: IUser) {
+  async function verifyInvite(currentUser: User ) {
     if (invite) {
       const respInvite = await InvitesController.verifyInvite(invite)
 

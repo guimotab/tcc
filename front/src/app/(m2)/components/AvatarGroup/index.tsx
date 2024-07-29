@@ -4,18 +4,18 @@ import { formAcronym } from "@/utils/formAcronym"
 import { HTMLAttributes } from "react"
 
 interface AvatarUserProps extends HTMLAttributes<HTMLSpanElement> {
-  src?: string | null
+  src: string | undefined
   nameFallback: string
   sizeText?: "text-2xl" | "text-xl" | "text-lg" | "text-base" | "text-sm" | "text-xs"
 }
 
-const AvatarWorker = ({ src, nameFallback, className, sizeText = "text-2xl", ...props }: AvatarUserProps) => {
+const AvatarGroup = ({ src, nameFallback, className, sizeText = "text-2xl", ...props }: AvatarUserProps) => {
   return (
     <Avatar className={cn("w-32 h-32 bg-slate-300", className)} {...props}>
-      <AvatarImage src={src || undefined} className="object-cover" />
-      <AvatarFallback className={cn("bg-slate-300", sizeText)}>{formAcronym(nameFallback)}</AvatarFallback>
+      <AvatarImage src={src} className="object-cover" />
+      <AvatarFallback className={cn("bg-slate-300", sizeText)}>{formAcronym(nameFallback, 2)}</AvatarFallback>
     </Avatar>
   )
 }
 
-export default AvatarWorker
+export default AvatarGroup

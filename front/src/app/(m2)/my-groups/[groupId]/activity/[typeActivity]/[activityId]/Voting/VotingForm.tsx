@@ -6,15 +6,16 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/h
 import { Label } from "@/components/ui/label"
 import ActivityController from "@/controllers/ActivityController"
 import GroupController from "@/controllers/GroupController"
-import { IVotingActivity } from "@/interfaces/activity/IVotingActivity"
 import defaultRoles from "@/types/defaultRoles"
+import { VotingActivity } from "@prisma/client"
 import { Session } from "next-auth"
 import { useRouter } from "next/navigation"
 import { useContext, useEffect, useState } from "react"
 import { FaArrowLeft } from "react-icons/fa";
+
 interface VotingProps {
   activityId: string
-  voting: IVotingActivity
+  voting: VotingActivity
   session: Session
   groupId: string
 }
@@ -24,7 +25,7 @@ interface VoteOfUsers {
     id: string
     name: string
     role: defaultRoles
-    imagem?: string
+    imagem?: string | null
   }[]
 }
 
@@ -68,7 +69,7 @@ const VotingForm = ({ activityId, voting, session, groupId }: VotingProps) => {
             return {
               id: user.userId,
               name: user.user.name,
-              image: user.user.image,
+              image: user.user.photo,
               role: user.user.groups[currentGroupIndex].role as defaultRoles
             }
           })
@@ -95,14 +96,14 @@ const VotingForm = ({ activityId, voting, session, groupId }: VotingProps) => {
 
         if (voting?.canMultipleVote) {
           //falta considerar peso do voto de cargos
-          fakeAllUserVote[optionChoose].usersVote.push({ id: user.id, name: user.name, imagem: user.image, role: thisUserFound.role as defaultRoles })
+          fakeAllUserVote[optionChoose].usersVote.push({ id: user.id, name: user.name, imagem: user.photo, role: thisUserFound.role as defaultRoles })
           setOptionsChoose(prev => [...prev, optionChoose])
         } else {
           //falta considerar peso do voto de cargos
           if (optionsChoose[0]) {
             fakeAllUserVote[optionsChoose[0]].usersVote = allUserVote[optionsChoose[0]].usersVote.filter(user => user.id !== user.id)
           }
-          fakeAllUserVote[optionChoose].usersVote.push({ id: user.id, name: user.name, imagem: user.image, role: thisUserFound.role as defaultRoles })
+          fakeAllUserVote[optionChoose].usersVote.push({ id: user.id, name: user.name, imagem: user.photo, role: thisUserFound.role as defaultRoles })
           setAllUserVote(fakeAllUserVote)
           setOptionsChoose([optionChoose])
         }

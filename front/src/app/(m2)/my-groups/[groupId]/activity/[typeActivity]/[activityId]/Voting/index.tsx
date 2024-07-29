@@ -6,7 +6,7 @@ import { Session } from "next-auth"
 import { useEffect, useState } from "react"
 import dayjs from "dayjs"
 import ResumeVoting from "./ResumeVoting"
-import { IVotingActivity } from "@/interfaces/activity/IVotingActivity"
+import { VotingActivity } from "@prisma/client"
 
 interface VotingProps {
   activityId: string
@@ -15,7 +15,7 @@ interface VotingProps {
 }
 
 const Voting = ({ activityId, groupId, session }: VotingProps) => {
-  const [voting, setVoting] = useState<IVotingActivity>()
+  const [voting, setVoting] = useState<VotingActivity>()
   const [votingFinished, setVotingFinished] = useState(false)
 
   useEffect(() => {

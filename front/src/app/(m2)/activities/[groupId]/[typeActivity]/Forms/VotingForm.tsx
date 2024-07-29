@@ -20,11 +20,11 @@ import { Calendar } from "@/components/ui/calendar"
 import { cn } from "@/lib/utils"
 import { CalendarIcon } from "@radix-ui/react-icons"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { IVotingActivityWithoutDefaults } from "@/interfaces/activity/IVotingActivity"
-import { IVotingWeightWithoutDefaults } from "@/interfaces/activity/IVotingWeight"
 import ActivityController from "@/controllers/ActivityController"
 import ResolveResponses from "@/utils/resolveResponseErrors"
 import { createToast } from "@/utils/createToastUtil"
+import VotingWeightWithoutDefaults from "@/types/VotingWeightWithoutDefaults"
+import VotingActivityWithoutDefaults from "@/types/VotingActivityWithoutDefaults"
 
 type participantsVotingTypes = "Todos" | "Admin" | "Editor" | "Usuário"
 
@@ -113,8 +113,8 @@ const VotingForm = ({ groupId }: VotiginForm) => {
       voteOptions: voteOptions.map(option => option.value.trim()).filter(option => option !== ""),
       canMultipleVote: multipleVotes,
       groupId,
-      weights
-    } as IVotingActivityWithoutDefaults & { weights: IVotingWeightWithoutDefaults[] }
+      weights,
+    } as VotingActivityWithoutDefaults & { weights: VotingWeightWithoutDefaults[] }
 
     const respVote = await ActivityController.createNewVote(votingForm)
 

@@ -1,4 +1,4 @@
-import IGroup from "@/interfaces/IGroup"
+import { Group } from "@prisma/client"
 import IApiResponse from "@/interfaces/api/IApiResponse"
 import { prismaPg } from "@/lib/prisma"
 import { NextApiResponse } from "next"
@@ -9,7 +9,7 @@ interface reqParams {
 }
 
 interface reqBodyPost {
-  group: IGroup
+  group: Group
 }
 
 export async function GET(request: Request,

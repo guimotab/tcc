@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import ActivityController from "@/controllers/ActivityController"
 import GroupController from "@/controllers/GroupController"
 import IUserVote from "@/interfaces/activity/IUserVote"
-import { IVotingActivity } from "@/interfaces/activity/IVotingActivity"
+import { VotingActivity } from "@prisma/client"
 import dayjs from "dayjs"
 import { Session } from "next-auth"
 import Link from "next/link"
@@ -19,7 +19,7 @@ interface CurrentGroupProps {
 const Activities = ({ session }: CurrentGroupProps) => {
   const searchParams = useSearchParams()
   const currentGroupId = searchParams.get("group")
-  const [votes, setVotes] = useState<(IVotingActivity & { userVote: IUserVote[] })[]>()
+  const [votes, setVotes] = useState<(VotingActivity & { userVote: IUserVote[] })[]>()
 
   useEffect(() => {
     if (currentGroupId) {
@@ -36,7 +36,7 @@ const Activities = ({ session }: CurrentGroupProps) => {
     }
   }
 
-  function statusVote(vote: IVotingActivity & { userVote: IUserVote[] }) {
+  function statusVote(vote: VotingActivity & { userVote: IUserVote[] }) {
     const now = dayjs()
     const endfOfVote = dayjs(vote.endOfVoting)
     const diffTimeVote = endfOfVote.diff(now)

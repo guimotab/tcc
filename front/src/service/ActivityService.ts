@@ -1,13 +1,14 @@
 import IAxiosResponse from "@/interfaces/IAxiosResponse"
-import IGroup from "@/interfaces/IGroup"
+import { Group } from "@prisma/client"
 import axios from "axios"
 import HttpService from "./HttpService"
 import { MessageResponse } from "@/types/MessageResponse"
-import { IVotingWeightWithoutDefaults } from "@/interfaces/activity/IVotingWeight"
-import { IVotingActivity, IVotingActivityWithoutDefaults } from "@/interfaces/activity/IVotingActivity"
+import { VotingWeightWithoutDefaults } from "@/interfaces/activity/IVotingWeight"
+import { VotingActivity, IVotingActivityWithoutDefaults } from "@/interfaces/activity/VotingActivity"
 import IUserVote from "@/interfaces/activity/IUserVote"
-import IUser from "@/interfaces/IUser"
-import IUserOnGroup from "@/interfaces/IUserOnGroup"
+import { User } from "@prisma/client"
+import { UserOnGroup } from "@prisma/client"
+
 
 export interface IActivityResponse<T> {
   resp: MessageResponse
@@ -15,43 +16,44 @@ export interface IActivityResponse<T> {
 }
 
 export interface IParamVotePost {
-  weights: IVotingWeightWithoutDefaults[]
+  weights: VotingWeightWithoutDefaults[]
   activity: IVotingActivityWithoutDefaults
 }
 
-export default class ActivityService extends HttpService<IGroup, IActivityResponse<any>> {
+export default class ActivityService extends HttpService<Group, IActivityResponse<any>> {
 
   constructor() {
     super("activity")
   }
 
   async newVote({ weights, activity }: IParamVotePost) {
-    const result = await axios.post(`${this.url}/vote`, { weights, activity }).catch(this.handleError) as IAxiosResponse<IActivityResponse<IVotingActivity>>
+    const result = await axios.post(`${this.url}/vote`, { weights, activity }).catch(this.handleError) as IAxiosResponse<IActivityResponse<VotingActivity>>
     return result.data
   }
 
   async submitVote(userId: string, votedOption: string[], votingActivityId: string) {
-    const result = await axios.post(`${this.url}/vote/userVote/`, { userId, votedOption, votingActivityId }).catch(this.handleError) as IAxiosResponse<IActivityResponse<IVotingActivity>>
+    const result = await axios.post(`${this.url}/vote/userVote/`, { userId, votedOption, votingActivityId }).catch(this.handleError) as IAxiosResponse<IActivityResponse<VotingActivity>>
     return result.data
   }
 
   async getVote(id: string) {
-    const result = await axios.get(`${this.url}/vote/${id}`).catch(this.handleError) as IAxiosResponse<IActivityResponse<IVotingActivity>>
+    const result = await axios.get(`${this.url}/vote/${id}`).catch(this.handleError) as IAxiosResponse<IActivityResponse<VotingActivity>>
     return result.data
   }
 
   async deleteVote(id: string) {
-    const result = await axios.delete(`${this.url}/vote/${id}`).catch(this.handleError) as IAxiosResponse<IActivityResponse<IVotingActivity>>
+    const result = await axios.delete(`${this.url}/vote/${id}`).catch(this.handleError) as IAxiosResponse<IActivityResponse<VotingActivity>>
     return result.data
   }
 
   async getAllVoteByGroupId(groupId: string) {
-    const result = await axios.get(`${this.url}/vote/all/byGroup/${groupId}`).catch(this.handleError) as IAxiosResponse<IActivityResponse<(IVotingActivity & { userVote: IUserVote[] })[]>>
+    const result = await axios.get(`${this.url}/vote/all/byGroup/${groupId}`).catch(this.handleError) as IAxiosResponse<IActivityResponse<(VotingActivity & { userVote: IUserVote[] })[]>>
     return result.data
   }
 
   async getAllUsersVotesByVotingId(votigingId: string) {
-    const result = await axios.get(`${this.url}/vote/all/userVote/byVotingId/${votigingId}`).catch(this.handleError) as IAxiosResponse<IActivityResponse<(IUserVote & { user: IUser & { groups: (IGroup & IUserOnGroup)[] } })[]>>
+    const result = await axios.get(`${this.url}/vote/all/userVote/byVotingId/${votigingId}`).catch(this.handleError) as IAxiosResponse<IActivityResponse<(IUserVote & { user: User  & { groups: (Group & UserOnGroup
+)[] } })[]>>
     return result.data
   }
 }

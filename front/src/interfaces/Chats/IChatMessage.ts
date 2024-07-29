@@ -1,6 +1,6 @@
-import IMessage from "./Chats/IMessage"
-import ISender from "./Chats/ISender"
-import IStatusMessage from "./Chats/IStatusMessage"
+import IMessage from "./IMessage"
+import ISender from "./ISender"
+import IStatusMessage from "./IStatusMessage"
 
 /**
  * Interface padrão que o chat utiliza na renderização das mensagens

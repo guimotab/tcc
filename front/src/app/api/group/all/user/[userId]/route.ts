@@ -2,7 +2,7 @@ import { prismaPg } from "@/lib/prisma";
 import { NextApiResponse } from "next";
 import { NextResponse } from "next/server";
 import IApiResponse from "@/interfaces/api/IApiResponse";
-import IGroup from "@/interfaces/IGroup";
+import { Group } from "@prisma/client";
 
 interface reqParams {
   userId: string
@@ -26,7 +26,7 @@ export async function GET(request: Request,
         return respGroup
       }
 
-    }).filter(group => group !== undefined)) as IGroup[]
+    }).filter(group => group !== undefined)) as Group[]
 
 
     return NextResponse.json({ resp: "Success", data: { groups, userOnGroups }, status: 200 } as IApiResponse)

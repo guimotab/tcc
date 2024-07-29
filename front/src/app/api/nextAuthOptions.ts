@@ -1,6 +1,6 @@
 import AuthController from "@/controllers/AuthController"
 import UserController from "@/controllers/UserController"
-import IUser from "@/interfaces/IUser"
+import { User } from "@prisma/client"
 import { AuthOptions } from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 const oneHour = 60 * 60
@@ -40,7 +40,7 @@ const nextAuthOptions = {
       return token
     },
     async session({ session, token }) {
-      const tokenUser = token.user as IUser
+      const tokenUser = token.user as User 
       const respUser = await UserController.get(tokenUser.id)
       if (respUser.data) {
         session = { user: respUser.data } as any

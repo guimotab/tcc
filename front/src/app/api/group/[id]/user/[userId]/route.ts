@@ -1,6 +1,7 @@
 import IApiResponse from "@/interfaces/api/IApiResponse"
-import IUser from "@/interfaces/IUser"
-import IUserOnGroup from "@/interfaces/IUserOnGroup"
+import { User } from "@prisma/client"
+import { UserOnGroup } from "@prisma/client"
+
 import { prismaPg } from "@/lib/prisma"
 import defaultRoles from "@/types/defaultRoles"
 import { NextApiResponse } from "next"
@@ -12,7 +13,7 @@ interface reqParams {
   userId: string
 }
 interface reqBodyPost {
-  newUserEdited: { role: defaultRoles; } & IUser
+  newUserEdited: { role: defaultRoles; } & User 
 }
 
 export async function DELETE(req: Request,
@@ -22,7 +23,8 @@ export async function DELETE(req: Request,
   const { id: groupId, userId } = params
 
   try {
-    const user = await prismaPg.userOnGroup.findUnique({ where: { userId_groupId: { groupId, userId } } }) as IUserOnGroup
+    const user = await prismaPg.userOnGroup.findUnique({ where: { userId_groupId: { groupId, userId } } }) as UserOnGroup
+
     const qtdUsers = await prismaPg.userOnGroup.count({ where: { groupId } })
     if (qtdUsers === 1) {
       await prismaPg.group.delete({ where: { id: groupId } })

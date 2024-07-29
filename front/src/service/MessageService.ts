@@ -5,7 +5,7 @@ import { MessageResponse } from "@/types/MessageResponse"
 import IMessage from "@/interfaces/Chats/IMessage"
 import { responseRecordMessage } from "@/controllers/MessagesController"
 import IStatusMessage from "@/interfaces/Chats/IStatusMessage"
-import IUser from "@/interfaces/IUser"
+import { User } from "@prisma/client"
 
 export interface IMessageResponse {
   resp: MessageResponse
@@ -36,7 +36,7 @@ export default class MessageService {
    * @param user usuário que leu as mensagens
    * @returns array de statusMessage apenas das mensagens modificadas
    */
-  async readMessages(statusMessages: IStatusMessage[], user: IUser) {
+  async readMessages(statusMessages: IStatusMessage[], user: User ) {
     const result = await axios.put(`${this.url}/readMessage`, {statusMessages, user}).catch(this.handleError) as IAxiosResponse<IMessageResponse>
     return result.data
   }

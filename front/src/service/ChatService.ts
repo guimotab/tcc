@@ -1,5 +1,5 @@
 import IAxiosResponse from "@/interfaces/IAxiosResponse"
-import IUser from "@/interfaces/IUser"
+import { User } from "@prisma/client"
 import { MessageResponse } from "@/types/MessageResponse"
 import axios from "axios"
 import IChat from "@/interfaces/Chats/IChat"
@@ -7,7 +7,7 @@ import IChat from "@/interfaces/Chats/IChat"
 export interface ISendMessageParams {
   content: string
   chatId: string
-  sender: IUser
+  sender: User 
 }
 
 export interface IChatMessageResponse {

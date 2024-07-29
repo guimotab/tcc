@@ -2,19 +2,18 @@
 import Groups from "./components/Groups"
 import ChatGroup from "./components/ChatGroup"
 import { Suspense, useEffect, useState } from "react"
-import IGroup from "@/interfaces/IGroup"
 import GroupController from "@/controllers/GroupController"
 import ResolveResponses from "@/utils/resolveResponseErrors"
 import { toast } from "sonner"
-import IUser from "@/interfaces/IUser"
+import { Group, User } from "@prisma/client"
 import { io } from "socket.io-client"
 import MessagesController from "@/controllers/MessagesController"
 import RecordChats from "@/classes/RecordChats"
-import { IChatMessage } from "@/interfaces/IChatMessage"
 import { IRecordChat } from "@/interfaces/IRecordChat"
 import NoGroups from "./components/NoGroups"
 import { ChatContext, IChatContext } from "@/providers/ChatContext"
 import { Session } from "next-auth"
+import { IChatMessage } from "@/interfaces/Chats/IChatMessage"
 
 interface ChatProps {
   session: Session
@@ -47,7 +46,7 @@ const Chat = ({ session }: ChatProps) => {
       const groups = respGroup.data.groups
       const userOnGroups = respGroup.data.userOnGroups
       const currentGroup = undefined
-      let currentUsers = [] as IUser[]
+      let currentUsers = [] as User []
 
       setCanRender(true)
 
@@ -69,7 +68,7 @@ const Chat = ({ session }: ChatProps) => {
     }
   }
 
-  function handleSockets(groups: IGroup[], recordChats: IRecordChat[]) {
+  function handleSockets(groups: Group[], recordChats: IRecordChat[]) {
     socket.emit("join-chat", groups)
     socket.on("message", ({ message, sender, chatId, statusMessage }: IChatMessage) => listenerNewMessage({ message, sender, chatId, statusMessage }, recordChats))
   }

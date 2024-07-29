@@ -2,12 +2,11 @@ import { prismaPg } from "@/lib/prisma";
 import { NextApiResponse } from "next";
 import { NextResponse } from "next/server";
 import IApiResponse from "@/interfaces/api/IApiResponse";
-import { IVotingWeightWithoutDefaults } from "@/interfaces/activity/IVotingWeight";
-import { IVotingActivityWithoutDefaults } from "@/interfaces/activity/IVotingActivity";
+import { VotingActivity, VotingWeight } from "@prisma/client";
 
 interface requestPost {
-  weights: IVotingWeightWithoutDefaults[]
-  activity: IVotingActivityWithoutDefaults
+  weights: Omit<VotingWeight, "id" | "voteActivityId">[]
+  activity: VotingActivity
 }
 
 export async function POST(req: Request, res: NextApiResponse) {

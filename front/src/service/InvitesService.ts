@@ -1,13 +1,13 @@
 import HttpService from "./HttpService"
-import IInvites from "@/interfaces/IInvites"
+import Invites from "@/interfaces/Invites"
 import { MessageResponse } from "@/types/MessageResponse"
 
 export interface IInvitesResponse {
   resp: MessageResponse
-  data: IInvites
+  data: Invites
 }
 
-export default class InvitesService extends HttpService<IInvites, IInvitesResponse> {
+export default class InvitesService extends HttpService<Invites, IInvitesResponse> {
 
   constructor() {
     super("invite")

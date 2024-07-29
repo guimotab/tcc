@@ -5,11 +5,9 @@ import { Card } from "@/components/ui/card"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 import { Label } from "@/components/ui/label"
 import ActivityController from "@/controllers/ActivityController"
-import GroupController from "@/controllers/GroupController"
 import UserController from "@/controllers/UserController"
-import { IVotingActivity } from "@/interfaces/activity/IVotingActivity"
-import IUser from "@/interfaces/IUser"
-import IUserOnGroup from "@/interfaces/IUserOnGroup"
+import { VotingActivity } from "@prisma/client"
+import { User, UserOnGroup } from "@prisma/client"
 import defaultRoles from "@/types/defaultRoles"
 import { Session } from "next-auth"
 import { useRouter } from "next/navigation"
@@ -18,7 +16,7 @@ import { FaArrowLeft } from "react-icons/fa6"
 
 interface VotingProps {
   activityId: string
-  voting: IVotingActivity
+  voting: VotingActivity
   session: Session
   groupId: string
 }
@@ -33,7 +31,7 @@ interface VoteOfUsers {
 }
 
 const ResumeVoting = ({ activityId, voting, session, groupId }: VotingProps) => {
-  const [user, setUser] = useState<IUser & { userOnGroup: IUserOnGroup }>()
+  const [user, setUser] = useState<User  & { userOnGroup: UserOnGroup }>()
   const router = useRouter()
   const [allUserVote, setAllUserVote] = useState<Record<string, VoteOfUsers>>({})
   const [canRender, setCanRender] = useState(false)
@@ -46,7 +44,8 @@ const ResumeVoting = ({ activityId, voting, session, groupId }: VotingProps) => 
   async function loadDataUser() {
     const respUser = await UserController.getUserOnGroup(session.user.id, groupId)
     if (respUser.data) {
-      const userData = { ...session.user, userOnGroup: respUser.data } as IUser & { userOnGroup: IUserOnGroup }
+      const userData = { ...session.user, userOnGroup: respUser.data } as User  & { userOnGroup: UserOnGroup
+ }
       setUser(userData)
     }
   }
@@ -78,7 +77,7 @@ const ResumeVoting = ({ activityId, voting, session, groupId }: VotingProps) => 
             return {
               id: user.userId,
               name: user.user.name,
-              image: user.user.image,
+              image: user.user.photo,
               role: user.user.groups[currentGroupIndex].role as defaultRoles
             }
           })

@@ -5,20 +5,20 @@ import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import React, { useContext, useState } from "react"
 import { IoMdPersonAdd } from "react-icons/io"
-import IUser from "@/interfaces/IUser"
+import { User } from "@prisma/client"
 import defaultRoles from "@/types/defaultRoles"
 import { Session } from "next-auth"
 import FormAddNewParticipants from "./components/FormAddNewParticipants"
 import UsersAdded from "./components/UsersAdded"
 import GroupController from "@/controllers/GroupController"
-import IGroup from "@/interfaces/IGroup"
+import { Group } from "@prisma/client"
 import ResolveResponses from "@/utils/resolveResponseErrors"
 import { createToast } from "@/utils/createToastUtil"
 import { GroupInformationContext } from "../../GroupInformationContext"
 
 interface ButtonInviteNewUsersProps {
   session: Session
-  usersOnGroup: ({ role: defaultRoles; } & IUser)[]
+  usersOnGroup: ({ role: defaultRoles; } & User )[]
 }
 
 const ButtonInviteNewUsers = ({ usersOnGroup, session }: ButtonInviteNewUsersProps) => {
