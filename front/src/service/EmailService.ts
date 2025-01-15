@@ -1,11 +1,9 @@
-import IAxiosResponse from "@/interfaces/IAxiosResponse"
-import axios from "axios"
 import HttpService from "./HttpService"
-import { messageResponse } from "@/types/messageResponse"
+import { MessageResponse } from "@/types/MessageResponse"
 import IEmail from "@/interfaces/IEmail"
 
 export interface IEmailResponse {
-  resp: messageResponse
+  resp: MessageResponse
   data: {
     group: IEmail
   }

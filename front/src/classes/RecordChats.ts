@@ -1,6 +1,6 @@
 import { IRecordChat } from "@/interfaces/IRecordChat";
-import { IChatMessage } from "@/interfaces/IChatMessage";
-import IGroup from "@/interfaces/IGroup";
+import { IChatMessage } from "@/interfaces/Chats/IChatMessage";
+import { Group } from "@prisma/client";
 
 export default class RecordChats {
 
@@ -76,7 +76,7 @@ export default class RecordChats {
    * Retorna a última mensagem do chat
    * @param group 
    */
-  returnLastChatMessage(group: IGroup) {
+  returnLastChatMessage(group: Group) {
     const findedChat = this._recordChats.find(chat => chat.groupId === group.id)
     if (findedChat) {
       const chatMessage = findedChat.chats[findedChat.chats.length - 1]
@@ -88,7 +88,7 @@ export default class RecordChats {
    * Retorna o RecordChat atual
    * @param chatId string
    */
-  currentRecordChat(group: IGroup) {
+  currentRecordChat(group: Group) {
     const findedChat = this._recordChats.find(chat => chat.groupId === group.id)
     if (findedChat) {
       return findedChat
@@ -97,12 +97,12 @@ export default class RecordChats {
 
   /**
    * Transforma o ChatMessage em RecordChat
-   * @param group IGroup
+   * @param group Group
    * @param chats array de IChatMessage
    * @param loadedOldMessages se o chat ainda não foi renderizado = false, se já foi renderizado = true
    * @returns recordChat
    */
-  static transformChatMessageToRecordChat(group: IGroup, chats: IChatMessage[], hasMoreMessagesToLoad: boolean) {
+  static transformChatMessageToRecordChat(group: Group, chats: IChatMessage[], hasMoreMessagesToLoad: boolean) {
     return { groupId: group.id, chats, hasMoreMessagesToLoad } as IRecordChat
   }
 

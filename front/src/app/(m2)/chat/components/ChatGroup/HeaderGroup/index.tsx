@@ -1,0 +1,38 @@
+"use client"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Label } from "@/components/ui/label"
+import { useContext } from "react"
+import { formAcronym } from "@/utils/formAcronym"
+import ActionsGroup from "./ActionsGroup"
+import { ChatContext } from "@/providers/ChatContext"
+
+
+const HeaderGroup = () => {
+  const { currentGroup, currentUsers } = useContext(ChatContext)
+  const groupAcronym = currentGroup ? formAcronym(currentGroup.name, 2) : ""
+
+  return currentGroup && (
+    <div className="flex justify-between items-center gap-14 bg-white px-7 py-3">
+
+      <div className="flex items-center h-fit gap-3">
+        <Avatar>
+          <div className="flex items-center justify-center w-10 h-10 bg-slate-300 rounded-full">
+            <AvatarFallback>{groupAcronym}</AvatarFallback>
+          </div>
+        </Avatar>
+        <div>
+          <Label className="text-lg">{currentGroup.name}</Label>
+          <div className="flex gap-1">
+            {currentUsers.map((user, index) =>
+              <p key={index} className="text-sm text-slate-500">{`${user.name}${index !== currentUsers.length - 1 ? "," : " "}`}</p>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <ActionsGroup />
+    </div>
+  )
+}
+
+export default HeaderGroup

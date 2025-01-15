@@ -6,13 +6,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useContext } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
-import { FormChatContext } from "../../page";
 import FormCreateGroup from "@/classes/FormCreateGroup";
-
+import { CreateChatContext } from "@/providers/CreateChatContext";
 
 const FormAddUsers = () => {
 
-  const { formStepsContext, setFormStepsContext } = useContext(FormChatContext)
+  const { formStepsContext, setFormStepsContext } = useContext(CreateChatContext)
   const formSteps = new FormCreateGroup(formStepsContext)
 
   const formSchema = z.object({
@@ -25,6 +24,7 @@ const FormAddUsers = () => {
       emailParticipant: "guimotab22@gmail.com",
     },
   })
+  
   function onAddParticipant(formValues: z.infer<typeof formSchema>) {
     const alreadyExists = checkIfAlreadyExist(formValues.emailParticipant)
     if (alreadyExists) {

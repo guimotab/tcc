@@ -9,11 +9,11 @@ import { z } from "zod"
 import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { HTMLInputTypeAttribute } from "react";
-import ResolveResponseErrors from "@/utils/resolveResponseErrors";
+import { HTMLInputTypeAttribute, useState } from "react";
+import ResolveResponses from "@/utils/resolveResponseErrors";
 import { toast } from "sonner";
-import AuthController from "@/controllers/AuthController";
-import { useUpdateCurrentUser } from "../../../states/hooks/useUpdateCurrentUser";
+import { signIn } from "next-auth/react";
+import LoadingButton from "../LoadingButton";
 
 type nameFields = "email" | "password"
 
@@ -31,7 +31,7 @@ interface LoginProps {
 
 export default function LoginForm({ signInPage, navigationTo }: LoginProps) {
   const router = useRouter()
-  const setCurrentUser = useUpdateCurrentUser()
+  const [isLoading, setIsLoading] = useState(false)
 
   const formSchema = z.object({
     email: z.string().min(1, "O email é obrigatório").email("Email inválido"),
@@ -49,21 +49,27 @@ export default function LoginForm({ signInPage, navigationTo }: LoginProps) {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const email = values.email
     const password = values.password
+    setIsLoading(true)
+    validateCredentials(email, password)
+  }
 
-    const resp = await AuthController.login(email, password)
-
-    if (!resp.data) {
-      const errorResponse = new ResolveResponseErrors(resp.resp)
+  async function validateCredentials(email: string, password: string) {
+    const result = await signIn("credentials", {
+      email,
+      password,
+      redirect: false
+    })
+    setIsLoading(false)
+    if (result?.error) {
+      const errorResponse = new ResolveResponses("ServerError")
       createToast(errorResponse)
       return
     }
-    //inicia um histórico novo
-    setCurrentUser(resp.data!.user)
     router.replace(navigationTo)
   }
 
-  function createToast(errorResponse: ResolveResponseErrors) {
-    const [title, description] = errorResponse.resolveError()
+  function createToast(errorResponse: ResolveResponses) {
+    const { title, description } = errorResponse.resolveResponse()
     toast(title, {
       description: description,
       action: {
@@ -128,7 +134,11 @@ export default function LoginForm({ signInPage, navigationTo }: LoginProps) {
               />
             )}
 
-            <Button type="submit">Entrar</Button>
+            {isLoading ?
+              <LoadingButton />
+              :
+              <Button type="submit">Entrar</Button>
+            }
           </form>
         </FormProvider>
       </CardContent>

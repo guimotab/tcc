@@ -1,32 +1,28 @@
 import IAxiosResponse from "@/interfaces/IAxiosResponse"
-import IUser from "@/interfaces/IUser"
+import { User } from "@prisma/client"
 import axios from "axios"
 import HttpService from "./HttpService"
-import IUserOnGroup from "@/interfaces/IUserOnGroup"
+import { UserOnGroup } from "@prisma/client"
 
-export interface IUserResponse {
+
+export interface IUserResponse<T> {
   resp: string
-  data: {
-    user: IUser
-  }
+  data: T
 }
 
-export interface IUserArrayResponse {
-  resp: string
-  data: {
-    users: IUser[]
-    userOnGroups: IUserOnGroup[]
-  }
-}
-
-export default class UserService extends HttpService<IUser, IUserResponse> {
+export default class UserService extends HttpService<User , IUserResponse<User >> {
 
   constructor() {
     super("user")
   }
 
+  async getUserOnGroup(userId: string, groupId: string) {
+    const result = await axios.get(`${this.url}/${userId}/getRole/${groupId}`).catch(this.handleError) as IAxiosResponse<IUserResponse<UserOnGroup
+>>
+    return result.data
+  }
   async getAllByGroupId(groupId: string) {
-    const result = await axios.get(`${this.url}/all/group/${groupId}`).catch(this.handleError)as IAxiosResponse<IUserArrayResponse>
-    return result.data 
+    const result = await axios.get(`${this.url}/all/group/${groupId}`).catch(this.handleError) as IAxiosResponse<IUserResponse<({ role: string } & User )[]>>
+    return result.data
   }
 }

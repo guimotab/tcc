@@ -1,6 +1,0 @@
-export default interface IUserReadStatus {
-  id: string
-  userId: string
-  name: string
-  statusMessageId: string
-}

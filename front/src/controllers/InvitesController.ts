@@ -1,5 +1,4 @@
-import IAxiosResponse from "@/interfaces/IAxiosResponse";
-import IInvites from "@/interfaces/IInvites";
+import { Invites } from "@prisma/client";
 import InvitesService, { IInvitesResponse } from "@/service/InvitesService";
 
 export default class InvitesController {
@@ -13,10 +12,10 @@ export default class InvitesController {
   static async get(id: string) {
     return await this.invitesService.get(id) as IInvitesResponse
   }
-  static async post(data: IInvites) {
+  static async post(data: Invites) {
     return await this.invitesService.post(data) as IInvitesResponse
   }
-  static async put(id: string, data: IInvites) {
+  static async put(id: string, data: Invites) {
     return await this.invitesService.put(id, data) as IInvitesResponse
   }
   static async delete(id: string) {

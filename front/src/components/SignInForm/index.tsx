@@ -7,13 +7,14 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../ui
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "../ui/form"
 import { Input } from "../ui/input"
 import AuthController from "@/controllers/AuthController"
-import ResolveResponseErrors from "@/utils/resolveResponseErrors"
+import ResolveResponses from "@/utils/resolveResponseErrors"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { HTMLInputTypeAttribute, ChangeEvent } from "react"
+import { HTMLInputTypeAttribute, ChangeEvent, useState } from "react"
 import { toast } from "sonner"
 import { z } from "zod"
-import { useUpdateCurrentUser } from "../../../states/hooks/useUpdateCurrentUser"
 import { useRouter } from "next/navigation"
+import { signIn } from "next-auth/react"
+import LoadingButton from "../LoadingButton"
 
 type nameFields = "name" | "email" | "password" | "confirmPassword"
 
@@ -31,7 +32,7 @@ interface SignInProps {
 
 const SignInForm = ({ loginPage, navigationTo }: SignInProps) => {
   const router = useRouter()
-  const setCurrentUser = useUpdateCurrentUser()
+  const [isLoading, setIsLoading] = useState(false)
 
   const formSchema = z.object({
     name: z.string().min(1, "O nome é obrigatório"),
@@ -56,23 +57,35 @@ const SignInForm = ({ loginPage, navigationTo }: SignInProps) => {
       const name = values.name
       const email = values.email
       const password = values.password
-
-      const resp = await AuthController.signUp(name, email, password)
-      if (resp.resp !== "Success") {
-        const errorResponse = new ResolveResponseErrors(resp.resp)
-        return createToast(errorResponse)
-      }
-      setCurrentUser(resp.data!.user)
-      router.replace(navigationTo)
+      setIsLoading(true)
+      validateCredentials(name, email, password)
 
     } else {
       setErrors("password", "As senhas devem ser iguais!")
       setErrors("confirmPassword")
     }
   }
+  async function validateCredentials(name: string, email: string, password: string) {
+    const resp = await AuthController.signUp(name, email, password)
+    if (resp.resp !== "Success") {
+      const errorResponse = new ResolveResponses(resp.resp)
+      return createToast(errorResponse)
+    }
+    const result = await signIn("credentials", {
+      email: email,
+      password: password,
+      redirect: false,
+    })
 
-  function createToast(resolveResponse: ResolveResponseErrors) {
-    const [title, description] = resolveResponse.resolveError()
+    setIsLoading(false)
+    if (result?.error) {
+      return
+    }
+    router.replace(navigationTo)
+  }
+
+  function createToast(resolveResponse: ResolveResponses) {
+    const { title, description } = resolveResponse.resolveResponse()
     toast(title, {
       description: description,
       action: {
@@ -166,8 +179,11 @@ const SignInForm = ({ loginPage, navigationTo }: SignInProps) => {
                 )}
               />
             )}
-
-            <Button type="submit">Criar Conta</Button>
+            {isLoading ?
+              <LoadingButton />
+              :
+              <Button type="submit">Criar Conta</Button>
+            }
           </form>
         </FormProvider>
 

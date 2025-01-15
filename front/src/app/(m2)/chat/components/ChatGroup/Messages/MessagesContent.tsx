@@ -25,15 +25,13 @@ interface MessagesContentProps
 }
 
 const MessagesContent = React.forwardRef<HTMLDivElement, MessagesContentProps>(
-  ({ children, side, className, ...rest }) => {
+  ({ children, side, className, ...rest }, ref) => {
     return (
       <div className={cn(contentVariants({ side, className }))} {...rest}>
         <MessagesText side={side}>
           {children}
           {side === "right" &&
-            <div className="absolute bottom-1.5 right-1.5">
-              <IoCheckmarkDone className="text-white" />
-            </div>
+            <IoCheckmarkDone className="absolute bottom-1.5 right-1.5 text-white" />
           }
         </MessagesText>
       </div>

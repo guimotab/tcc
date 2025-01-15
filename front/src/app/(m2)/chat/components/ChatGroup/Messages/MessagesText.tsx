@@ -18,17 +18,17 @@ const textVariants = cva(
 
 interface MessagesTextProps
   extends React.HTMLAttributes<HTMLParagraphElement>,
-  VariantProps<typeof textVariants>, VariantProps<typeof textVariants>{
-    side: "left" | "right"
-  }
+  VariantProps<typeof textVariants>, VariantProps<typeof textVariants> {
+  side: "left" | "right"
+}
 
 const MessagesText = React.forwardRef<HTMLParagraphElement, MessagesTextProps>(
-    ({ children, side, className, ...rest }) => {
-      return (
-        <p className={cn(textVariants({ side, className }))} {...rest}>
-          {children}
-        </p>
-      )
-    }
-  )
+  ({ children, side, className, ...rest }, ref) => {
+    return (
+      <p className={cn(textVariants({ side, className }))} {...rest}>
+        {children}
+      </p>
+    )
+  }
+)
 export default MessagesText

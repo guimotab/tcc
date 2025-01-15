@@ -1,10 +1,10 @@
-import IGroup from "@/interfaces/IGroup"
+import { Group } from "@prisma/client"
 import { cn } from "@/lib/utils"
 import { HTMLAttributes, ReactNode } from "react"
 
 interface GroupRootProps extends HTMLAttributes<HTMLDivElement> {
-  currentGroup: IGroup
-  currentSelectedGroup: IGroup | undefined
+  currentGroup: Group
+  currentSelectedGroup: Group | undefined
   onClick: () => void
 }
 

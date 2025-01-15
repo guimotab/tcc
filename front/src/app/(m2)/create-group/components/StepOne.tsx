@@ -8,12 +8,11 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { Dispatch, SetStateAction, useContext } from "react"
 import { useForm, FormProvider } from "react-hook-form"
 import { z } from "zod"
-import { FormChatContext } from "../page"
+import { CreateChatContext } from "@/providers/CreateChatContext"
 
-type formNames = "nameGroup" | "description"
 
-interface formArray {
-  name: formNames,
+interface formArray<T> {
+  name: T,
   label: string,
   placeholder: string
 }
@@ -25,11 +24,11 @@ const StepOne = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const stepURL = searchParams.get("step") as stepCreateGroup
-  const { formStepsContext, setFormStepsContext } = useContext(FormChatContext)
+  const { formStepsContext, setFormStepsContext } = useContext(CreateChatContext)
   const formSteps = new FormCreateGroup(formStepsContext)
 
   const formSchema = z.object({
-    nameGroup: z.string().min(1, "O nome do grupo é obrigatório").max(12, "O nome pode ter até 12 caracteres"),
+    nameGroup: z.string().min(1, "O nome do grupo é obrigatório").max(15, "O nome pode ter até 15 caracteres"),
     description: z.string().max(30, "A descrição pode ter até 30 caracteres"),
   })
 
@@ -61,7 +60,7 @@ const StepOne = () => {
       label: "Descrição (Opcional)",
       placeholder: "Adicione a descrição aqui"
     },
-  ] as formArray[]
+  ] as formArray<keyof z.infer<typeof formSchema>>[]
 
   return (
     <>

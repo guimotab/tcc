@@ -1,0 +1,97 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_POSTGRE_URL")
+}
+
+model User {
+  id       String  @id @default(uuid())
+  name     String
+  email    String  @unique
+  password String
+  photo    String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  groups   UserOnGroup[]
+  UserVote UserVote[]
+}
+
+model UserOnGroup {
+  role String
+
+  assignedAt DateTime @default(now())
+  assignedBy String
+
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  String
+  group   Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId String
+
+  @@id([userId, groupId])
+}
+
+model Group {
+  id          String  @id @default(uuid())
+  name        String
+  description String
+  photo       String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  voteActivity VotingActivity[]
+  users        UserOnGroup[]
+  invites      Invites[]
+}
+
+model Invites {
+  id   String @id @default(uuid())
+  role String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  group   Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId String
+}
+
+model VotingActivity {
+  id                 String   @id @default(uuid())
+  title              String
+  voteOptions        String[]
+  startOfVoting      DateTime
+  endOfVoting        DateTime
+  rolesParticipating String[]
+  canMultipleVote    Boolean
+  groupId            String
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  userVote     UserVote[]
+  weightVoting VotingWeight[]
+  Group        Group?         @relation(fields: [groupId], references: [id], onDelete: Cascade)
+}
+
+model UserVote {
+  id               String   @id @default(uuid())
+  votedOption      String[]
+  userId           String
+  votingActivityId String
+
+  user           User            @relation(fields: [userId], references: [id])
+  VotingActivity VotingActivity? @relation(fields: [votingActivityId], references: [id])
+}
+
+model VotingWeight {
+  id     Int    @id @default(autoincrement())
+  role   String
+  weight Int
+
+  voteActivity   VotingActivity @relation(fields: [voteActivityId], references: [id], onDelete: Cascade)
+  voteActivityId String
+}

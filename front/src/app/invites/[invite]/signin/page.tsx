@@ -1,5 +1,6 @@
 "use client"
 import SignInForm from "@/components/SignInForm"
+import "../../../globals.css";
 
 const Signin = () => {
   return (
@@ -10,5 +11,5 @@ const Signin = () => {
     </main>
   )
 }
-
+ 
 export default Signin

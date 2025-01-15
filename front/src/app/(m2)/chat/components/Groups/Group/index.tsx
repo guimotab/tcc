@@ -1,28 +1,27 @@
 "use client"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { useContext, useEffect, useState } from "react"
-import { DataContext } from "../../../page"
 import UserController from "@/controllers/UserController"
-import IUser from "@/interfaces/IUser"
-import IGroup from "@/interfaces/IGroup"
+import { User, Group } from "@prisma/client"
 import RecordChats from "@/classes/RecordChats"
-import { IChatMessage } from "@/interfaces/IChatMessage"
-import useCurrentUser from "../../../../../../../states/hooks/useCurrentUser"
+import { IChatMessage } from "@/interfaces/Chats/IChatMessage"
 import dayjs, { Dayjs } from "dayjs"
 import { clearInterval, setInterval } from "timers"
 import GroupElapsedTime from "./GroupElapsedTime"
 import GroupRoot from "./GroupRoot"
 import GroupContent from "./GroupContent"
 import GroupMessages from "./GroupMessages"
+import { ChatContext } from "@/providers/ChatContext"
+import { Session } from "next-auth"
 
 interface GroupProps {
-  group: IGroup
+  group: Group
+  session: Session
 }
 
-const Group = ({ group }: GroupProps) => {
+const GroupComponent = ({ group, session }: GroupProps) => {
   const oneMinute = 60000
-  const { currentGroup, groups, setDataContext, recordChats, isAtEndOfChat } = useContext(DataContext)
-  const currentUser = useCurrentUser()
+  const { currentGroup, groups, setDataContext, recordChats, isAtEndOfChat } = useContext(ChatContext)
   const recordChatClass = new RecordChats(recordChats)
   const [lastMessage, setLastMessage] = useState<IChatMessage>()
   const [lastMessageWasRead, setLastMessageWasRead] = useState(true)
@@ -46,14 +45,14 @@ const Group = ({ group }: GroupProps) => {
     if (lastMessage && currentGroup) {
       checkReadLastMessage()
     }
-  }, [currentGroup])
+  }, [lastMessage])
 
   function loadLastMessage() {
     const chatMessage = recordChatClass.returnLastChatMessage(group)
     if (chatMessage) {
       setLastMessage(chatMessage)
-      const lastMessageWasSendByCurrentUser = chatMessage.sender.idUser === currentUser.id
-      const foundRead = chatMessage.statusMessage.readBy?.find(user => user.userId === currentUser.id)
+      const lastMessageWasSendByCurrentUser = chatMessage.sender.idUser === session.user.id
+      const foundRead = chatMessage.statusMessage.readBy?.find(user => user.userId === session.user.id)
       if (!foundRead && !lastMessageWasSendByCurrentUser) {
         setLastMessageWasRead(false)
       }
@@ -62,14 +61,14 @@ const Group = ({ group }: GroupProps) => {
   }
 
   function checkReadLastMessage() {
-    const lastMessageIsFromCurrentUser = lastMessage!.sender.idUser === currentUser.id
-    const isAtCurrentChat = currentGroup!.id === lastMessage!.chatId
+    const lastMessageIsFromCurrentUser = lastMessage?.sender.idUser === session.user.id
+    const isAtCurrentChat = currentGroup!.id === lastMessage?.chatId
     if (lastMessageIsFromCurrentUser || (isAtCurrentChat && isAtEndOfChat)) {
       return setLastMessageWasRead(true)
     }
 
-    const arrayReadByExist = lastMessage!.statusMessage.readBy
-    const foundRead = arrayReadByExist && arrayReadByExist.find(user => user.userId === currentUser.id)
+    const arrayReadByExist = lastMessage?.statusMessage.readBy
+    const foundRead = arrayReadByExist && arrayReadByExist.find(user => user.userId === session.user.id)
     if (foundRead) {
       return setLastMessageWasRead(true)
     }
@@ -83,13 +82,13 @@ const Group = ({ group }: GroupProps) => {
     }
 
     const newCurrentGroup = groups!.find(group => group.id === idGroup)
-    let currentUsers = [] as IUser[]
+    let currentUsers = [] as User []
 
     if (newCurrentGroup) {
       const respUsers = await UserController.getAllByGroupId(newCurrentGroup.id)
 
       if (respUsers.data) {
-        currentUsers = respUsers.data.users
+        currentUsers = respUsers.data
         setDataContext(prevState => ({ ...prevState, currentGroup: newCurrentGroup, currentUsers }))
       }
     }
@@ -161,4 +160,4 @@ const Group = ({ group }: GroupProps) => {
   )
 }
 
-export default Group
+export default GroupComponent

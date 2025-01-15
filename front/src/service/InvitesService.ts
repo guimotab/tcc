@@ -1,19 +1,15 @@
-import IAxiosResponse from "@/interfaces/IAxiosResponse"
-import axios from "axios"
 import HttpService from "./HttpService"
-import IInvites from "@/interfaces/IInvites"
-import { messageResponse } from "@/types/messageResponse"
+import Invites from "@/interfaces/Invites"
+import { MessageResponse } from "@/types/MessageResponse"
 
 export interface IInvitesResponse {
-  resp: messageResponse
-  data: {
-    invites: IInvites
-  }
+  resp: MessageResponse
+  data: Invites
 }
 
-export default class InvitesService extends HttpService<IInvites, IInvitesResponse> {
+export default class InvitesService extends HttpService<Invites, IInvitesResponse> {
 
   constructor() {
-    super("invites")
+    super("invite")
   }
 }

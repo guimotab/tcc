@@ -3,9 +3,9 @@ import IMessage from "@/interfaces/Chats/IMessage";
 import ISender from "@/interfaces/Chats/ISender";
 import IStatusMessage from "@/interfaces/Chats/IStatusMessage";
 import { IRecordChat } from "@/interfaces/IRecordChat";
-import { IChatMessage } from "@/interfaces/IChatMessage";
-import IGroup from "@/interfaces/IGroup";
-import IUser from "@/interfaces/IUser";
+import { IChatMessage } from "@/interfaces/Chats/IChatMessage";
+import { Group } from "@prisma/client";
+import { User } from "@prisma/client";
 import MessageService, { IMessageArrayResponse, IMessageResponse, IStatusMessageResponse } from "@/service/MessageService";
 
 export interface responseRecordMessage {
@@ -17,19 +17,17 @@ export interface responseRecordMessage {
 
 export default abstract class MessagesController {
 
-
-
   private static _messageService = new MessageService();
 
   /**
    * Modifica o status das mensagens não lidas para lida
-   * @param group IGroup
+   * @param group Group
    * @param currentUser usuário atual
    * @param recordChat RecordChats
    * @param currentChat array de IChatMessage
    * @returns array de IChatMessage com as mensagens lidas
    */
-  static async ReadMessages(group: IGroup, currentUser: IUser, recordChat: RecordChats, currentChat: IChatMessage[]) {
+  static async ReadMessages(group: Group, currentUser: User , recordChat: RecordChats, currentChat: IChatMessage[]) {
     const messegesDontRead = currentChat.filter(message => {
 
       const messageSendByCurrentUser = message.sender.idUser === currentUser.id
@@ -49,7 +47,7 @@ export default abstract class MessagesController {
       readBy: message.statusMessage.readBy
     } as IStatusMessage))
 
-    const respStatusMessage = await this._messageService.readMessages(unreadMessages, currentUser) as IStatusMessageResponse
+    const respStatusMessage = await this._messageService.readMessages(unreadMessages, currentUser) as IStatusMessageResponse 
 
     if (respStatusMessage.data) {
 
@@ -58,6 +56,8 @@ export default abstract class MessagesController {
         const index = currentChat.findIndex(message => readMessage.messageId === message.statusMessage.messageId)
         const currentMessages = currentChat[index]
         const arrayReadByCurrentMessages = currentMessages.statusMessage.readBy
+
+        //adiciona os novos leitores da mensagem
         fakeMessages.splice(index, 1, {
           ...currentMessages,
           statusMessage: {
@@ -66,41 +66,41 @@ export default abstract class MessagesController {
               [...arrayReadByCurrentMessages, ...readMessage.readBy!]
               :
               [...readMessage.readBy!]
-          }
+          },
         })
       })
 
-      recordChat.spliceRecordChat(group.id, RecordChats.transformChatMessageToRecordChat(group, fakeMessages, true))
+      recordChat.spliceRecordChat(group.id, RecordChats.transformChatMessageToRecordChat(group, fakeMessages, false))
       return recordChat.currentRecordChat(group)
     }
   }
 
   /**
    * Retorna todas as mensagens pelo id do Grupo
-   * @param group IGroup 
+   * @param group Group 
    */
-  static async getAllByGroupId(group: IGroup) {
-    return await this._messageService.getAllByChatId(group.id) as IMessageResponse
+  static async getAllByGroup(group: Group) {
+    return await this._messageService.getAllByChatId(group.id) as IMessageArrayResponse
   }
 
   /**
    * Retorna algumas mensagens pelo id do Grupo
-   * @param group IGroup 
+   * @param group Group 
    * @param skip quantidade de mensagens que você vai pular na requisição
    * @param take quantidade de mensagens que você vai retornar na requisição
    */
-  static async getSomeByGroupId(group: IGroup, skip: number, take: number) {
+  static async getSomeByGroupId(group: Group, skip: number, take: number) {
     return await this._messageService.getSomeByChatId(group.id, skip, take) as IMessageArrayResponse
   }
 
   /**
    * Busca mensagens de todos os grupos no servidor e transforma em IRecordChat[]
-   * @param groups Array de IGroup
+   * @param groups Array de Group
    * @param skip Posição de início na busca no banco
    * @param take Quantidade de elementos que serão trazidos do banco
    * @returns array de recordMessage
    */
-  static async tranformAllChatsToRecord(groups: IGroup[], skip: number, take: number) {
+  static async tranformAllChatsToRecord(groups: Group[], skip: number, take: number) {
 
     const chatMessage = await Promise.all(groups.map(async group => {
       const messageResp = await MessagesController.getSomeByGroupId(group, skip, take)
@@ -121,13 +121,13 @@ export default abstract class MessagesController {
 
   /**
    * Busca mensagens antigas no servidor e transforma em IRecordChat
-   * @param group IGroup
+   * @param group Group
    * @param skip quantidade de mensagens que serão ignoradas na requisição
    * @param take quantidade de mensagens que serão pegas na requisição
    * @returns retorna mensagens no formato IRecordChat
    */
-  static async loadOldestMessages(group: IGroup, skip: number, take: number) {
-    const messageResp = await MessagesController.getSomeByGroupId(group, skip, take)
+  static async loadAllOldestMessages(group: Group) {
+    const messageResp = await MessagesController.getAllByGroup(group)
     const dataMessages = messageResp.data
 
     if (dataMessages && dataMessages.messages.length !== 0) {
@@ -141,10 +141,10 @@ export default abstract class MessagesController {
 
   /**
    * Utilizada para converter um objeto de mensagens e senders em um objeto que facilita a gravação deles
-   * @param group IGroup
+   * @param group Group
    * @param allMessages objeto que contenha o array de messages e senders
    */
-  private static converterToRecordChat(group: IGroup, allMessages: responseRecordMessage, hasMoreMessagesToLoad: boolean) {
+  private static converterToRecordChat(group: Group, allMessages: responseRecordMessage, hasMoreMessagesToLoad: boolean) {
     if (allMessages) {
 
       const contentMessage = allMessages.messages.map(dataMessage => {
@@ -162,13 +162,13 @@ export default abstract class MessagesController {
 
   /**
    * Concatena o chat antigo com o chat atual
-   * @param group IGroup
+   * @param group Group
    * @param oldestChat parte do chat mais antiga (que ficará para cima no chat)
    * @param currentChat parte do chat atual (que ficará para baixo no chat)
    * @param recordChat RecordChats para gravar o chat atualizado
    * @returns chat concatenado
    */
-  static concatOldestChatWithCurrent(group: IGroup, oldestChat: IRecordChat, currentChat: IChatMessage[], recordChat: RecordChats) {
+  static concatOldestChatWithCurrent(group: Group, oldestChat: IRecordChat, currentChat: IChatMessage[], recordChat: RecordChats) {
     const oldestChatMessage = oldestChat.chats
 
     const concatedChat = [
@@ -186,15 +186,33 @@ export default abstract class MessagesController {
     return concatedChat
   }
 
-  static async put(id: string, data: IMessage) {
-    return await this._messageService.put(id, data) as IMessageResponse
+  /**
+   * Concatena o chat antigo com o chat atual
+   * @param group Group
+   * @param newChat parte do chat mais antiga (que ficará para cima no chat)
+   * @param newChat parte do chat atual (que ficará para baixo no chat)
+   * @param recordChat RecordChats para gravar o chat atualizado
+   * @returns chat concatenado
+   */
+  static spliceOldestChatByNew(group: Group, newChat: IRecordChat, recordChat: RecordChats) {
+
+    const newObj = [{
+      groupId: group.id,
+      chats: newChat.chats,
+      hasMoreMessagesToLoad: newChat.hasMoreMessagesToLoad
+    }] as IRecordChat[]
+
+    recordChat.spliceRecordChat(group.id, ...newObj)
+    return newChat.chats
   }
 
-
+  // static async put(id: string, data: IMessage) {
+  //   return await this._messageService.put(id, data) as IMessageResponse
+  // }
   // static async get(id: string) {
   //   return await this._messageService.get(id) as IMessageResponse
   // }
-  // static async create(data: IGroup, user: IUser, participants: IParticipantsGroup[]) {
+  // static async create(data: Group, user: User , participants: IParticipantsGroup[]) {
   //   const newData = { ...data, user, participants }
   //   return await this._messageService.post(newData) as IMessageResponse
   // }
