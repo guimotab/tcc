@@ -1,3 +1,3 @@
 ## Aviso 
 
-> Esse projeto ainda não está finalizado. Em breve haverá README mostrando como rodar o projeto
+> Esse projeto ainda está em desenvolvimento. Em breve haverá README mostrando como rodar o projeto
